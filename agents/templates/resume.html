@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, Helvetica, sans-serif; font-size: 10.5pt; color: #1a1a1a; line-height: 1.5; }
+  .page { max-width: 720px; margin: 0 auto; padding: 40px; }
+  .header { border-bottom: 3px solid #2563eb; padding-bottom: 12px; margin-bottom: 24px; }
+  .kit-label { font-size: 8pt; letter-spacing: 2px; text-transform: uppercase; color: #64748b; }
+  .job-info { font-size: 12pt; font-weight: bold; color: #1e293b; margin-top: 4px; }
+  .content h1 { font-size: 18pt; color: #1e3a5f; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px; margin: 16px 0 8px; }
+  .content h2 { font-size: 12pt; color: #2563eb; text-transform: uppercase; letter-spacing: 1px; margin: 14px 0 6px; border-bottom: 1px solid #dbeafe; padding-bottom: 3px; }
+  .content h3 { font-size: 11pt; color: #1e293b; margin: 10px 0 4px; }
+  .content p { margin-bottom: 0.6em; }
+  .content ul { margin: 0.4em 0 0.8em 1.3em; }
+  .content li { margin-bottom: 0.2em; }
+  .content strong { color: #0f172a; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="header">
+    <div class="kit-label">Tailored Resume</div>
+    <div class="job-info">Optimized for: {{ title }}{% if company %} at {{ company }}{% endif %}</div>
+  </div>
+  <div class="content">{{ content }}</div>
+</div>
+</body>
+</html>

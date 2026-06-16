@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, Helvetica, sans-serif; font-size: 10.5pt; color: #1a1a1a; line-height: 1.6; }
+  .page { max-width: 720px; margin: 0 auto; padding: 44px; }
+  .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #059669; padding-bottom: 14px; margin-bottom: 28px; }
+  .header-left .kit-label { font-size: 8pt; letter-spacing: 2px; text-transform: uppercase; color: #059669; }
+  .header-left .company-name { font-size: 16pt; font-weight: bold; color: #064e3b; margin-top: 4px; }
+  .header-right { font-size: 9pt; color: #64748b; text-align: right; }
+  .content h2 { font-size: 11pt; color: #065f46; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; margin: 18px 0 6px; padding-bottom: 4px; border-bottom: 1px solid #d1fae5; }
+  .content h3 { font-size: 10.5pt; color: #1e293b; font-weight: bold; margin: 10px 0 4px; }
+  .content p { margin-bottom: 0.7em; }
+  .content ul { margin: 0.4em 0 0.8em 1.4em; }
+  .content li { margin-bottom: 0.3em; }
+  .content strong { color: #064e3b; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="header">
+    <div class="header-left">
+      <div class="kit-label">Company Brief — Interview Preparation</div>
+      <div class="company-name">{{ company }}</div>
+    </div>
+    <div class="header-right">Role: {{ title }}</div>
+  </div>
+  <div class="content">{{ content }}</div>
+</div>
+</body>
+</html>

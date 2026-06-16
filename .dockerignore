@@ -1,0 +1,10 @@
+.git
+.env
+node_modules
+dist
+__pycache__
+*.pyc
+artifacts
+search_results
+shared/job_tracker.db
+frontend/node_modules

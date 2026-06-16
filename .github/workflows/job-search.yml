@@ -1,0 +1,46 @@
+name: Weekly Job Search
+
+on:
+  schedule:
+    - cron: '0 20 * * 5'   # Every Friday at 8 PM UTC
+  workflow_dispatch:          # Allow manual trigger from GitHub UI
+
+jobs:
+  search:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: Install Python dependencies
+        run: pip install .
+
+      - name: Install Playwright Chromium
+        run: playwright install chromium --with-deps
+
+      - name: Run job search agent
+        run: python agents/run_search.py
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          DATABASE_PATH: shared/job_tracker.db
+          SEARCH_RESULTS_PATH: search_results
+
+      - name: Commit and push results
+        run: |
+          git config user.name "Linear Lantern Bot"
+          git config user.email "bot@noreply.github.com"
+          git add search_results/
+          git diff --staged --quiet || (
+            git commit -m "chore: weekly job search results $(date +%Y-%m-%d)"
+            git push
+          )

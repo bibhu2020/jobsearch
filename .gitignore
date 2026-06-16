@@ -1,0 +1,34 @@
+# Environment
+.env
+
+# Node
+node_modules/
+dist/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+*.egg-info/
+.eggs/
+
+# DB & artifacts (keep directory structure, not contents)
+shared/job_tracker.db
+artifacts/resumes/*
+artifacts/generated/*
+!artifacts/resumes/.gitkeep
+!artifacts/generated/.gitkeep
+
+# Vite build
+frontend/dist/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Playwright
+/playwright-report/
+/test-results/
+build/
+.claude/
