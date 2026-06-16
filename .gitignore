@@ -32,3 +32,7 @@ Thumbs.db
 /test-results/
 build/
 .claude/
+
+shared/job_tracker.db-shm
+shared/job_tracker.db-wal
+starting_prompt.txt
