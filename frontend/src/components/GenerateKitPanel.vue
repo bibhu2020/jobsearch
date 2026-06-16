@@ -131,24 +131,22 @@ loadKits()
 
     <div v-if="activeType" class="space-y-2">
       <!-- Toolbar: label + tabs + regenerate -->
-      <div class="flex items-center justify-between gap-2">
-        <span class="text-sm font-medium text-gray-700">{{ activeKitMeta?.label }}</span>
-        <div class="flex items-center gap-2 ml-auto">
-          <div class="flex rounded-md border border-gray-200 overflow-hidden text-xs">
-            <button @click="mode = 'preview'"
-              :class="['px-3 py-1 transition', mode === 'preview' ? 'bg-indigo-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50']">
-              Preview
-            </button>
-            <button @click="mode = 'edit'"
-              :class="['px-3 py-1 transition', mode === 'edit' ? 'bg-indigo-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50']">
-              Edit
-            </button>
-          </div>
-          <button @click="generate(activeType!)"
-            class="text-xs text-indigo-500 hover:text-indigo-700 transition whitespace-nowrap">
-            ↺ Regenerate
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="text-sm font-medium text-gray-700 mr-auto">{{ activeKitMeta?.label }}</span>
+        <div class="flex rounded-md border border-gray-200 overflow-hidden text-xs">
+          <button @click="mode = 'preview'"
+            :class="['px-3 py-1 transition', mode === 'preview' ? 'bg-indigo-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50']">
+            Preview
+          </button>
+          <button @click="mode = 'edit'"
+            :class="['px-3 py-1 transition', mode === 'edit' ? 'bg-indigo-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50']">
+            Edit
           </button>
         </div>
+        <button @click="generate(activeType!)"
+          class="text-xs text-indigo-500 hover:text-indigo-700 transition whitespace-nowrap">
+          ↺ Regenerate
+        </button>
       </div>
 
       <!-- PREVIEW mode: rendered markdown document -->

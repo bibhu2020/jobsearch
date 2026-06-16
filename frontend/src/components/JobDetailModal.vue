@@ -25,19 +25,20 @@ async function deleteCard() {
 </script>
 
 <template>
+  <!-- Overlay: full-screen on mobile, side-drawer on sm+ -->
   <div class="fixed inset-0 bg-black/40 z-50 flex justify-end" @click.self="emit('close')">
-    <div class="bg-white w-full max-w-xl h-full overflow-y-auto shadow-2xl flex flex-col">
+    <div class="bg-white w-full sm:max-w-xl h-full overflow-y-auto shadow-2xl flex flex-col">
 
       <!-- Header -->
-      <div class="sticky top-0 bg-white border-b px-6 py-4 flex items-start justify-between z-10">
-        <div class="flex-1 min-w-0 pr-4">
-          <h2 class="text-lg font-bold text-gray-900 leading-tight">{{ card.title || 'Untitled Position' }}</h2>
+      <div class="sticky top-0 bg-white border-b px-4 sm:px-6 py-4 flex items-start justify-between z-10">
+        <div class="flex-1 min-w-0 pr-3">
+          <h2 class="text-base sm:text-lg font-bold text-gray-900 leading-tight">{{ card.title || 'Untitled Position' }}</h2>
           <p class="text-sm text-gray-500 mt-0.5">{{ card.company }}<span v-if="card.location"> · {{ card.location }}</span></p>
         </div>
-        <button @click="emit('close')" class="text-gray-400 hover:text-gray-600 text-2xl leading-none flex-shrink-0">×</button>
+        <button @click="emit('close')" class="text-gray-400 hover:text-gray-600 text-2xl leading-none flex-shrink-0 p-1">×</button>
       </div>
 
-      <div class="flex-1 px-6 py-5 space-y-6">
+      <div class="flex-1 px-4 sm:px-6 py-4 sm:py-5 space-y-5">
 
         <!-- Quick actions -->
         <div class="flex gap-2 flex-wrap">

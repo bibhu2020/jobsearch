@@ -24,7 +24,7 @@ async function submit() {
 
 <template>
   <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 to-slate-100">
-    <div class="bg-white rounded-2xl shadow-xl p-10 w-full max-w-md">
+    <div class="bg-white rounded-2xl shadow-xl p-6 sm:p-10 w-full max-w-md mx-4 sm:mx-0">
       <div class="mb-8 text-center">
         <div class="text-3xl font-bold text-indigo-600 tracking-tight">🎯 JobQuest AI</div>
         <p class="text-gray-500 mt-2">Create your account</p>

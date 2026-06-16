@@ -6,12 +6,10 @@ import { usePipelineStore, STAGES, type PipelineCard, type Stage } from '@/store
 const emit = defineEmits<{ (e: 'card-click', card: PipelineCard): void }>()
 const store = usePipelineStore()
 
-// Writable per-stage arrays that VueDraggable can mutate directly
 const stageLists = reactive<Record<Stage, PipelineCard[]>>({
   wishlist: [], applied: [], interviewing: [], offer: [], rejected: [],
 })
 
-// Sync store → stageLists (in-place splice so VueDraggable doesn't see a new reference)
 watch(
   () => store.cards,
   (cards) => {
@@ -29,7 +27,7 @@ async function onDrop(cardId: number, toStage: Stage, toIndex: number) {
 </script>
 
 <template>
-  <div class="flex h-full gap-4 p-4 overflow-x-auto scrollbar-hide">
+  <div class="flex h-full gap-3 p-3 sm:gap-4 sm:p-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide">
     <KanbanColumn
       v-for="stage in STAGES"
       :key="stage.key"

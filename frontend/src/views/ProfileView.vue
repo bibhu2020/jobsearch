@@ -9,7 +9,7 @@ const name = ref('')
 const linkedinUrl = ref('')
 const location = ref('')
 const profileSummary = ref('')
-const skillsText = ref('')   // comma-separated for easy editing
+const skillsText = ref('')
 const successMsg = ref('')
 
 onMounted(async () => {
@@ -51,14 +51,14 @@ async function analyze() {
 <template>
   <div class="flex flex-col h-screen">
     <Navbar />
-    <div class="flex-1 overflow-y-auto p-6">
-      <div class="max-w-2xl mx-auto space-y-6">
-        <h1 class="text-2xl font-semibold text-gray-800">My Profile</h1>
+    <div class="flex-1 overflow-y-auto px-4 sm:px-6 py-4 sm:py-6">
+      <div class="max-w-2xl mx-auto space-y-4 sm:space-y-6">
+        <h1 class="text-xl sm:text-2xl font-semibold text-gray-800">My Profile</h1>
 
         <!-- Basic Info -->
-        <div class="bg-white rounded-xl border border-gray-200 p-6 space-y-4">
+        <div class="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 space-y-4">
           <h2 class="text-base font-semibold text-gray-700">Basic Information</h2>
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label class="block text-sm font-medium text-gray-600 mb-1">Full Name</label>
               <input v-model="name" type="text"
@@ -78,31 +78,31 @@ async function analyze() {
         </div>
 
         <!-- Resume Upload -->
-        <div class="bg-white rounded-xl border border-gray-200 p-6 space-y-4">
+        <div class="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 space-y-4">
           <h2 class="text-base font-semibold text-gray-700">Resume</h2>
           <div v-if="store.profile?.profile?.resume_path"
             class="text-sm text-emerald-600 bg-emerald-50 px-3 py-2 rounded-lg">
             ✓ Resume uploaded
           </div>
-          <div class="flex gap-3 flex-wrap">
+          <div class="flex flex-col sm:flex-row gap-3">
             <input ref="fileInput" type="file" accept=".pdf,.doc,.docx" class="hidden" @change="onFileChange" />
             <button @click="fileInput?.click()" :disabled="store.uploading"
-              class="px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg text-sm font-medium text-gray-700 transition disabled:opacity-50">
-              {{ store.uploading ? 'Uploading…' : '📎 Upload Resume (PDF or Word)' }}
+              class="flex-1 sm:flex-none px-4 py-2 border border-gray-300 hover:bg-gray-50 rounded-lg text-sm font-medium text-gray-700 transition disabled:opacity-50">
+              {{ store.uploading ? 'Uploading…' : '📎 Upload Resume' }}
             </button>
             <button @click="analyze" :disabled="store.analyzing || !store.profile?.profile?.resume_path"
-              class="flex items-center gap-2 px-4 py-2 bg-violet-600 hover:bg-violet-700 disabled:opacity-40 text-white rounded-lg text-sm font-medium transition">
+              class="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 bg-violet-600 hover:bg-violet-700 disabled:opacity-40 text-white rounded-lg text-sm font-medium transition">
               <svg v-if="store.analyzing" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
               </svg>
-              {{ store.analyzing ? 'Analyzing…' : '🤖 Analyze My Resume' }}
+              {{ store.analyzing ? 'Analyzing…' : '🤖 Analyze Resume' }}
             </button>
           </div>
         </div>
 
-        <!-- Editable AI Summary + Skills -->
-        <div class="bg-white rounded-xl border border-gray-200 p-6 space-y-4">
+        <!-- AI Summary + Skills -->
+        <div class="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 space-y-4">
           <div class="flex items-center justify-between">
             <h2 class="text-base font-semibold text-gray-700">Profile Summary</h2>
             <span class="text-xs text-gray-400">Auto-filled by AI · edit freely</span>
@@ -113,12 +113,11 @@ async function analyze() {
               class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 text-sm resize-y" />
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-600 mb-1">Skills
-              <span class="font-normal text-gray-400 ml-1">(comma-separated)</span>
+            <label class="block text-sm font-medium text-gray-600 mb-1">
+              Skills <span class="font-normal text-gray-400 ml-1">(comma-separated)</span>
             </label>
             <input v-model="skillsText" type="text" placeholder="Python, Azure DevOps, Kubernetes, Terraform…"
               class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 text-sm" />
-            <!-- Skill pills preview -->
             <div v-if="skillsText" class="flex flex-wrap gap-1.5 mt-2">
               <span v-for="s in skillsText.split(',').map(x => x.trim()).filter(Boolean)" :key="s"
                 class="px-2.5 py-0.5 bg-indigo-50 text-indigo-700 rounded-full text-xs font-medium">
@@ -128,10 +127,10 @@ async function analyze() {
           </div>
         </div>
 
-        <!-- Save button + feedback -->
-        <div class="flex items-center gap-4">
+        <!-- Save -->
+        <div class="flex items-center gap-4 pb-6">
           <button @click="saveProfile"
-            class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-semibold transition">
+            class="w-full sm:w-auto px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-semibold transition">
             Save Profile
           </button>
           <p v-if="successMsg" class="text-emerald-600 text-sm font-medium">✓ {{ successMsg }}</p>

@@ -12,33 +12,31 @@ const emit = defineEmits<{
   (e: 'drop', cardId: number, stage: Stage, index: number): void
 }>()
 
-// Two-way bound to stageLists[stage.key] in KanbanBoard
 const cards = defineModel<PipelineCard[]>('cards', { default: () => [] })
 
 function cardId(evt: any): number {
   return parseInt((evt.item as HTMLElement).dataset.cardId || '0')
 }
 
-// Fired when a card from ANOTHER column is dropped into this one
 function onAdd(evt: any) {
   emit('drop', cardId(evt), props.stage.key, evt.newIndex ?? 0)
 }
 
-// Fired when a card is reordered within THIS column
 function onUpdate(evt: any) {
   emit('drop', cardId(evt), props.stage.key, evt.newIndex ?? 0)
 }
 </script>
 
 <template>
-  <div class="flex flex-col w-64 flex-shrink-0 h-full min-h-0">
-    <!-- Column header — fixed, never scrolls -->
+  <!-- snap-center so mobile swipe snaps one column at a time -->
+  <div class="flex flex-col w-[80vw] sm:w-64 flex-shrink-0 h-full min-h-0 snap-center">
+    <!-- Column header -->
     <div class="flex items-center justify-between mb-3 flex-shrink-0">
       <h3 class="text-sm font-semibold text-gray-700">{{ stage.label }}</h3>
       <span class="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">{{ cards.length }}</span>
     </div>
 
-    <!-- Card list — fills remaining height and scrolls -->
+    <!-- Card list -->
     <div :class="['flex-1 min-h-0 rounded-xl border-2 p-2 overflow-y-auto transition-colors', stage.color]">
       <VueDraggable
         v-model="cards"
