@@ -1,0 +1,18 @@
+name: Keep HF Space Alive
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'  # Every 30 minutes
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Hugging Face Space
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 30 https://mishrabp-jobsearch.hf.space)
+          echo "Response status: $STATUS"
+          if [ "$STATUS" -lt 200 ] || [ "$STATUS" -ge 500 ]; then
+            echo "Warning: unexpected status $STATUS"
+          fi
