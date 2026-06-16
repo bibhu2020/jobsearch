@@ -1,14 +1,14 @@
 ---
-title: Linear Lantern
-emoji: 🪔
+title: JobQuest AI
+emoji: 🎯
 colorFrom: indigo
-colorTo: purple
+colorTo: violet
 sdk: docker
 pinned: false
 app_port: 7860
 ---
 
-# Linear Lantern — Job Application Tracker
+# JobQuest AI — Smart Job Application Tracker
 
 A full-stack Kanban job tracker with AI-powered document generation and automated job search across 10 sources.
 

@@ -25,7 +25,7 @@ async function submit() {
   <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 to-slate-100">
     <div class="bg-white rounded-2xl shadow-xl p-10 w-full max-w-md">
       <div class="mb-8 text-center">
-        <div class="text-3xl font-bold text-indigo-600 tracking-tight">🪔 Linear Lantern</div>
+        <div class="text-3xl font-bold text-indigo-600 tracking-tight">🎯 JobQuest AI</div>
         <p class="text-gray-500 mt-2">Sign in to your job tracker</p>
       </div>
       <form @submit.prevent="submit" class="space-y-5">

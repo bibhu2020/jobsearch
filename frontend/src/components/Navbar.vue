@@ -5,7 +5,7 @@ const auth = useAuthStore()
 
 <template>
   <nav class="bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between">
-    <router-link to="/pipeline" class="text-lg font-bold text-indigo-600 tracking-tight">🪔 Linear Lantern</router-link>
+    <router-link to="/pipeline" class="text-lg font-bold text-indigo-600 tracking-tight">🎯 JobQuest AI</router-link>
     <div class="flex items-center gap-1">
       <router-link to="/pipeline"
         class="px-3 py-1.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition"
