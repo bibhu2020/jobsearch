@@ -6,7 +6,7 @@ colorTo: purple
 sdk: docker
 pinned: false
 app_port: 7860
-short_description: AI-Powered Job Search and Tracking Platform 
+short_description: AI-Powered Smart Job Search and Tracking Platform 
 ---
 
 # JobQuest AI — Smart Job Application Tracker
