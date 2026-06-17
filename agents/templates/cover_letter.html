@@ -4,25 +4,76 @@
 <meta charset="UTF-8">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Georgia', 'Times New Roman', serif; font-size: 11pt; color: #1a1a1a; line-height: 1.7; }
-  .page { max-width: 720px; margin: 0 auto; padding: 48px; }
-  .header { border-bottom: 2px solid #334155; padding-bottom: 16px; margin-bottom: 32px; }
-  .kit-label { font-size: 9pt; letter-spacing: 2px; text-transform: uppercase; color: #64748b; font-family: Arial, sans-serif; }
-  .job-info { font-size: 13pt; font-weight: bold; color: #1e293b; margin-top: 6px; }
-  .content { font-size: 11pt; }
-  .content p { margin-bottom: 1em; }
-  .content h1, .content h2 { color: #1e293b; margin: 1.2em 0 0.5em; }
-  .content ul, .content ol { margin: 0.5em 0 1em 1.5em; }
-  .content li { margin-bottom: 0.3em; }
-  .content strong { color: #0f172a; }
+
+  body {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    font-size: 11pt;
+    color: #1a1a1a;
+    line-height: 1.75;
+    background: #fff;
+  }
+
+  .page {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 52px 56px 56px;
+  }
+
+  /* ── Candidate name (h1) ── */
+  .content h1 {
+    font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+    font-size: 18pt;
+    font-weight: 700;
+    color: #0f172a;
+    border: none;
+    padding: 0;
+    margin-bottom: 3px;
+    letter-spacing: -0.3px;
+  }
+
+  /* Contact line — <p> immediately after <h1> */
+  .content h1 + p {
+    font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+    font-size: 9pt;
+    color: #64748b;
+    margin-bottom: 0;
+    padding-bottom: 16px;
+    border-bottom: 1.5px solid #cbd5e1;
+    line-height: 1.6;
+  }
+
+  /* ── Horizontal rule (separates header from letter body) ── */
+  .content hr {
+    border: none;
+    border-top: 1px solid #e2e8f0;
+    margin: 18px 0;
+  }
+
+  /* ── Date / addressee / salutation paragraphs ── */
+  .content p {
+    margin-bottom: 0.9em;
+    font-size: 11pt;
+  }
+
+  /* ── Inline bold ── */
+  .content strong {
+    font-weight: 700;
+    color: #0f172a;
+  }
+
+  /* ── Signature area ── */
+  .content p:last-child {
+    margin-top: 0.5em;
+  }
+
+  @media print {
+    body { font-size: 10.5pt; }
+    .page { padding: 0; }
+  }
 </style>
 </head>
 <body>
 <div class="page">
-  <div class="header">
-    <div class="kit-label">Cover Letter</div>
-    <div class="job-info">{{ title }}{% if company %} — {{ company }}{% endif %}</div>
-  </div>
   <div class="content">{{ content }}</div>
 </div>
 </body>

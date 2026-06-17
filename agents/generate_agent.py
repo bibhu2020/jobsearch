@@ -25,15 +25,17 @@ def get_openai() -> AsyncOpenAI:
     return _openai
 
 
-async def _call_google(prompt: str, json_mode: bool) -> str:
+async def _call_google(prompt: str, json_mode: bool, max_tokens: int) -> str:
     client = google_genai.Client(api_key=os.environ["GEMINI_API_KEY"])
-    config = {"response_mime_type": "application/json"} if json_mode else {}
+    config = {"max_output_tokens": max_tokens}
+    if json_mode:
+        config["response_mime_type"] = "application/json"
     resp = client.models.generate_content(model=GOOGLE_MODEL, contents=prompt, config=config)
     return resp.text
 
 
-async def _call_openai(system: str, user: str, json_mode: bool) -> str:
-    kwargs = {"model": OPENAI_MODEL, "messages": [
+async def _call_openai(system: str, user: str, json_mode: bool, max_tokens: int) -> str:
+    kwargs = {"model": OPENAI_MODEL, "max_tokens": max_tokens, "messages": [
         {"role": "system", "content": system},
         {"role": "user", "content": user},
     ]}
@@ -43,22 +45,22 @@ async def _call_openai(system: str, user: str, json_mode: bool) -> str:
     return resp.choices[0].message.content
 
 
-async def _call_provider(provider: str, prompt: str, system: str, user: str, json_mode: bool) -> str:
+async def _call_provider(provider: str, prompt: str, system: str, user: str, json_mode: bool, max_tokens: int) -> str:
     if provider == "google":
-        return await _call_google(prompt, json_mode)
+        return await _call_google(prompt, json_mode, max_tokens)
     if provider == "openai":
-        return await _call_openai(system, user, json_mode)
+        return await _call_openai(system, user, json_mode, max_tokens)
     raise ValueError(f"Unknown AI provider: {provider!r}. Use 'google' or 'openai'.")
 
 
-async def call_ai(system: str, user: str, json_mode: bool = False) -> str:
+async def call_ai(system: str, user: str, json_mode: bool = False, max_tokens: int = 2048) -> str:
     prompt = f"{system}\n\n{user}"
     try:
-        return await _call_provider(PRIMARY_PROVIDER, prompt, system, user, json_mode)
+        return await _call_provider(PRIMARY_PROVIDER, prompt, system, user, json_mode, max_tokens)
     except Exception as primary_err:
         print(f"{PRIMARY_PROVIDER} failed ({primary_err}), falling back to {FALLBACK_PROVIDER}")
         try:
-            return await _call_provider(FALLBACK_PROVIDER, prompt, system, user, json_mode)
+            return await _call_provider(FALLBACK_PROVIDER, prompt, system, user, json_mode, max_tokens)
         except Exception as fallback_err:
             raise RuntimeError(
                 f"Both AI providers failed. "
@@ -77,27 +79,71 @@ class GenerateRequest(BaseModel):
 @router.post("/cover-letter")
 async def generate_cover_letter(req: GenerateRequest):
     system = (
-        "You are an expert career coach. Write a compelling, specific cover letter "
-        "grounded entirely in the candidate's real experience. Never invent facts."
+        "You are an expert career coach and professional writer who crafts compelling, "
+        "highly personalized cover letters that get candidates interviews. "
+        "Every sentence must be grounded in the candidate's real experience — never fabricate facts, "
+        "companies, titles, or achievements."
     )
     if req.resumeText.strip():
-        user = f"""Write a tailored cover letter for this application.
+        user = f"""Write a compelling, tailored cover letter for this application.
 
-TARGET ROLE:
-{req.jobTitle} at {req.company}
+## TARGET ROLE
+**{req.jobTitle}** at **{req.company}**
 
-JOB DESCRIPTION:
-{req.jobDescription[:2000]}
+## JOB DESCRIPTION
+{req.jobDescription[:3000]}
 
-CANDIDATE'S ACTUAL RESUME (use real companies, titles, and achievements — do not fabricate):
-{req.resumeText[:4000]}
+## CANDIDATE'S RESUME (use ONLY facts from here — do not fabricate anything)
+{req.resumeText[:5000]}
 
-Instructions:
-- 3–4 focused paragraphs, no generic filler
-- Opening: why this specific company/role excites the candidate
-- Middle paragraphs: cite 2–3 concrete achievements from their resume that directly address the JD requirements
-- Closing: confident call to action
-- Output in markdown. Start with 'Dear Hiring Manager,'"""
+## OUTPUT FORMAT
+Output in clean markdown, following this exact structure:
+
+---
+
+# [Extract candidate's full name from the resume]
+[Extract email from resume] | [Extract phone from resume] | [Extract city/location from resume]
+
+---
+
+[Today's date in format: Month DD, YYYY]
+
+Hiring Manager
+{req.company}
+
+Dear Hiring Manager,
+
+**Opening paragraph** (3 sentences):
+- Sentence 1: Name the specific role and express genuine interest — reference something concrete about {req.company} from the job description (their product, mission, tech stack, or stated values).
+- Sentence 2: One crisp thesis — why the candidate is a strong match, naming their most relevant title/domain from the resume.
+- Do NOT use clichés like "I am writing to express my interest" or "I would be a great fit."
+
+**Second paragraph** (3–4 sentences):
+- Lead with the candidate's single most impressive and relevant achievement from the resume.
+- Directly connect it to a specific requirement or pain point stated in the job description.
+- If the resume has numbers (percentages, dollar amounts, user counts, time saved), use them.
+- Name the actual company and role from the resume.
+
+**Third paragraph** (3–4 sentences):
+- Bring in a second relevant skill or achievement from the resume.
+- Show understanding of what challenges this role at {req.company} faces (based on the JD).
+- Explain specifically how the candidate's background addresses those challenges.
+
+**Closing paragraph** (2–3 sentences):
+- Express enthusiasm for contributing to {req.company}'s goals.
+- Request an interview with confidence — not desperation.
+- Thank them briefly.
+
+Sincerely,
+[Candidate's Full Name]
+
+---
+
+RULES:
+- Extract real name, email, phone, location from the resume — do not use placeholders
+- Every achievement cited must exist in the resume
+- Use keywords from the JD naturally throughout the letter
+- Tone: confident, warm, professional — never generic or desperate"""
     else:
         user = f"""Write a cover letter for:
 
@@ -105,58 +151,105 @@ Job Title: {req.jobTitle}
 Company: {req.company}
 
 Job Description:
-{req.jobDescription[:2000]}
+{req.jobDescription[:3000]}
 
 Candidate Profile:
 {json.dumps(req.userProfile, indent=2)[:2000]}
 
-Write a professional cover letter (3–4 paragraphs) in markdown. Start with 'Dear Hiring Manager,'"""
+Output in markdown. Include: candidate name header, date, salutation, 4 focused paragraphs, and signature."""
 
-    content = await call_ai(system, user)
+    content = await call_ai(system, user, max_tokens=1500)
     return {"content": content}
 
 
 @router.post("/resume")
 async def generate_resume(req: GenerateRequest):
     system = (
-        "You are an expert resume writer. Your job is to rewrite a candidate's actual resume "
-        "to better target a specific role — never invent or remove factual information."
+        "You are a professional resume writer and ATS optimization expert. "
+        "Your job is to rewrite a candidate's resume to be perfectly tailored for a specific job posting. "
+        "ABSOLUTE RULES — never break these:\n"
+        "1. NEVER invent or add facts, companies, titles, dates, skills, or achievements not in the original\n"
+        "2. NEVER remove any company, role, or date from the original — all experience stays\n"
+        "3. ALWAYS preserve the candidate's real name and contact information from the top of the resume\n"
+        "4. Rewrite and reorder to surface the most relevant experience first within each role\n"
+        "5. Use exact keywords from the job description naturally — no stuffing"
     )
     if req.resumeText.strip():
-        user = f"""Rewrite the candidate's resume below to target this specific job.
+        user = f"""Rewrite the candidate's resume to perfectly target this role.
 
-TARGET ROLE:
-{req.jobTitle} at {req.company}
+## TARGET ROLE
+**{req.jobTitle}** at **{req.company}**
 
-JOB DESCRIPTION (study the requirements carefully):
-{req.jobDescription[:2500]}
+## JOB DESCRIPTION — study every requirement, keyword, and technology mentioned
+{req.jobDescription[:3500]}
 
-CANDIDATE'S ACTUAL RESUME:
-{req.resumeText[:5000]}
+## CANDIDATE'S ORIGINAL RESUME — this is the source of truth
+{req.resumeText[:6000]}
 
-Rewriting rules — STRICTLY follow these:
-1. Keep EVERY fact: company names, job titles, employment dates, real accomplishments
-2. Do NOT invent new experiences, skills, or achievements
-3. Reorder bullet points within each role to surface the most relevant achievements first
-4. Rewrite bullet points to use keywords from the JD naturally (without keyword stuffing)
-5. Rewrite the Summary (top section) to speak directly to this role and company
-6. If the candidate has skills mentioned in the JD, make sure they appear in the Skills section
-7. Output clean markdown: # Name, ## Summary, ## Skills, ## Experience, ## Education"""
+## REQUIRED OUTPUT FORMAT
+Output the complete resume in clean markdown, following this exact structure:
+
+---
+
+# [Candidate's Full Name — extract from top of resume]
+[Email] | [Phone] | [City, State/Country] | [LinkedIn URL if present] | [GitHub/Portfolio if present]
+
+---
+
+## Professional Summary
+3–4 sentences. Open with the candidate's years of experience and strongest domain. Reference the target role ({req.jobTitle}) and company ({req.company}) if natural. Close with what they bring that directly addresses the JD's top requirements. Use keywords from the JD.
+
+## Core Competencies
+Organize skills into 2–4 labeled groups that match what the JD values. Only include skills the candidate actually has.
+**[Category 1 label]:** skill, skill, skill
+**[Category 2 label]:** skill, skill, skill
+(add more categories if needed)
+
+---
+
+## Professional Experience
+
+### [Exact Job Title from resume] | [Exact Company Name] | [City, State] | [Start Month Year] – [End Month Year or Present]
+- [Most relevant to {req.jobTitle}] Start with strong action verb. State what was done, the scale/technology, and the measurable result. Use JD keywords naturally.
+- [Second most relevant] Same format — action verb, context, result.
+- [Continue for all original bullets, rewritten and reordered by relevance]
+- Keep 3–6 bullets per role. Reorder so most JD-relevant points come first.
+
+[Repeat ### block for EVERY position in the original resume, most recent first]
+
+---
+
+## Education
+### [Degree Name] | [Institution] | [Graduation Year or Expected Year]
+[Optional: GPA if 3.5+, honors, relevant coursework only if it strengthens the application]
+
+[## Certifications — include this section ONLY if certifications exist in the original resume]
+- [Certification Name] — [Issuer] ([Year])
+
+---
+
+## REWRITING RULES
+- Extract real name, email, phone, location from the original resume — no placeholders
+- For each bullet: lead with a strong action verb, weave in 1–2 JD keywords, end with a result/impact
+- If the original has numbers (%, $, time saved, team size, user count), keep and surface them prominently
+- If no numbers exist for a bullet, still rewrite it clearly with context and scope
+- The Summary must directly reference the target company and role — make it feel written specifically for this application
+- Do not add a line for skills the candidate does not have"""
     else:
-        user = f"""Rewrite this candidate's resume to match the job description:
+        user = f"""Create a tailored resume for:
 
 Job Title: {req.jobTitle}
 Company: {req.company}
 
 Job Description:
-{req.jobDescription[:2500]}
+{req.jobDescription[:3500]}
 
 Candidate Profile:
-{json.dumps(req.userProfile, indent=2)[:2000]}
+{json.dumps(req.userProfile, indent=2)[:3000]}
 
-Output in markdown with sections: Summary, Skills, Experience, Education."""
+Output complete resume in markdown: Name/Contact header, Professional Summary, Core Competencies, Professional Experience (with bullet points), Education."""
 
-    content = await call_ai(system, user)
+    content = await call_ai(system, user, max_tokens=3000)
     return {"content": content}
 
 
