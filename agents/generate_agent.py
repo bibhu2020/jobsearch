@@ -165,91 +165,112 @@ Output in markdown. Include: candidate name header, date, salutation, 4 focused 
 @router.post("/resume")
 async def generate_resume(req: GenerateRequest):
     system = (
-        "You are a professional resume writer and ATS optimization expert. "
-        "Your job is to rewrite a candidate's resume to be perfectly tailored for a specific job posting. "
-        "ABSOLUTE RULES — never break these:\n"
-        "1. NEVER invent or add facts, companies, titles, dates, skills, or achievements not in the original\n"
-        "2. NEVER remove any company, role, or date from the original — all experience stays\n"
-        "3. ALWAYS preserve the candidate's real name and contact information from the top of the resume\n"
-        "4. Rewrite and reorder to surface the most relevant experience first within each role\n"
-        "5. Use exact keywords from the job description naturally — no stuffing"
+        "You are a senior resume writer, ATS expert, and executive career coach. "
+        "You produce complete, polished, senior-professional resumes tailored to a specific job posting.\n\n"
+        "ABSOLUTE RULES — violating any of these is a failure:\n"
+        "1. NEVER invent or add any fact not in the original resume (no fake companies, titles, dates, skills, achievements)\n"
+        "2. NEVER drop any role from the last 10 years — every position must appear, no matter what\n"
+        "3. ALWAYS include Education — even if only a degree and school name\n"
+        "4. ALWAYS include Certifications & Professional Development if any exist in the original\n"
+        "5. ALWAYS preserve the candidate's real name and contact info exactly as found\n"
+        "6. Rewrite bullets to surface technical depth, domain expertise, process knowledge, and leadership impact\n"
+        "7. Use keywords from the JD naturally — do not stuff"
     )
     if req.resumeText.strip():
-        user = f"""Rewrite the candidate's resume to perfectly target this role.
+        user = f"""Rewrite this candidate's complete resume to target the role below.
 
 ## TARGET ROLE
 **{req.jobTitle}** at **{req.company}**
 
-## JOB DESCRIPTION — study every requirement, keyword, and technology mentioned
-{req.jobDescription[:3500]}
+## JOB DESCRIPTION — extract every required skill, technology, domain, and process keyword
+{req.jobDescription[:4000]}
 
-## CANDIDATE'S ORIGINAL RESUME — this is the source of truth
-{req.resumeText[:6000]}
-
-## REQUIRED OUTPUT FORMAT
-Output the complete resume in clean markdown, following this exact structure:
+## CANDIDATE'S ORIGINAL RESUME — complete source of truth, do not omit anything
+{req.resumeText[:10000]}
 
 ---
 
-# [Candidate's Full Name — extract from top of resume]
-[Email] | [Phone] | [City, State/Country] | [LinkedIn URL if present] | [GitHub/Portfolio if present]
+## REQUIRED OUTPUT — follow this structure exactly, section by section
+
+### SECTION 1 — Header
+# [Candidate's Full Name]
+[Email] | [Phone] | [City, State/Country] | [LinkedIn if present] | [GitHub/Portfolio if present]
 
 ---
 
-## Professional Summary
-3–4 sentences. Open with the candidate's years of experience and strongest domain. Reference the target role ({req.jobTitle}) and company ({req.company}) if natural. Close with what they bring that directly addresses the JD's top requirements. Use keywords from the JD.
+### SECTION 2 — Professional Summary (4–5 sentences, REQUIRED)
+Write a powerful senior-level summary that:
+- Opens with total years of experience, primary technical domain, and industry/business domain
+- Names 2–3 of the candidate's strongest technical capabilities that match the JD
+- Calls out their domain expertise (industry verticals, business functions they've worked in)
+- Mentions leadership or management scope (team size, stakeholders, budget if in resume)
+- Closes by connecting their background to the specific needs of {req.company} / {req.jobTitle}
+- Use keywords from the JD. Do NOT use phrases like "seasoned professional" or "results-driven."
 
-## Core Competencies
-Organize skills into 2–4 labeled groups that match what the JD values. Only include skills the candidate actually has.
-**[Category 1 label]:** skill, skill, skill
-**[Category 2 label]:** skill, skill, skill
-(add more categories if needed)
+### SECTION 3 — Core Competencies (REQUIRED, use ALL FOUR categories)
+Populate every category using ONLY skills found in the original resume:
 
----
+**Technical Skills:** [languages, frameworks, platforms, databases, cloud, tools, APIs]
+**Domain & Industry Expertise:** [industries, business domains, functional areas the candidate has worked in]
+**Methodologies & Processes:** [Agile, Scrum, DevOps, CI/CD, SDLC, SAFe, ITIL, or other processes from resume]
+**Leadership & Management:** [team leadership, stakeholder management, mentoring, cross-functional, budget, P&L, etc.]
 
-## Professional Experience
-
-### [Exact Job Title from resume] | [Exact Company Name] | [City, State] | [Start Month Year] – [End Month Year or Present]
-- [Most relevant to {req.jobTitle}] Start with strong action verb. State what was done, the scale/technology, and the measurable result. Use JD keywords naturally.
-- [Second most relevant] Same format — action verb, context, result.
-- [Continue for all original bullets, rewritten and reordered by relevance]
-- Keep 3–6 bullets per role. Reorder so most JD-relevant points come first.
-
-[Repeat ### block for EVERY position in the original resume, most recent first]
+If a category has nothing in the original resume, write "N/A" rather than leaving it out.
 
 ---
 
-## Education
-### [Degree Name] | [Institution] | [Graduation Year or Expected Year]
-[Optional: GPA if 3.5+, honors, relevant coursework only if it strengthens the application]
+### SECTION 4 — Professional Experience (REQUIRED — include EVERY role from the last 10 years)
+List roles in reverse chronological order. For EACH role:
 
-[## Certifications — include this section ONLY if certifications exist in the original resume]
-- [Certification Name] — [Issuer] ([Year])
+#### [Exact Job Title] | [Exact Company Name] | [City, Country] | [Start Mon YYYY] – [End Mon YYYY or Present]
+- **[Technical]** [Most relevant technical achievement for this JD — action verb + technology/tool + scale + result]
+- **[Domain]** [Achievement showing domain/industry/business expertise — what business problem was solved]
+- **[Process]** [Achievement showing process, methodology, or operational improvement]
+- **[Leadership]** [Achievement showing leadership, team impact, stakeholder influence, or org-level impact]
+- [Additional bullets if original resume has more facts to surface — max 6 bullets per role]
+
+Rule: Write 4–6 bullets per role. Always lead with technical depth, then domain knowledge, process, leadership.
+Rewrite each bullet as: strong action verb → what was done (with technology/method) → measurable result or scope.
+Keep all company names, titles, and dates EXACTLY as in the original. Do not infer or estimate dates.
 
 ---
 
-## REWRITING RULES
-- Extract real name, email, phone, location from the original resume — no placeholders
-- For each bullet: lead with a strong action verb, weave in 1–2 JD keywords, end with a result/impact
-- If the original has numbers (%, $, time saved, team size, user count), keep and surface them prominently
-- If no numbers exist for a bullet, still rewrite it clearly with context and scope
-- The Summary must directly reference the target company and role — make it feel written specifically for this application
-- Do not add a line for skills the candidate does not have"""
+### SECTION 5 — Education (REQUIRED — always include, never omit)
+For each degree found in the original resume:
+#### [Full Degree Name, e.g. Bachelor of Engineering in Computer Science] | [University/Institution Name] | [Year]
+[Include GPA only if 3.5+ AND it appears in the original. Include honors/distinction if stated.]
+
+### SECTION 6 — Certifications & Professional Development (REQUIRED if ANY exist in original resume)
+List every certification, course, or training found in the original:
+- **[Certification Name]** — [Issuing Body] | [Year if present]
+
+If no certifications appear anywhere in the original resume, omit this section entirely.
+
+---
+
+## GLOBAL RULES
+- Extract name/email/phone/location from the original — never use placeholders
+- Do not shorten, skip, or summarize older roles — include all details from the last 10 years
+- If a role is older than 10 years, include company name, title, and dates only (one line, no bullets)
+- Numbers matter: if the resume has %, $, headcount, SLA, time saved — surface them prominently
+- The Summary and bullets must feel written specifically for {req.jobTitle} at {req.company}, not generic"""
     else:
-        user = f"""Create a tailored resume for:
+        user = f"""Create a complete tailored resume for:
 
 Job Title: {req.jobTitle}
 Company: {req.company}
 
 Job Description:
-{req.jobDescription[:3500]}
+{req.jobDescription[:4000]}
 
 Candidate Profile:
 {json.dumps(req.userProfile, indent=2)[:3000]}
 
-Output complete resume in markdown: Name/Contact header, Professional Summary, Core Competencies, Professional Experience (with bullet points), Education."""
+Output a complete resume in markdown with: Header (name/contact), Professional Summary (4–5 sentences),
+Core Competencies (Technical Skills / Domain & Industry / Methodologies & Processes / Leadership & Management),
+Professional Experience (all roles with 4–6 bullets each), Education, Certifications if any."""
 
-    content = await call_ai(system, user, max_tokens=3000)
+    content = await call_ai(system, user, max_tokens=4000)
     return {"content": content}
 
 

@@ -16,101 +16,109 @@
   .page {
     max-width: 780px;
     margin: 0 auto;
-    padding: 36px 44px 44px;
+    padding: 36px 44px 48px;
   }
 
-  /* ── Candidate name (h1) ── */
+  /* ── Candidate name ── */
   .content h1 {
-    font-size: 24pt;
+    font-size: 22pt;
     font-weight: 700;
     color: #0f172a;
-    letter-spacing: -0.5px;
+    letter-spacing: -0.4px;
     margin-bottom: 4px;
     border: none;
     padding: 0;
     line-height: 1.1;
   }
 
-  /* Contact line — the <p> immediately after <h1> */
+  /* Contact line — <p> immediately after <h1> */
   .content h1 + p {
     font-size: 9pt;
     color: #475569;
     margin-bottom: 0;
-    padding-bottom: 12px;
+    padding-bottom: 11px;
     border-bottom: 2.5px solid #2563eb;
-    line-height: 1.6;
+    line-height: 1.7;
   }
 
-  /* ── Section headers (h2) ── */
+  /* ── Section headers (## ) ── */
   .content h2 {
-    font-size: 9.5pt;
+    font-size: 9pt;
     font-weight: 700;
-    color: #2563eb;
+    color: #1d4ed8;
     text-transform: uppercase;
-    letter-spacing: 1.8px;
-    margin: 16px 0 5px;
+    letter-spacing: 2px;
+    margin: 18px 0 5px;
     padding-bottom: 3px;
     border-bottom: 1px solid #bfdbfe;
   }
 
-  /* ── Role / institution header (h3) ── */
+  /* ── Sub-section: role / degree header (### ) ── */
   .content h3 {
     font-size: 10.5pt;
     font-weight: 700;
     color: #0f172a;
-    margin: 10px 0 3px;
+    margin: 12px 0 2px;
     line-height: 1.3;
   }
 
-  /* ── Body text ── */
-  .content p {
-    margin-bottom: 0.55em;
+  /* ── Role header inside experience (#### ) ── */
+  .content h4 {
     font-size: 10.5pt;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 12px 0 2px;
+    line-height: 1.3;
   }
 
-  /* Skills groups — bold label inside paragraph */
-  .content h2 + p,
-  .content h2 + p + p {
+  /* ── Body paragraphs (skills lines, dates, etc.) ── */
+  .content p {
     font-size: 10pt;
-    margin-bottom: 0.3em;
+    margin-bottom: 0.45em;
     color: #1e293b;
   }
 
   /* ── Bullet lists ── */
   .content ul {
-    margin: 3px 0 6px 16px;
+    margin: 3px 0 8px 16px;
     list-style: disc;
   }
   .content li {
     font-size: 10pt;
-    margin-bottom: 2px;
-    line-height: 1.4;
+    margin-bottom: 3px;
+    line-height: 1.45;
     color: #1e293b;
   }
 
-  /* ── Horizontal rule (section divider) ── */
+  /* ── Inline bold — category labels in bullets & skills ── */
+  .content strong {
+    font-weight: 700;
+    color: #0f172a;
+  }
+
+  /* Skills category labels (bold at start of paragraph) */
+  .content h2 + p strong:first-child,
+  .content p strong:first-child {
+    color: #1d4ed8;
+  }
+
+  /* Bold category labels inside list items */
+  .content li strong:first-child {
+    color: #1d4ed8;
+  }
+
+  /* ── Horizontal rule ── */
   .content hr {
     border: none;
     border-top: 1px solid #e2e8f0;
     margin: 6px 0 4px;
   }
 
-  /* ── Inline bold ── */
-  .content strong {
-    font-weight: 700;
-    color: #0f172a;
-  }
-
-  /* Skills category labels */
-  .content p strong:first-child {
-    color: #1d4ed8;
-  }
-
   @media print {
     body { font-size: 10pt; }
     .page { padding: 0; }
-    .content h2 { page-break-after: avoid; }
-    .content h3 { page-break-after: avoid; }
+    h2, h3, h4 { page-break-after: avoid; }
+    ul { page-break-inside: avoid; }
   }
 </style>
 </head>
