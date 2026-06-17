@@ -25,7 +25,7 @@ async function submit() {
   <div class="min-h-screen flex">
 
     <!-- Left: Login Form (1/3) -->
-    <div class="w-full lg:w-1/3 flex items-center justify-center bg-white px-8 py-12 relative z-10 shadow-2xl">
+    <div class="w-full lg:w-1/3 flex items-start justify-center bg-white px-8 pt-10 pb-12 relative z-10 shadow-2xl">
       <div class="w-full max-w-sm">
         <div class="mb-8">
           <div class="text-3xl font-bold text-indigo-600 tracking-tight mb-1">🎯 JobQuest AI</div>
