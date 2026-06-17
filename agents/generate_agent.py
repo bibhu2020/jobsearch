@@ -9,6 +9,14 @@ router = APIRouter()
 
 _openai: AsyncOpenAI | None = None
 
+# Provider selection — set AI_PRIMARY_PROVIDER / AI_FALLBACK_PROVIDER to "google" or "openai"
+PRIMARY_PROVIDER = os.getenv("AI_PRIMARY_PROVIDER", "google")
+FALLBACK_PROVIDER = os.getenv("AI_FALLBACK_PROVIDER", "openai")
+
+# Model overrides — defaults match the provider defaults above
+GOOGLE_MODEL = os.getenv("GOOGLE_AI_MODEL", "gemma-4")
+OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o")
+
 
 def get_openai() -> AsyncOpenAI:
     global _openai
@@ -17,32 +25,45 @@ def get_openai() -> AsyncOpenAI:
     return _openai
 
 
+async def _call_google(prompt: str, json_mode: bool) -> str:
+    client = google_genai.Client(api_key=os.environ["GEMINI_API_KEY"])
+    config = {"response_mime_type": "application/json"} if json_mode else {}
+    resp = client.models.generate_content(model=GOOGLE_MODEL, contents=prompt, config=config)
+    return resp.text
+
+
+async def _call_openai(system: str, user: str, json_mode: bool) -> str:
+    kwargs = {"model": OPENAI_MODEL, "messages": [
+        {"role": "system", "content": system},
+        {"role": "user", "content": user},
+    ]}
+    if json_mode:
+        kwargs["response_format"] = {"type": "json_object"}
+    resp = await get_openai().chat.completions.create(**kwargs)
+    return resp.choices[0].message.content
+
+
+async def _call_provider(provider: str, prompt: str, system: str, user: str, json_mode: bool) -> str:
+    if provider == "google":
+        return await _call_google(prompt, json_mode)
+    if provider == "openai":
+        return await _call_openai(system, user, json_mode)
+    raise ValueError(f"Unknown AI provider: {provider!r}. Use 'google' or 'openai'.")
+
+
 async def call_ai(system: str, user: str, json_mode: bool = False) -> str:
     prompt = f"{system}\n\n{user}"
-
     try:
-        gemini = google_genai.Client(api_key=os.environ["GEMINI_API_KEY"])
-        config = {"response_mime_type": "application/json"} if json_mode else {}
-        resp = gemini.models.generate_content(
-            model="gemini-2.5-flash",
-            contents=prompt,
-            config=config,
-        )
-        return resp.text
-    except Exception as e:
-        print(f"Gemini failed ({e}), falling back to GPT-4o")
+        return await _call_provider(PRIMARY_PROVIDER, prompt, system, user, json_mode)
+    except Exception as primary_err:
+        print(f"{PRIMARY_PROVIDER} failed ({primary_err}), falling back to {FALLBACK_PROVIDER}")
         try:
-            kwargs = {"model": "gpt-4o", "messages": [
-                {"role": "system", "content": system},
-                {"role": "user", "content": user},
-            ]}
-            if json_mode:
-                kwargs["response_format"] = {"type": "json_object"}
-            client = get_openai()
-            resp = await client.chat.completions.create(**kwargs)
-            return resp.choices[0].message.content
-        except Exception as ge:
-            raise RuntimeError(f"Both AI providers failed. Gemini: {e}. OpenAI: {ge}")
+            return await _call_provider(FALLBACK_PROVIDER, prompt, system, user, json_mode)
+        except Exception as fallback_err:
+            raise RuntimeError(
+                f"Both AI providers failed. "
+                f"{PRIMARY_PROVIDER}: {primary_err}. {FALLBACK_PROVIDER}: {fallback_err}"
+            )
 
 
 class GenerateRequest(BaseModel):
