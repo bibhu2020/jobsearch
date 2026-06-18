@@ -58,16 +58,21 @@ export const useSuggestionsStore = defineStore('suggestions', () => {
     workflowStatus.value = 'dispatching'
     workflowMessage.value = ''
     try {
-      await api.post('/suggestions/trigger-action', {
+      const { data } = await api.post('/suggestions/trigger-action', {
         keywords: keywords?.trim() || '',
         location: country?.trim() || '',
       })
-      workflowStatus.value = 'dispatched'
-      workflowMessage.value =
-        'GitHub Actions search started — results will be committed in ~5 minutes. Click "Import Results" once it finishes.'
-    } catch {
+      if (data?.error) {
+        workflowStatus.value = 'error'
+        workflowMessage.value = data.error
+      } else {
+        workflowStatus.value = 'dispatched'
+        workflowMessage.value =
+          'GitHub Actions search started — results will be committed in ~5 minutes. Click "Import Results" once it finishes.'
+      }
+    } catch (err: any) {
       workflowStatus.value = 'error'
-      workflowMessage.value = 'Failed to trigger GitHub Actions workflow. Check GITHUB_TOKEN.'
+      workflowMessage.value = err?.response?.data?.error || err?.response?.data?.message || 'Failed to trigger GitHub Actions workflow.'
     }
   }
 

@@ -139,12 +139,18 @@ export class SuggestionsService {
     const workflow = process.env.GITHUB_WORKFLOW_FILE || 'job-search.yml';
     const ref = process.env.GITHUB_BRANCH || 'main';
 
-    await axios.post(
-      `https://api.github.com/repos/${repo}/actions/workflows/${workflow}/dispatches`,
-      { ref, inputs: { keywords: keywords?.trim() || '', location: location?.trim() || '' } },
-      { headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' } },
-    );
-
-    return { dispatched: true };
+    try {
+      await axios.post(
+        `https://api.github.com/repos/${repo}/actions/workflows/${workflow}/dispatches`,
+        { ref, inputs: { keywords: keywords?.trim() || '', location: location?.trim() || '' } },
+        { headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' } },
+      );
+      return { dispatched: true };
+    } catch (err: any) {
+      const status = err?.response?.status;
+      const message = err?.response?.data?.message || err.message;
+      console.error(`GitHub Actions dispatch failed [${status}]: ${message}`);
+      return { error: `GitHub API error ${status}: ${message}` };
+    }
   }
 }
