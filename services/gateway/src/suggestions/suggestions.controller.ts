@@ -26,6 +26,14 @@ export class SuggestionsController {
     return this.suggestionsService.triggerSearch(req.user.userId, keywords, country);
   }
 
+  @Post('trigger-action')
+  triggerAction(
+    @Body('keywords') keywords?: string,
+    @Body('location') location?: string,
+  ) {
+    return this.suggestionsService.triggerGitHubAction(keywords, location);
+  }
+
   @Post(':id/add-to-wishlist')
   addToWishlist(@Request() req, @Param('id') id: string) {
     return this.suggestionsService.addToWishlist(req.user.userId, parseInt(id));

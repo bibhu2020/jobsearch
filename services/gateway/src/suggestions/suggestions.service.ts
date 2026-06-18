@@ -130,4 +130,21 @@ export class SuggestionsService {
     );
     return { dismissed: true };
   }
+
+  async triggerGitHubAction(keywords?: string, location?: string) {
+    const token = process.env.GITHUB_TOKEN;
+    if (!token) return { error: 'GITHUB_TOKEN not configured' };
+
+    const repo = process.env.GITHUB_WORKFLOW_REPO || 'bibhu2020/jobsearch';
+    const workflow = process.env.GITHUB_WORKFLOW_FILE || 'job-search.yml';
+    const ref = process.env.GITHUB_BRANCH || 'main';
+
+    await axios.post(
+      `https://api.github.com/repos/${repo}/actions/workflows/${workflow}/dispatches`,
+      { ref, inputs: { keywords: keywords?.trim() || '', location: location?.trim() || '' } },
+      { headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' } },
+    );
+
+    return { dispatched: true };
+  }
 }

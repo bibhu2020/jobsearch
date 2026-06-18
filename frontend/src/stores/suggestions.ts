@@ -19,12 +19,16 @@ export interface Suggestion {
   search_date: string
 }
 
+export type WorkflowStatus = 'idle' | 'dispatching' | 'dispatched' | 'error'
+
 export const useSuggestionsStore = defineStore('suggestions', () => {
   const suggestions = ref<Suggestion[]>([])
   const loading = ref(false)
   const syncing = ref(false)
   const detectedCountry = ref('')
   const detectingCountry = ref(false)
+  const workflowStatus = ref<WorkflowStatus>('idle')
+  const workflowMessage = ref('')
 
   async function detectCountry() {
     if (detectedCountry.value || detectingCountry.value) return
@@ -45,6 +49,34 @@ export const useSuggestionsStore = defineStore('suggestions', () => {
     try {
       const { data } = await api.get('/suggestions')
       suggestions.value = data
+    } finally {
+      loading.value = false
+    }
+  }
+
+  async function triggerAction(keywords?: string, country?: string) {
+    workflowStatus.value = 'dispatching'
+    workflowMessage.value = ''
+    try {
+      await api.post('/suggestions/trigger-action', {
+        keywords: keywords?.trim() || '',
+        location: country?.trim() || '',
+      })
+      workflowStatus.value = 'dispatched'
+      workflowMessage.value =
+        'GitHub Actions search started — results will be committed in ~5 minutes. Click "Import Results" once it finishes.'
+    } catch {
+      workflowStatus.value = 'error'
+      workflowMessage.value = 'Failed to trigger GitHub Actions workflow. Check GITHUB_TOKEN.'
+    }
+  }
+
+  async function importResults() {
+    loading.value = true
+    try {
+      const { data } = await api.post('/suggestions/import')
+      await fetchSuggestions()
+      return data.imported as number
     } finally {
       loading.value = false
     }
@@ -77,6 +109,7 @@ export const useSuggestionsStore = defineStore('suggestions', () => {
   return {
     suggestions, loading, syncing,
     detectedCountry, detectingCountry,
-    fetchSuggestions, sync, addToWishlist, dismiss, detectCountry,
+    workflowStatus, workflowMessage,
+    fetchSuggestions, sync, triggerAction, importResults, addToWishlist, dismiss, detectCountry,
   }
 })

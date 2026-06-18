@@ -21,15 +21,25 @@ from agents.search_agent import build_queries, deduplicate, score_and_rank, Sear
 
 
 async def run():
-    users = await fetchall(
-        """SELECT u.id as user_id, up.profile_summary, up.skills, up.experience
-           FROM users u
-           JOIN user_profiles up ON u.id = up.user_id
-           WHERE up.profile_summary IS NOT NULL"""
-    )
+    keywords_override = os.getenv("SEARCH_KEYWORDS", "").strip()
+    location_override = os.getenv("SEARCH_LOCATION", "").strip()
+
+    # When triggered via GitHub Actions dispatch with keywords, skip DB lookup
+    if keywords_override:
+        users = [{"user_id": 0, "profile_summary": None, "skills": "[]", "experience": "[]"}]
+    else:
+        try:
+            users = await fetchall(
+                """SELECT u.id as user_id, up.profile_summary, up.skills, up.experience
+                   FROM users u
+                   JOIN user_profiles up ON u.id = up.user_id
+                   WHERE up.profile_summary IS NOT NULL"""
+            )
+        except Exception:
+            users = []
 
     if not users:
-        print("No users with analyzed profiles found.")
+        print("No users with analyzed profiles found and no SEARCH_KEYWORDS set.")
         return
 
     all_results = []
@@ -40,6 +50,9 @@ async def run():
             profileSummary=user["profile_summary"] or "",
             skills=json.loads(user["skills"] or "[]"),
             experience=json.loads(user["experience"] or "[]"),
+            keywords=keywords_override,
+            location=location_override,
+            country=location_override,
         )
         queries = await build_queries(req)
 

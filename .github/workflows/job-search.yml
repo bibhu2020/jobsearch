@@ -3,7 +3,16 @@ name: Weekly Job Search
 on:
   schedule:
     - cron: '0 20 * * 5'   # Every Friday at 8 PM UTC
-  workflow_dispatch:          # Allow manual trigger from GitHub UI
+  workflow_dispatch:
+    inputs:
+      keywords:
+        description: 'Job search keywords (e.g. "Python engineer remote")'
+        required: false
+        default: ''
+      location:
+        description: 'Location or country preference (e.g. "United Kingdom")'
+        required: false
+        default: ''
 
 jobs:
   search:
@@ -34,6 +43,8 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           DATABASE_PATH: shared/job_tracker.db
           SEARCH_RESULTS_PATH: search_results
+          SEARCH_KEYWORDS: ${{ github.event.inputs.keywords }}
+          SEARCH_LOCATION: ${{ github.event.inputs.location }}
 
       - name: Commit and push results
         run: |
