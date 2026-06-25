@@ -182,4 +182,43 @@ export class SuggestionsService {
       return { error: `GitHub API error ${status}: ${message}` };
     }
   }
+
+  async getLatestWorkflowRun() {
+    const token = process.env.GITHUB_TOKEN;
+    if (!token) return null;
+
+    const repo = process.env.GITHUB_WORKFLOW_REPO || 'bibhu2020/jobsearch';
+    const workflow = process.env.GITHUB_WORKFLOW_FILE || 'job-search.yml';
+    const headers = { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' };
+
+    try {
+      const { data: runsData } = await axios.get(
+        `https://api.github.com/repos/${repo}/actions/workflows/${workflow}/runs?per_page=1&event=workflow_dispatch`,
+        { headers },
+      );
+      const run = runsData.workflow_runs?.[0];
+      if (!run) return null;
+
+      const { data: jobsData } = await axios.get(
+        `https://api.github.com/repos/${repo}/actions/runs/${run.id}/jobs`,
+        { headers },
+      );
+      const steps: any[] = jobsData.jobs?.[0]?.steps || [];
+
+      return {
+        runId:      run.id,
+        status:     run.status as string,     // queued | in_progress | completed
+        conclusion: run.conclusion as string | null, // success | failure | cancelled | null
+        createdAt:  run.created_at as string,
+        runUrl:     run.html_url as string,
+        steps: steps.map((s: any) => ({
+          name:       s.name as string,
+          status:     s.status as string,
+          conclusion: s.conclusion as string | null,
+        })),
+      };
+    } catch {
+      return null;
+    }
+  }
 }

@@ -35,6 +35,11 @@ export class SuggestionsController {
     return this.suggestionsService.triggerGitHubAction(req.user.userId, keywords, location);
   }
 
+  @Get('workflow-run')
+  getWorkflowRun() {
+    return this.suggestionsService.getLatestWorkflowRun();
+  }
+
   @Post(':id/add-to-wishlist')
   addToWishlist(@Request() req, @Param('id') id: string) {
     return this.suggestionsService.addToWishlist(req.user.userId, parseInt(id));
