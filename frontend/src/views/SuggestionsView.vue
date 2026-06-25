@@ -210,7 +210,7 @@ const isRunning = computed(() =>
     </div>
 
     <!-- Suggestions list -->
-    <div class="flex-1 overflow-y-auto p-4 sm:p-6">
+    <div class="flex-1 overflow-y-auto p-4 sm:p-6 pb-24 sm:pb-6">
       <div v-if="store.loading && !store.suggestions.length" class="flex justify-center pt-20">
         <div class="animate-spin h-8 w-8 border-4 border-indigo-500 border-t-transparent rounded-full"></div>
       </div>

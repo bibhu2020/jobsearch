@@ -51,7 +51,7 @@ async function analyze() {
 <template>
   <div class="flex flex-col h-screen">
     <Navbar />
-    <div class="flex-1 overflow-y-auto px-4 sm:px-6 py-4 sm:py-6">
+    <div class="flex-1 overflow-y-auto px-4 sm:px-6 py-4 sm:py-6 pb-24 sm:pb-6">
       <div class="max-w-2xl mx-auto space-y-4 sm:space-y-6">
         <h1 class="text-xl sm:text-2xl font-semibold text-gray-800">My Profile</h1>
 

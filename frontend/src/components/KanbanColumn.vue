@@ -37,7 +37,7 @@ function onUpdate(evt: any) {
     </div>
 
     <!-- Card list -->
-    <div :class="['flex-1 min-h-0 rounded-xl border-2 p-2 overflow-y-auto transition-colors', stage.color]">
+    <div :class="['flex-1 min-h-0 rounded-xl border-2 p-2 pb-20 sm:pb-2 overflow-y-auto transition-colors', stage.color]">
       <VueDraggable
         v-model="cards"
         group="kanban"
