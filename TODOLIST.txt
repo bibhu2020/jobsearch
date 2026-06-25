@@ -1,0 +1,7 @@
+can this be improved to search my email. the agent shall wake up once every night 9PM scan my google email (email that is shared with the recuiter), and if it finds any email relavant to the job applied (job in applied stage) or the recuiter, it should record against that job and send me a notification on PWA.
+
+Authenticate using gmail
+
+ensure duplicate jobs are detected.
+
+
