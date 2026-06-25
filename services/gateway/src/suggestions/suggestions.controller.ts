@@ -28,10 +28,16 @@ export class SuggestionsController {
 
   @Post('trigger-action')
   triggerAction(
+    @Request() req,
     @Body('keywords') keywords?: string,
     @Body('location') location?: string,
   ) {
-    return this.suggestionsService.triggerGitHubAction(keywords, location);
+    return this.suggestionsService.triggerGitHubAction(req.user.userId, keywords, location);
+  }
+
+  @Get('workflow-run')
+  getWorkflowRun() {
+    return this.suggestionsService.getLatestWorkflowRun();
   }
 
   @Post(':id/add-to-wishlist')

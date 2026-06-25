@@ -26,8 +26,8 @@ export class PipelineService {
     );
     if (!card) throw new NotFoundException('Card not found');
     await this.db.run(
-      'UPDATE pipeline_cards SET stage = ?, position = ?, updated_at = NOW() WHERE id = ?',
-      [stage, position, cardId],
+      'UPDATE pipeline_cards SET stage = ?, position = ?, updated_at = NOW() WHERE id = ? AND user_id = ?',
+      [stage, position, cardId, userId],
     );
     return this.getCards(userId);
   }
@@ -46,7 +46,7 @@ export class PipelineService {
       [cardId, userId],
     );
     if (!card) throw new NotFoundException('Card not found');
-    await this.db.run('DELETE FROM pipeline_cards WHERE id = ?', [cardId]);
+    await this.db.run('DELETE FROM pipeline_cards WHERE id = ? AND user_id = ?', [cardId, userId]);
     return { deleted: true };
   }
 }

@@ -66,7 +66,7 @@ export class JobsService {
   async deleteJob(userId: number, jobId: number) {
     const job = await this.db.get('SELECT id FROM jobs WHERE id = ? AND user_id = ?', [jobId, userId]);
     if (!job) throw new NotFoundException('Job not found');
-    await this.db.run('DELETE FROM jobs WHERE id = ?', [jobId]);
+    await this.db.run('DELETE FROM jobs WHERE id = ? AND user_id = ?', [jobId, userId]);
     return { deleted: true };
   }
 }
