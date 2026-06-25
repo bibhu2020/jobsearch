@@ -21,6 +21,7 @@ const migrations = [
   "ALTER TABLE job_suggestions ADD COLUMN recommendation TEXT DEFAULT 'consider'",
   "ALTER TABLE user_profiles ADD COLUMN location TEXT",
   "ALTER TABLE user_profiles ADD COLUMN resume_text TEXT",
+  "ALTER TABLE users ADD COLUMN mode TEXT NOT NULL DEFAULT 'candidate'",
 ];
 for (const m of migrations) {
   try { db.exec(m); } catch (_) { /* column already exists */ }
