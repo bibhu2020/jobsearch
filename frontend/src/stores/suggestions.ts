@@ -36,6 +36,9 @@ export interface WorkflowRun {
 
 export type WorkflowStatus = 'idle' | 'dispatching' | 'running' | 'completed' | 'error'
 
+// How long to keep polling before giving up (in poll ticks of ~12s each)
+const MAX_POLL_ATTEMPTS = 30  // ~6 minutes
+
 export const useSuggestionsStore = defineStore('suggestions', () => {
   const suggestions = ref<Suggestion[]>([])
   const loading = ref(false)
@@ -50,7 +53,9 @@ export const useSuggestionsStore = defineStore('suggestions', () => {
   const triggerTime = ref<number>(0)
   const autoImported = ref(false)
 
-  let _pollTimer: ReturnType<typeof setInterval> | null = null
+  let _pollIntervalId: ReturnType<typeof setInterval> | null = null
+  let _pollTimeoutId: ReturnType<typeof setTimeout> | null = null
+  let _pollAttempts = 0
 
   async function detectCountry() {
     if (detectedCountry.value || detectingCountry.value) return
@@ -81,8 +86,10 @@ export const useSuggestionsStore = defineStore('suggestions', () => {
     workflowMessage.value = ''
     workflowRun.value = null
     autoImported.value = false
+    triggerTime.value = Date.now()
     _stopPolling()
 
+    let dispatched = false
     try {
       const { data } = await api.post('/suggestions/trigger-action', {
         keywords: keywords?.trim() || '',
@@ -90,49 +97,61 @@ export const useSuggestionsStore = defineStore('suggestions', () => {
       })
 
       if (data?.error) {
+        // Application-level errors (no token, no profile) — workflow definitely did not run
         workflowStatus.value = 'error'
         workflowMessage.value = data.error
         return
       }
+      dispatched = true
+    } catch {
+      // HTTP error — the dispatch request may have already reached GitHub before the
+      // gateway threw. Treat as "maybe dispatched" and let polling confirm it.
+      dispatched = true
+    }
 
-      triggerTime.value = Date.now()
+    if (dispatched) {
       workflowStatus.value = 'running'
       workflowMessage.value = 'Workflow dispatched — waiting for GitHub Actions to pick it up…'
       _startPolling()
-    } catch (err: any) {
-      workflowStatus.value = 'error'
-      workflowMessage.value =
-        err?.response?.data?.error || err?.response?.data?.message || 'Failed to trigger GitHub Actions workflow.'
     }
   }
 
   function _startPolling() {
     _stopPolling()
-    // First check after 8s to give GitHub time to register the run
-    const firstCheck = setTimeout(() => _pollOnce(), 8000)
-    _pollTimer = setInterval(() => _pollOnce(), 12000) as any
-    // Store the initial timeout ref so we can clear it
-    ;((_pollTimer as any)._initialTimeout = firstCheck)
+    _pollAttempts = 0
+    // First check at 8s (give GitHub time to register the run), then every 12s
+    _pollTimeoutId = setTimeout(() => {
+      _pollOnce()
+      _pollIntervalId = setInterval(_pollOnce, 12_000)
+    }, 8_000)
   }
 
   function _stopPolling() {
-    if (_pollTimer !== null) {
-      clearInterval(_pollTimer)
-      const t = (_pollTimer as any)._initialTimeout
-      if (t) clearTimeout(t)
-      _pollTimer = null
-    }
+    if (_pollTimeoutId !== null) { clearTimeout(_pollTimeoutId); _pollTimeoutId = null }
+    if (_pollIntervalId !== null) { clearInterval(_pollIntervalId); _pollIntervalId = null }
   }
 
   async function _pollOnce() {
+    _pollAttempts++
+
+    // Give up after MAX_POLL_ATTEMPTS with no matching run found
+    if (_pollAttempts > MAX_POLL_ATTEMPTS) {
+      _stopPolling()
+      workflowStatus.value = 'error'
+      workflowMessage.value = 'No GitHub Actions run detected. Check the Actions tab on GitHub.'
+      return
+    }
+
     try {
       const { data } = await api.get<WorkflowRun | null>('/suggestions/workflow-run')
       if (!data) return
 
-      // Ignore stale runs from before our trigger
+      // Ignore runs that started before our trigger (stale previous runs)
       const runCreated = new Date(data.createdAt).getTime()
       if (runCreated < triggerTime.value - 30_000) return
 
+      // Found our run — reset the timeout counter
+      _pollAttempts = 0
       workflowRun.value = data
 
       if (data.status === 'completed') {
@@ -143,10 +162,10 @@ export const useSuggestionsStore = defineStore('suggestions', () => {
           autoImported.value = true
           workflowMessage.value = 'Search complete — importing results…'
           await importResults()
-          workflowMessage.value = 'Done! Results imported and ready below.'
+          workflowMessage.value = 'Done! New job suggestions are ready below.'
         } else if (data.conclusion !== 'success') {
           workflowStatus.value = 'error'
-          workflowMessage.value = `Workflow ${data.conclusion ?? 'failed'}. Click the run link for details.`
+          workflowMessage.value = `Workflow ${data.conclusion ?? 'failed'}. See the run link for details.`
         }
       } else {
         workflowMessage.value = data.status === 'in_progress'
@@ -154,7 +173,7 @@ export const useSuggestionsStore = defineStore('suggestions', () => {
           : 'Waiting for a GitHub Actions runner to pick up the job…'
       }
     } catch {
-      // network error — keep polling
+      // network hiccup — keep polling
     }
   }
 

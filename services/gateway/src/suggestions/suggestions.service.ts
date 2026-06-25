@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '../database/database.service';
 import axios from 'axios';
-import { readdirSync, readFileSync, existsSync } from 'fs';
-import { join } from 'path';
 
 @Injectable()
 export class SuggestionsService {
@@ -23,37 +21,61 @@ export class SuggestionsService {
   }
 
   async importFromFiles(userId: number) {
-    const base = process.env.SEARCH_RESULTS_PATH || './search_results';
-    const dir = join(base, String(userId));
-    if (!existsSync(dir)) return { imported: 0 };
+    const token = process.env.GITHUB_TOKEN;
+    const repo = process.env.GITHUB_WORKFLOW_REPO || 'bibhu2020/jobsearch';
+    const branch = process.env.GITHUB_BRANCH || 'main';
+    const headers: Record<string, string> = {
+      Accept: 'application/vnd.github.v3+json',
+      ...(token ? { Authorization: `token ${token}` } : {}),
+    };
 
-    const files = readdirSync(dir).filter(f => f.endsWith('.json'));
+    const dirPath = `search_results/${userId}`;
+    let entries: any[];
+    try {
+      const { data } = await axios.get(
+        `https://api.github.com/repos/${repo}/contents/${dirPath}?ref=${branch}`,
+        { headers },
+      );
+      entries = Array.isArray(data) ? data : [];
+    } catch (err: any) {
+      if (err?.response?.status === 404) return { imported: 0 };
+      throw err;
+    }
+
     let imported = 0;
+    for (const entry of entries) {
+      if (entry.type !== 'file' || !entry.name.endsWith('.json')) continue;
+      try {
+        const { data: fileData } = await axios.get(entry.url, { headers });
+        const raw = Buffer.from(fileData.content.replace(/\s/g, ''), 'base64').toString('utf-8');
+        const jobs: any[] = JSON.parse(raw);
 
-    for (const file of files) {
-      const results: any[] = JSON.parse(readFileSync(join(dir, file), 'utf-8'));
-      for (const job of results) {
-        const exists = await this.db.get(
-          'SELECT id FROM job_suggestions WHERE user_id = ? AND url = ?',
-          [userId, job.url],
-        );
-        if (!exists) {
-          await this.db.insert(
-            `INSERT INTO job_suggestions
-               (user_id, title, company, location, description, url, match_reason, source,
-                search_date, match_score, matching, gaps, recommendation)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-            [
-              userId, job.title, job.company, job.location, job.description,
-              job.url, job.match_reason, job.source, job.search_date,
-              job.match_score ?? 0,
-              JSON.stringify(job.matching ?? []),
-              JSON.stringify(job.gaps ?? []),
-              job.recommendation ?? 'consider',
-            ],
+        for (const job of jobs) {
+          if (!job.url) continue;
+          const exists = await this.db.get(
+            'SELECT id FROM job_suggestions WHERE user_id = ? AND url = ?',
+            [userId, job.url],
           );
-          imported++;
+          if (!exists) {
+            await this.db.insert(
+              `INSERT INTO job_suggestions
+                 (user_id, title, company, location, description, url, match_reason, source,
+                  search_date, match_score, matching, gaps, recommendation)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+              [
+                userId, job.title, job.company, job.location, job.description,
+                job.url, job.match_reason, job.source, job.search_date,
+                job.match_score ?? 0,
+                JSON.stringify(job.matching ?? []),
+                JSON.stringify(job.gaps ?? []),
+                job.recommendation ?? 'consider',
+              ],
+            );
+            imported++;
+          }
         }
+      } catch {
+        // skip malformed files; don't abort the whole import
       }
     }
 
@@ -147,13 +169,15 @@ export class SuggestionsService {
       return { error: 'No profile analyzed yet. Enter keywords to search anyway.' };
     }
 
-    const skills: string[] = profile?.skills ? JSON.parse(profile.skills) : [];
-    const experience: any[] = profile?.experience ? JSON.parse(profile.experience) : [];
-    // Slim experience down so it fits safely in a workflow input string
-    const experienceSlim = experience.slice(0, 3).map((e: any) => ({
-      title: e.title || '',
-      company: e.company || '',
-    }));
+    let skills: string[] = [];
+    let experienceSlim: { title: string; company: string }[] = [];
+    try {
+      skills = profile?.skills ? JSON.parse(profile.skills) : [];
+    } catch { skills = []; }
+    try {
+      const exp: any[] = profile?.experience ? JSON.parse(profile.experience) : [];
+      experienceSlim = exp.slice(0, 3).map((e: any) => ({ title: e.title || '', company: e.company || '' }));
+    } catch { experienceSlim = []; }
 
     const repo = process.env.GITHUB_WORKFLOW_REPO || 'bibhu2020/jobsearch';
     const workflow = process.env.GITHUB_WORKFLOW_FILE || 'job-search.yml';
