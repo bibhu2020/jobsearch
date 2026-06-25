@@ -84,26 +84,54 @@ class FormatJdRequest(BaseModel):
 
 @router.post("/format-jd")
 async def format_jd(body: FormatJdRequest):
-    prompt = f"""You are formatting a job description for a hiring manager.
+    prompt = f"""Format this job description as compact HTML for a rich text editor.
 
-Raw text (pasted from somewhere):
+Input text:
 {body.text[:6000]}
 
-Reformat this into clean, professional HTML suitable for a rich text editor.
-Use: <h2> for section headings, <ul><li> for bullet lists, <p> for paragraphs, <strong> for emphasis.
-Preserve all original content — do not add or remove requirements.
-Fix capitalization and punctuation. Group related bullets under appropriate headings.
-Typical sections: About the Role, Responsibilities, Requirements, Nice to Have, Benefits.
-Only include sections that have actual content in the input.
+Return JSON: {{"html": "..."}}
 
-Return ONLY the HTML — no markdown fences, no explanation, no wrapping element.
+HTML rules (strict):
+- <h2>Section Name</h2> for content sections (Responsibilities, Requirements, Nice to Have, Benefits, etc.)
+- <ul><li>item text</li></ul> for bullet lists — NO <p> inside <li>, text goes directly in <li>
+- <p>text</p> for introductory overview paragraphs only
+- <strong>term</strong> only for key technical terms when needed
+- COMPACT: absolutely NO whitespace or newlines between tags — every tag immediately follows the last closing tag
+
+SKIP these entirely — they are captured in separate form fields:
+- Job title / role name lines
+- Location / office / remote lines
+- Experience level lines (e.g. "5-10 Years", "3+ years")
+- Employment type lines (Full-Time, Contract, Part-Time)
+- Salary / compensation lines
+- Any single-word label + value pairs at the top of the JD
+
+Preserve all responsibilities, requirements, and qualifications.
+
+Example: {{"html": "<h2>About the Role</h2><p>We are seeking a senior engineer...</p><h2>Responsibilities</h2><ul><li>Design RESTful APIs</li><li>Build microservices</li></ul><h2>Requirements</h2><ul><li>5+ years Node.js</li><li>Experience with PostgreSQL</li></ul>"}}
 """
     raw = await _call_ai(prompt)
-    # Strip any accidental markdown code fences
+
     import re
-    cleaned = re.sub(r'^```(?:html)?\s*', '', raw.strip(), flags=re.IGNORECASE)
-    cleaned = re.sub(r'\s*```$', '', cleaned)
-    return {"html": cleaned.strip()}
+    # _call_ai returns JSON string — parse it to extract the html field
+    try:
+        data = json.loads(raw)
+        html = data.get("html") or data.get("content") or data.get("result") or ""
+    except Exception:
+        # Fallback: AI returned raw HTML or something else
+        html = raw
+        html = re.sub(r'^```(?:html)?\s*', '', html.strip(), flags=re.IGNORECASE)
+        html = re.sub(r'\s*```$', '', html)
+
+    # Remove any remaining whitespace between tags that the AI snuck in
+    html = re.sub(r'>\s+<', '><', html.strip())
+    # Remove <p> wrappers inside <li> elements
+    html = re.sub(r'<li>\s*<p>', '<li>', html, flags=re.IGNORECASE)
+    html = re.sub(r'</p>\s*</li>', '</li>', html, flags=re.IGNORECASE)
+    # Remove empty paragraphs
+    html = re.sub(r'<p>\s*</p>', '', html, flags=re.IGNORECASE)
+
+    return {"html": html.strip()}
 
 
 class ScanRequest(BaseModel):

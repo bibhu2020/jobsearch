@@ -47,7 +47,8 @@ watch(
   () => props.modelValue,
   (val) => {
     if (editor.value && editor.value.getHTML() !== val) {
-      editor.value.commands.setContent(val, false as any)
+      // Tiptap v3: second arg is SetContentOptions object, not a boolean
+      editor.value.commands.setContent(val, { emitUpdate: false } as any)
     }
   },
 )

@@ -24,6 +24,8 @@ const editTitle   = ref('')
 const editDesc    = ref('')
 const editLocation = ref('')
 const saving      = ref(false)
+const saveError   = ref('')
+const createError = ref('')
 const editFormatState = ref<'idle' | 'formatting'>('idle')
 
 onMounted(() => store.fetchProjects())
@@ -45,6 +47,7 @@ async function handleFormatRequest(text: string, target: 'create' | 'edit') {
 async function createProject() {
   if (!newTitle.value.trim()) return
   creating.value = true
+  createError.value = ''
   try {
     const p = await store.createProject(
       newTitle.value.trim(),
@@ -56,6 +59,8 @@ async function createProject() {
     newLocation.value = ''
     showCreate.value  = false
     router.push(`/interviewer/projects/${p.id}`)
+  } catch (e: any) {
+    createError.value = e.response?.data?.message || 'Failed to create project. Run npm run db:init if this is a new install.'
   } finally {
     creating.value = false
   }
@@ -71,6 +76,7 @@ function startEdit(p: { id: number; title: string; description?: string | null; 
 async function saveEdit() {
   if (!editTitle.value.trim() || editingId.value === null) return
   saving.value = true
+  saveError.value = ''
   try {
     await store.updateProject(
       editingId.value,
@@ -79,6 +85,8 @@ async function saveEdit() {
       editLocation.value.trim() || undefined,
     )
     editingId.value = null
+  } catch (e: any) {
+    saveError.value = e.response?.data?.message || 'Save failed. Run npm run db:init to apply DB migrations.'
   } finally {
     saving.value = false
   }
@@ -139,11 +147,12 @@ async function saveEdit() {
               class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 text-white rounded-lg text-sm font-medium transition">
               {{ creating ? 'Creating…' : 'Create' }}
             </button>
-            <button @click="showCreate = false"
+            <button @click="showCreate = false; createError = ''"
               class="px-4 py-2 border border-slate-600 hover:bg-slate-700 rounded-lg text-sm text-slate-400 transition">
               Cancel
             </button>
           </div>
+          <p v-if="createError" class="text-xs text-red-400">{{ createError }}</p>
         </div>
 
         <!-- Loading -->
@@ -194,11 +203,12 @@ async function saveEdit() {
                   class="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 text-white rounded-lg text-sm font-medium transition">
                   {{ saving ? 'Saving…' : 'Save' }}
                 </button>
-                <button @click="editingId = null"
+                <button @click="editingId = null; saveError = ''"
                   class="px-4 py-1.5 border border-slate-600 hover:bg-slate-700 rounded-lg text-sm text-slate-400 transition">
                   Cancel
                 </button>
               </div>
+              <p v-if="saveError" class="text-xs text-red-400">{{ saveError }}</p>
             </div>
 
             <!-- View mode -->
