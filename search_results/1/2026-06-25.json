@@ -1,111 +1,107 @@
 [
   {
-    "title": "Senior AI Architect \u2013 Azure & Cloud AI",
-    "company": "IBM",
-    "location": "Chicago, IL",
-    "description": "Senior AI Architect \u2013 Azure & Cloud AI at IBM (Chicago, IL)",
-    "url": "https://www.linkedin.com/jobs/view/senior-ai-architect-%E2%80%93-azure-cloud-ai-at-ibm-4417967870",
+    "title": "Senior Director of AI & Enterprise Architecture",
+    "company": "Convey Health Solutions",
+    "location": "United States",
+    "description": "Senior Director of AI & Enterprise Architecture at Convey Health Solutions (United States)",
+    "url": "https://www.linkedin.com/jobs/view/senior-director-of-ai-enterprise-architecture-at-convey-health-solutions-4431872963",
     "source": "linkedin",
-    "match_score": 95,
+    "match_score": 92,
     "matching": [
-      "Senior experience in AI and Azure matches job requirement",
-      "Based in the United States location (Chicago, IL)",
-      "Cloud-native and generative AI expertise",
-      "Enterprise architecture and solution architecture skills"
+      "Experience in AI and Enterprise Architecture",
+      "Located in the United States",
+      "Leadership and cloud-native platforms expertise",
+      "Focus on healthcare aligns with candidate\u2019s experience"
     ],
     "gaps": [
-      "None significant"
+      "None identified"
     ],
     "recommendation": "apply",
-    "match_reason": "Exceptional match on job requirements and location. Candidate's extensive experience in AI and Azure aligns strongly.",
-    "user_id": 1,
-    "search_date": "2026-06-25"
-  },
-  {
-    "title": "Senior AI Architect \u2013 Azure & Cloud AI",
-    "company": "IBM",
-    "location": "Dallas, TX",
-    "description": "Senior AI Architect \u2013 Azure & Cloud AI at IBM (Dallas, TX)",
-    "url": "https://www.linkedin.com/jobs/view/senior-ai-architect-%E2%80%93-azure-cloud-ai-at-ibm-4417974668",
-    "source": "linkedin",
-    "match_score": 95,
-    "matching": [
-      "Senior experience in AI and Azure matches job requirement",
-      "Based in the United States location (Dallas, TX)",
-      "Cloud-native and generative AI expertise",
-      "Enterprise architecture and solution architecture skills"
-    ],
-    "gaps": [
-      "None significant"
-    ],
-    "recommendation": "apply",
-    "match_reason": "Outstanding alignment with job criteria and location. Candidate's specialization in AI and Azure is highly relevant.",
-    "user_id": 1,
-    "search_date": "2026-06-25"
-  },
-  {
-    "title": "Senior AI Architect \u2013 Azure & Cloud AI",
-    "company": "IBM",
-    "location": "New York, United States",
-    "description": "Senior AI Architect \u2013 Azure & Cloud AI at IBM (New York, United States)",
-    "url": "https://www.linkedin.com/jobs/view/senior-ai-architect-%E2%80%93-azure-cloud-ai-at-ibm-4417967869",
-    "source": "linkedin",
-    "match_score": 95,
-    "matching": [
-      "Senior experience in AI and Azure matches job requirement",
-      "Based in the United States location (New York, NY)",
-      "Cloud-native and generative AI expertise",
-      "Enterprise architecture and solution architecture skills"
-    ],
-    "gaps": [
-      "None significant"
-    ],
-    "recommendation": "apply",
-    "match_reason": "Excellent fit with requirements and location. Candidate's expertise and skills are in perfect alignment.",
+    "match_reason": "This role aligns perfectly with the candidate's leadership skills and experience in AI, architecture, and focus on healthcare.",
     "user_id": 1,
     "search_date": "2026-06-25"
   },
   {
     "title": "Principal AI Architect - Remote",
-    "company": "Paradigm",
+    "company": "ChatGPT Jobs",
     "location": "Lombard, IL",
-    "description": "Principal AI Architect - Remote at Paradigm (Lombard, IL)",
-    "url": "https://www.linkedin.com/jobs/view/principal-ai-architect-remote-at-paradigm-4430776437",
+    "description": "Principal AI Architect - Remote at ChatGPT Jobs (Lombard, IL)",
+    "url": "https://www.linkedin.com/jobs/view/principal-ai-architect-remote-at-chatgpt-jobs-4428540206",
     "source": "linkedin",
-    "match_score": 92,
+    "match_score": 88,
     "matching": [
-      "Remote role available to US candidates",
-      "Expertise in AI and cloud architecture",
-      "Principal-level experience aligns with job expectations",
-      "Experience with mentoring and leading teams"
+      "Remote position accessible from US",
+      "Principal AI Architect role matches experience level",
+      "Skills in architecture and AI are ideal"
     ],
     "gaps": [
-      "No specific mention of healthcare industry"
+      "Location specific projects may require travel not mentioned"
     ],
     "recommendation": "apply",
-    "match_reason": "Highly relevant experience and skills. The remote nature allows flexibility, with a minor industry-specific gap.",
+    "match_reason": "High relevance to AI and architectural skills with remote flexibility.",
     "user_id": 1,
     "search_date": "2026-06-25"
   },
   {
-    "title": "AI Strategy, Emerging Systems & AI Principal Architect",
-    "company": "Micron Technology",
-    "location": "Boise, ID",
-    "description": "AI Strategy, Emerging Systems & AI Principal Architect at Micron Technology (Boise, ID)",
-    "url": "https://www.linkedin.com/jobs/view/ai-strategy-emerging-systems-ai-principal-architect-at-micron-technology-4410839266",
+    "title": "Boomi Enterprise Integration Architect-Master Consultant",
+    "company": "Wipfli",
+    "location": "United States",
+    "description": "Boomi Enterprise Integration Architect-Master Consultant at Wipfli (United States)",
+    "url": "https://www.linkedin.com/jobs/view/boomi-enterprise-integration-architect-master-consultant-at-wipfli-4389295093",
+    "source": "linkedin",
+    "match_score": 85,
+    "matching": [
+      "Enterprise Integration Architecture expertise",
+      "Located in the United States",
+      "Senior Consultant level aligns with experience"
+    ],
+    "gaps": [
+      "Boomi platform experience not specified"
+    ],
+    "recommendation": "apply",
+    "match_reason": "The role\u2019s focus on enterprise architecture aligns well with the candidate\u2019s experience, with minimal gaps.",
+    "user_id": 1,
+    "search_date": "2026-06-25"
+  },
+  {
+    "title": "Data AI Solutions Architect",
+    "company": "CSI Companies",
+    "location": "United States",
+    "description": "Data AI Solutions Architect at CSI Companies (United States)",
+    "url": "https://www.linkedin.com/jobs/view/data-ai-solutions-architect-at-csi-companies-4432827004",
     "source": "linkedin",
     "match_score": 90,
     "matching": [
-      "Senior role in AI strategy matches candidate\u2019s profile",
-      "Experience in emerging systems and enterprise architecture",
-      "Based in the United States location (Boise, ID)",
-      "Strong background in AI and cloud technologies"
+      "Data AI Solutions experience",
+      "Located in the United States",
+      "Architecture and AI expertise matches requirements"
     ],
     "gaps": [
-      "Specific generative AI specialization not mentioned"
+      "None identified"
     ],
     "recommendation": "apply",
-    "match_reason": "Strong alignment with candidate's experience and skill set. Candidate's profile fits the strategic and AI-focused nature of the role.",
+    "match_reason": "Highly aligns with expertise in AI, data solutions, and architecture, fitting the candidate\u2019s strong background.",
+    "user_id": 1,
+    "search_date": "2026-06-25"
+  },
+  {
+    "title": "Sr. Support Engineer, EBS",
+    "company": "Rimini Street",
+    "location": "Remote",
+    "description": " \n   Headquarters:  Remote United States\n      URL:   http://riministreet.com \n \n\n   About Rimini Street, Inc.     Rimini Street, Inc. (Nasdaq: RMNI), a Russell 2000\u00ae Company, is a proven, trusted global provider of end-to-end, mission-critical enterprise software support, managed services and innovative Agentic AI ERP solutions, and is the leading third-party support provider for Oracle, SAP and VMware software.    Our comprehensive portfolio of unified solutions help run, manage, support, customize, configure, connect, protect, monitor, and optimize enterprise application, database and technology software, enabling our clients to achieve better business outcomes, significantly reduce costs and reallocate resources towards strategic projects.    The Company has signed thousands of contracts with Fortune Global 100, Fortune 500, midmarket, public sector and government organizations who selected Rimini Street as their trusted, proven mission-critical enterprise software solutions provider and achieved better operational outcomes, realized billions of US dollars in savings and funded AI and other innovation investments.    We are actively seeking a   Sr. Support Engineer, EBS   .  This role reports to the Sr. Director, Oracle Delivery and is eligible for remote work from a home office located in the US.     Position Summary      The role of the Senior&nbsp;EBS Support&nbsp;Engineer is to provide exceptional remote-based support for mission-critical EBS applications as part of our global customer support team. The position has the responsibility for researching, troubleshooting and supporting multiple&nbsp;EBS modules for our global clients who use both r11i and R12 environments. &nbsp;The role of the Senior&nbsp;EBS Support&nbsp;Engineer requires expertise and skills to diagnose serious issues; then develop, test, package and deliver fixes for such issues in complex, integrated and highly configured environments.     Essential Duties &amp; Responsibilities    Collabor",
+    "url": "https://weworkremotely.com/remote-jobs/rimini-street-sr-support-engineer-ebs",
+    "source": "weworkremotely",
+    "match_score": 80,
+    "matching": [
+      "Remote position available in US",
+      "Enterprise software support experience matches",
+      "Engineering and leadership skills applicable"
+    ],
+    "gaps": [
+      "Support Engineer role may require more operational support skills"
+    ],
+    "recommendation": "consider",
+    "match_reason": "Good match in enterprise support context with a slight role-specific focus shift.",
     "user_id": 1,
     "search_date": "2026-06-25"
   }
