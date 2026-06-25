@@ -42,41 +42,74 @@ export class SuggestionsService {
       throw err;
     }
 
-    let imported = 0;
-    for (const entry of entries) {
-      if (entry.type !== 'file' || !entry.name.endsWith('.json')) continue;
-      try {
-        const { data: fileData } = await axios.get(entry.url, { headers });
-        const raw = Buffer.from(fileData.content.replace(/\s/g, ''), 'base64').toString('utf-8');
-        const jobs: any[] = JSON.parse(raw);
+    // Only process the most recently dated file — historical files are superseded
+    const jsonFiles = entries
+      .filter(e => e.type === 'file' && e.name.endsWith('.json'))
+      .sort((a, b) => b.name.localeCompare(a.name));
 
-        for (const job of jobs) {
-          if (!job.url) continue;
-          const exists = await this.db.get(
-            'SELECT id FROM job_suggestions WHERE user_id = ? AND url = ?',
-            [userId, job.url],
-          );
-          if (!exists) {
-            await this.db.insert(
-              `INSERT INTO job_suggestions
-                 (user_id, title, company, location, description, url, match_reason, source,
-                  search_date, match_score, matching, gaps, recommendation)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-              [
-                userId, job.title, job.company, job.location, job.description,
-                job.url, job.match_reason, job.source, job.search_date,
-                job.match_score ?? 0,
-                JSON.stringify(job.matching ?? []),
-                JSON.stringify(job.gaps ?? []),
-                job.recommendation ?? 'consider',
-              ],
-            );
-            imported++;
-          }
-        }
-      } catch {
-        // skip malformed files; don't abort the whole import
+    if (!jsonFiles.length) return { imported: 0 };
+
+    const latestEntry = jsonFiles[0];
+    const latestDate = latestEntry.name.replace('.json', ''); // e.g. '2026-06-25'
+
+    let jobs: any[];
+    try {
+      const { data: fileData } = await axios.get(latestEntry.url, { headers });
+      const raw = Buffer.from(fileData.content.replace(/\s/g, ''), 'base64').toString('utf-8');
+      jobs = JSON.parse(raw);
+    } catch {
+      return { imported: 0 };
+    }
+
+    // Dismiss pending suggestions from older runs — they are now superseded by the
+    // latest run. Explicit user decisions (dismissed / added) are left untouched.
+    await this.db.run(
+      "UPDATE job_suggestions SET status = 'dismissed' WHERE user_id = ? AND status = 'pending' AND search_date < ?",
+      [userId, latestDate],
+    );
+
+    let imported = 0;
+    for (const job of jobs) {
+      if (!job.url) continue;
+
+      const existing = await this.db.get<any>(
+        'SELECT id, status FROM job_suggestions WHERE user_id = ? AND url = ?',
+        [userId, job.url],
+      );
+
+      if (!existing) {
+        // New job — insert as pending
+        await this.db.insert(
+          `INSERT INTO job_suggestions
+             (user_id, title, company, location, description, url, match_reason, source,
+              search_date, match_score, matching, gaps, recommendation)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          [
+            userId, job.title, job.company, job.location, job.description,
+            job.url, job.match_reason, job.source, latestDate,
+            job.match_score ?? 0,
+            JSON.stringify(job.matching ?? []),
+            JSON.stringify(job.gaps ?? []),
+            job.recommendation ?? 'consider',
+          ],
+        );
+        imported++;
+      } else if (existing.status === 'pending') {
+        // Same job re-appeared in the new run — refresh its match data
+        await this.db.run(
+          `UPDATE job_suggestions
+             SET match_score = ?, match_reason = ?, matching = ?, gaps = ?,
+                 recommendation = ?, search_date = ?
+           WHERE id = ?`,
+          [
+            job.match_score ?? 0, job.match_reason,
+            JSON.stringify(job.matching ?? []), JSON.stringify(job.gaps ?? []),
+            job.recommendation ?? 'consider', latestDate,
+            existing.id,
+          ],
+        );
       }
+      // status = 'added' or 'dismissed' → leave untouched (respect user's decision)
     }
 
     return { imported };
