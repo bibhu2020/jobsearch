@@ -116,8 +116,8 @@ export class SuggestionsService {
     );
 
     await this.db.run(
-      "UPDATE job_suggestions SET status = 'added' WHERE id = ?",
-      [suggestionId],
+      "UPDATE job_suggestions SET status = 'added' WHERE id = ? AND user_id = ?",
+      [suggestionId, userId],
     );
 
     return { cardId, jobId };
