@@ -1,12 +1,25 @@
-name: Weekly Job Search
+name: Job Search Agent
 
 on:
-  schedule:
-    - cron: '0 20 * * 5'   # Every Friday at 8 PM UTC
   workflow_dispatch:
     inputs:
+      user_id:
+        description: 'ID of the user who triggered the search'
+        required: true
+      profile_summary:
+        description: 'User profile summary for AI-powered job matching'
+        required: false
+        default: ''
+      skills:
+        description: 'JSON array of user skills'
+        required: false
+        default: '[]'
+      experience:
+        description: 'JSON array of recent roles (title + company)'
+        required: false
+        default: '[]'
       keywords:
-        description: 'Job search keywords (e.g. "Python engineer remote")'
+        description: 'Optional keyword override (e.g. "Python engineer remote")'
         required: false
         default: ''
       location:
@@ -41,8 +54,11 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          DATABASE_PATH: shared/job_tracker.db
           SEARCH_RESULTS_PATH: search_results
+          USER_ID: ${{ github.event.inputs.user_id }}
+          PROFILE_SUMMARY: ${{ github.event.inputs.profile_summary }}
+          SKILLS: ${{ github.event.inputs.skills }}
+          EXPERIENCE: ${{ github.event.inputs.experience }}
           SEARCH_KEYWORDS: ${{ github.event.inputs.keywords }}
           SEARCH_LOCATION: ${{ github.event.inputs.location }}
 
@@ -52,6 +68,6 @@ jobs:
           git config user.email "bot@noreply.github.com"
           git add search_results/
           git diff --staged --quiet || (
-            git commit -m "chore: weekly job search results $(date +%Y-%m-%d)"
+            git commit -m "chore: job search results for user ${{ github.event.inputs.user_id }} $(date +%Y-%m-%d)"
             git push
           )

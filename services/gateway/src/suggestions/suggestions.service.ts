@@ -23,7 +23,8 @@ export class SuggestionsService {
   }
 
   async importFromFiles(userId: number) {
-    const dir = process.env.SEARCH_RESULTS_PATH || './search_results';
+    const base = process.env.SEARCH_RESULTS_PATH || './search_results';
+    const dir = join(base, String(userId));
     if (!existsSync(dir)) return { imported: 0 };
 
     const files = readdirSync(dir).filter(f => f.endsWith('.json'));
@@ -32,7 +33,6 @@ export class SuggestionsService {
     for (const file of files) {
       const results: any[] = JSON.parse(readFileSync(join(dir, file), 'utf-8'));
       for (const job of results) {
-        if (job.user_id && job.user_id !== userId) continue;
         const exists = await this.db.get(
           'SELECT id FROM job_suggestions WHERE user_id = ? AND url = ?',
           [userId, job.url],
@@ -40,10 +40,17 @@ export class SuggestionsService {
         if (!exists) {
           await this.db.insert(
             `INSERT INTO job_suggestions
-               (user_id, title, company, location, description, url, match_reason, source, search_date)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-            [userId, job.title, job.company, job.location, job.description,
-             job.url, job.match_reason, job.source, job.search_date],
+               (user_id, title, company, location, description, url, match_reason, source,
+                search_date, match_score, matching, gaps, recommendation)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [
+              userId, job.title, job.company, job.location, job.description,
+              job.url, job.match_reason, job.source, job.search_date,
+              job.match_score ?? 0,
+              JSON.stringify(job.matching ?? []),
+              JSON.stringify(job.gaps ?? []),
+              job.recommendation ?? 'consider',
+            ],
           );
           imported++;
         }
@@ -131,18 +138,40 @@ export class SuggestionsService {
     return { dismissed: true };
   }
 
-  async triggerGitHubAction(keywords?: string, location?: string) {
+  async triggerGitHubAction(userId: number, keywords?: string, location?: string) {
     const token = process.env.GITHUB_TOKEN;
     if (!token) return { error: 'GITHUB_TOKEN not configured' };
+
+    const profile = await this.db.get<any>('SELECT * FROM user_profiles WHERE user_id = ?', [userId]);
+    if (!profile?.profile_summary && !keywords?.trim()) {
+      return { error: 'No profile analyzed yet. Enter keywords to search anyway.' };
+    }
+
+    const skills: string[] = profile?.skills ? JSON.parse(profile.skills) : [];
+    const experience: any[] = profile?.experience ? JSON.parse(profile.experience) : [];
+    // Slim experience down so it fits safely in a workflow input string
+    const experienceSlim = experience.slice(0, 3).map((e: any) => ({
+      title: e.title || '',
+      company: e.company || '',
+    }));
 
     const repo = process.env.GITHUB_WORKFLOW_REPO || 'bibhu2020/jobsearch';
     const workflow = process.env.GITHUB_WORKFLOW_FILE || 'job-search.yml';
     const ref = process.env.GITHUB_BRANCH || 'main';
 
+    const inputs = {
+      user_id:         String(userId),
+      profile_summary: (profile?.profile_summary || '').slice(0, 2000),
+      skills:          JSON.stringify(skills.slice(0, 15)),
+      experience:      JSON.stringify(experienceSlim),
+      keywords:        keywords?.trim() || '',
+      location:        location?.trim() || profile?.location || '',
+    };
+
     try {
       await axios.post(
         `https://api.github.com/repos/${repo}/actions/workflows/${workflow}/dispatches`,
-        { ref, inputs: { keywords: keywords?.trim() || '', location: location?.trim() || '' } },
+        { ref, inputs },
         { headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' } },
       );
       return { dispatched: true };
