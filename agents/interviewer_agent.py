@@ -47,6 +47,37 @@ async def _call_ai(prompt: str) -> str:
     return resp.choices[0].message.content
 
 
+class ExtractRequest(BaseModel):
+    resume_text: str
+
+
+@router.post("/extract-candidate")
+async def extract_candidate(body: ExtractRequest):
+    prompt = f"""Extract the candidate's personal contact information from this resume.
+
+Resume (first 3000 chars):
+{body.resume_text[:3000]}
+
+Return a JSON object with exactly these keys:
+- "name": full name of the candidate (string — infer from email username if not obvious, never null)
+- "email": email address found in the resume (string or null)
+
+Return ONLY the JSON, no explanation.
+"""
+    raw = await _call_ai(prompt)
+    try:
+        data = json.loads(raw)
+    except Exception:
+        import re
+        m = re.search(r'\{.*\}', raw, re.DOTALL)
+        data = json.loads(m.group()) if m else {}
+
+    return {
+        "name": (data.get("name") or "").strip() or "Unknown Candidate",
+        "email": (data.get("email") or "").strip() or None,
+    }
+
+
 class ScanRequest(BaseModel):
     resume_text: str
     job_description: str = ""

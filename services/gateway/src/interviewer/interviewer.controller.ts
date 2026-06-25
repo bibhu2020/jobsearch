@@ -84,6 +84,30 @@ export class InterviewerController {
 
   // ── Candidates ────────────────────────────────────────────────────────────────
 
+  @Post('projects/:pid/candidates/from-resume')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: memoryStorage(),
+      fileFilter: (_req, file, cb) => {
+        const allowed = ['.pdf', '.doc', '.docx'];
+        cb(null, allowed.includes(extname(file.originalname).toLowerCase()));
+      },
+      limits: { fileSize: 10 * 1024 * 1024 },
+    }),
+  )
+  addCandidateFromResume(
+    @Request() req,
+    @Param('pid') pid: string,
+    @UploadedFile() file: Express.Multer.File,
+    @Body('stage') stage?: string,
+  ) {
+    return this.svc.addCandidateFromResume(
+      req.user.userId, parseInt(pid),
+      stage || 'applied',
+      file.buffer, file.originalname,
+    );
+  }
+
   @Post('projects/:pid/candidates')
   addCandidate(
     @Request() req,

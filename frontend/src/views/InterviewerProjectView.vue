@@ -18,6 +18,62 @@ const newEmail = ref('')
 const newResumeText = ref('')
 const selectedCandidate = ref<Candidate | null>(null)
 
+// ── Resume drag-and-drop ───────────────────────────────────────────────────────
+
+const fileDragCounter = reactive<Record<string, number>>({
+  applied: 0, screening: 0, interview: 0, offer: 0, rejected: 0,
+})
+const columnUploading = reactive<Record<string, boolean>>({
+  applied: false, screening: false, interview: false, offer: false, rejected: false,
+})
+const dropError = ref('')
+
+function isFileDrag(e: DragEvent) {
+  return e.dataTransfer?.types.includes('Files') ?? false
+}
+
+function onDragEnter(stageKey: string, e: DragEvent) {
+  if (isFileDrag(e)) fileDragCounter[stageKey]++
+}
+
+function onDragLeave(stageKey: string, e: DragEvent) {
+  if (isFileDrag(e)) fileDragCounter[stageKey] = Math.max(0, fileDragCounter[stageKey] - 1)
+}
+
+function onDragOver(stageKey: string, e: DragEvent) {
+  if (isFileDrag(e)) {
+    e.preventDefault()
+    if (e.dataTransfer) e.dataTransfer.dropEffect = 'copy'
+  }
+}
+
+async function onFileDrop(stageKey: string, e: DragEvent) {
+  fileDragCounter[stageKey] = 0
+  if (!isFileDrag(e)) return
+  e.preventDefault()
+  dropError.value = ''
+
+  const file = e.dataTransfer?.files[0]
+  if (!file) return
+
+  const ext = file.name.split('.').pop()?.toLowerCase() || ''
+  if (!['pdf', 'doc', 'docx'].includes(ext)) {
+    dropError.value = 'Only PDF, DOC, and DOCX files are supported.'
+    setTimeout(() => { dropError.value = '' }, 4000)
+    return
+  }
+
+  columnUploading[stageKey] = true
+  try {
+    await store.addCandidateFromResume(projectId.value, stageKey, file)
+  } catch (err: any) {
+    dropError.value = err.response?.data?.message || 'Failed to extract resume.'
+    setTimeout(() => { dropError.value = '' }, 4000)
+  } finally {
+    columnUploading[stageKey] = false
+  }
+}
+
 // ── Share / members panel ──────────────────────────────────────────────────────
 
 const showShare = ref(false)
@@ -326,6 +382,17 @@ function timeAgo(dateStr: string) {
         </div>
       </div>
 
+      <!-- Drop error toast -->
+      <Transition name="drop-fade">
+        <div v-if="dropError"
+          class="flex-shrink-0 flex items-center gap-2 px-4 py-2.5 bg-red-900/30 border-b border-red-700/50 text-sm text-red-300">
+          <svg class="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/>
+          </svg>
+          {{ dropError }}
+        </div>
+      </Transition>
+
       <!-- Loading -->
       <div v-if="store.loading" class="flex-1 flex items-center justify-center text-slate-500">
         Loading…
@@ -356,8 +423,33 @@ function timeAgo(dateStr: string) {
         <div ref="boardRef" class="flex-1 flex gap-3 p-3 sm:gap-4 sm:p-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide">
 
           <div v-for="col in STAGES" :key="col.key"
-            class="flex flex-col w-[82vw] sm:w-64 flex-shrink-0 h-full min-h-0 snap-center"
-            :data-stage="col.key">
+            class="relative flex flex-col w-[82vw] sm:w-64 flex-shrink-0 h-full min-h-0 snap-center"
+            :data-stage="col.key"
+            @dragenter="onDragEnter(col.key, $event)"
+            @dragleave="onDragLeave(col.key, $event)"
+            @dragover="onDragOver(col.key, $event)"
+            @drop="onFileDrop(col.key, $event)">
+
+            <!-- File drop overlay -->
+            <Transition name="drop-fade">
+              <div v-if="fileDragCounter[col.key] > 0 || columnUploading[col.key]"
+                class="absolute inset-0 z-20 rounded-xl border-2 border-dashed border-indigo-500 bg-indigo-950/80 backdrop-blur-sm flex flex-col items-center justify-center gap-2 pointer-events-none">
+                <template v-if="columnUploading[col.key]">
+                  <svg class="animate-spin h-6 w-6 text-indigo-400" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
+                  </svg>
+                  <p class="text-sm text-indigo-300 font-medium">Extracting resume…</p>
+                </template>
+                <template v-else>
+                  <svg class="h-8 w-8 text-indigo-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m6.75 12l-3-3m0 0l-3 3m3-3v6m-1.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                  </svg>
+                  <p class="text-sm text-indigo-300 font-semibold">Drop resume here</p>
+                  <p class="text-xs text-indigo-500">PDF · DOC · DOCX</p>
+                </template>
+              </div>
+            </Transition>
 
             <!-- Column header -->
             <div class="flex items-center justify-between mb-2.5 px-0.5">
@@ -465,3 +557,14 @@ function timeAgo(dateStr: string) {
     />
   </div>
 </template>
+
+<style scoped>
+.drop-fade-enter-active,
+.drop-fade-leave-active {
+  transition: opacity 0.15s ease;
+}
+.drop-fade-enter-from,
+.drop-fade-leave-to {
+  opacity: 0;
+}
+</style>

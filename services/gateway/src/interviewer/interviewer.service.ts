@@ -234,6 +234,66 @@ export class InterviewerService {
     return { deleted: true };
   }
 
+  async addCandidateFromResume(
+    userId: number,
+    projectId: number,
+    stage: string,
+    buffer: Buffer,
+    originalname: string,
+  ) {
+    const ownerId = await this.getProjectOwnerId(userId, projectId);
+    const targetStage = VALID_STAGES.includes(stage) ? stage : 'applied';
+
+    // Extract text from the uploaded file
+    const ext = extname(originalname).toLowerCase();
+    let resumeText = '';
+    try {
+      if (ext === '.pdf') {
+        resumeText = (await pdfParse(buffer)).text;
+      } else if (['.doc', '.docx'].includes(ext)) {
+        resumeText = (await mammoth.extractRawText({ buffer })).value;
+      }
+    } catch { /* unreadable format — carry on with empty text */ }
+
+    // Ask the AI agent to identify name + email from the resume
+    let name = originalname.replace(/\.(pdf|docx?)$/i, '').replace(/[-_]/g, ' ').trim();
+    let email: string | null = null;
+    if (resumeText.trim()) {
+      try {
+        const { data: extracted } = await axios.post(
+          `${this.agentsUrl}/interviewer/extract-candidate`,
+          { resume_text: resumeText.slice(0, 3000) },
+        );
+        if (extracted.name) name = extracted.name;
+        if (extracted.email) email = extracted.email;
+      } catch { /* agent unreachable — fall back to filename */ }
+    }
+
+    // Upload file to GitHub storage using a timestamp path (candidateId not yet known)
+    const remotePath = `interviewer/${ownerId}/projects/${projectId}/resumes/${Date.now()}${ext}`;
+    const resumeUrl = await this.github.upload(remotePath, buffer, `Resume for ${name}`);
+
+    // Create the candidate record
+    const candidateId = await this.db.insert(
+      `INSERT INTO interviewer_candidates (project_id, user_id, name, email, resume_path, resume_text)
+       VALUES (?, ?, ?, ?, ?, ?)`,
+      [projectId, ownerId, name, email, resumeUrl, resumeText],
+    );
+
+    // Create the pipeline card in the target stage
+    const pos = await this.db.get<any>(
+      `SELECT COUNT(*)::int AS cnt FROM interviewer_pipeline_cards WHERE project_id = ? AND stage = ?`,
+      [projectId, targetStage],
+    );
+    await this.db.insert(
+      `INSERT INTO interviewer_pipeline_cards (candidate_id, project_id, user_id, stage, position)
+       VALUES (?, ?, ?, ?, ?)`,
+      [candidateId, projectId, ownerId, targetStage, pos?.cnt ?? 0],
+    );
+
+    return this.getCandidate(userId, projectId, candidateId);
+  }
+
   async uploadResume(
     userId: number,
     projectId: number,

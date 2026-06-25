@@ -94,6 +94,26 @@ export const useInterviewerStore = defineStore('interviewer', () => {
     return data
   }
 
+  async function addCandidateFromResume(projectId: number, stage: string, file: File): Promise<Candidate> {
+    uploading.value = true
+    try {
+      const form = new FormData()
+      form.append('file', file)
+      form.append('stage', stage)
+      const { data } = await api.post(
+        `/interviewer/projects/${projectId}/candidates/from-resume`,
+        form,
+        { headers: { 'Content-Type': 'multipart/form-data' } },
+      )
+      if (currentProject.value?.cards) {
+        currentProject.value.cards.push(data)
+      }
+      return data
+    } finally {
+      uploading.value = false
+    }
+  }
+
   async function uploadResume(projectId: number, candidateId: number, file: File) {
     uploading.value = true
     try {
@@ -179,7 +199,7 @@ export const useInterviewerStore = defineStore('interviewer', () => {
   return {
     projects, currentProject, loading, scanning, uploading,
     fetchProjects, createProject, updateProject, deleteProject,
-    fetchProject, addCandidate, uploadResume, scanResume,
+    fetchProject, addCandidate, addCandidateFromResume, uploadResume, scanResume,
     updateNotes, deleteCandidate, moveCard, refreshCandidate,
     fetchMembers, inviteMember, removeMember,
   }
