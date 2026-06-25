@@ -37,8 +37,9 @@ export class InterviewerController {
     @Request() req,
     @Body('title') title: string,
     @Body('description') description?: string,
+    @Body('location') location?: string,
   ) {
-    return this.svc.createProject(req.user.userId, title, description);
+    return this.svc.createProject(req.user.userId, title, description, location);
   }
 
   @Get('projects/:id')
@@ -52,13 +53,19 @@ export class InterviewerController {
     @Param('id') id: string,
     @Body('title') title: string,
     @Body('description') description?: string,
+    @Body('location') location?: string,
   ) {
-    return this.svc.updateProject(req.user.userId, parseInt(id), title, description);
+    return this.svc.updateProject(req.user.userId, parseInt(id), title, description, location);
   }
 
   @Delete('projects/:id')
   deleteProject(@Request() req, @Param('id') id: string) {
     return this.svc.deleteProject(req.user.userId, parseInt(id));
+  }
+
+  @Post('format-jd')
+  formatJd(@Body('text') text: string) {
+    return this.svc.formatJd(text);
   }
 
   // ── Members ───────────────────────────────────────────────────────────────────

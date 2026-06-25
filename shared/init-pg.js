@@ -29,6 +29,16 @@ async function main() {
   await client.query(sql);
   console.log('✓ Schema applied');
 
+  // Additive migrations — safe to re-run
+  const migrations = [
+    `ALTER TABLE interviewer_projects ADD COLUMN IF NOT EXISTS location TEXT`,
+    `ALTER TABLE interviewer_project_members ADD COLUMN IF NOT EXISTS role TEXT NOT NULL DEFAULT 'editor'`,
+  ];
+  for (const m of migrations) {
+    await client.query(m);
+  }
+  console.log('✓ Migrations applied');
+
   await client.end();
   console.log('✓ Done');
 }

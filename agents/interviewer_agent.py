@@ -78,6 +78,34 @@ Return ONLY the JSON, no explanation.
     }
 
 
+class FormatJdRequest(BaseModel):
+    text: str
+
+
+@router.post("/format-jd")
+async def format_jd(body: FormatJdRequest):
+    prompt = f"""You are formatting a job description for a hiring manager.
+
+Raw text (pasted from somewhere):
+{body.text[:6000]}
+
+Reformat this into clean, professional HTML suitable for a rich text editor.
+Use: <h2> for section headings, <ul><li> for bullet lists, <p> for paragraphs, <strong> for emphasis.
+Preserve all original content — do not add or remove requirements.
+Fix capitalization and punctuation. Group related bullets under appropriate headings.
+Typical sections: About the Role, Responsibilities, Requirements, Nice to Have, Benefits.
+Only include sections that have actual content in the input.
+
+Return ONLY the HTML — no markdown fences, no explanation, no wrapping element.
+"""
+    raw = await _call_ai(prompt)
+    # Strip any accidental markdown code fences
+    import re
+    cleaned = re.sub(r'^```(?:html)?\s*', '', raw.strip(), flags=re.IGNORECASE)
+    cleaned = re.sub(r'\s*```$', '', cleaned)
+    return {"html": cleaned.strip()}
+
+
 class ScanRequest(BaseModel):
     resume_text: str
     job_description: str = ""

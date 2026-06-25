@@ -83,6 +83,7 @@ CREATE TABLE IF NOT EXISTS interviewer_projects (
   user_id     INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   title       TEXT    NOT NULL,
   description TEXT,
+  location    TEXT,
   created_at  TIMESTAMPTZ DEFAULT NOW()
 );
 

@@ -64,10 +64,10 @@ export class InterviewerService {
     );
   }
 
-  async createProject(userId: number, title: string, description?: string) {
+  async createProject(userId: number, title: string, description?: string, location?: string) {
     const id = await this.db.insert(
-      'INSERT INTO interviewer_projects (user_id, title, description) VALUES (?, ?, ?)',
-      [userId, title, description || null],
+      'INSERT INTO interviewer_projects (user_id, title, description, location) VALUES (?, ?, ?, ?)',
+      [userId, title, description || null, location || null],
     );
     const p = await this.db.get<any>('SELECT * FROM interviewer_projects WHERE id = ?', [id]);
     return { ...p, is_owner: true, candidate_count: 0 };
@@ -102,11 +102,11 @@ export class InterviewerService {
     };
   }
 
-  async updateProject(userId: number, projectId: number, title: string, description?: string) {
+  async updateProject(userId: number, projectId: number, title: string, description?: string, location?: string) {
     await this.assertOwner(userId, projectId);
     await this.db.run(
-      'UPDATE interviewer_projects SET title = ?, description = ? WHERE id = ?',
-      [title, description || null, projectId],
+      'UPDATE interviewer_projects SET title = ?, description = ?, location = ? WHERE id = ?',
+      [title, description || null, location || null, projectId],
     );
     const p = await this.db.get<any>('SELECT * FROM interviewer_projects WHERE id = ?', [projectId]);
     return { ...p, is_owner: true };
@@ -389,6 +389,11 @@ export class InterviewerService {
       [stage, position, cardId, card.owner_id],
     );
     return this.getProject(userId, card.project_id);
+  }
+
+  async formatJd(text: string) {
+    const { data } = await axios.post(`${this.agentsUrl}/interviewer/format-jd`, { text });
+    return data;
   }
 
   // ── User mode ────────────────────────────────────────────────────────────────
