@@ -74,3 +74,43 @@ CREATE TABLE IF NOT EXISTS job_suggestions (
   search_date  DATE,
   created_at   TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- Interviewer mode tables
+ALTER TABLE users ADD COLUMN IF NOT EXISTS mode TEXT NOT NULL DEFAULT 'candidate';
+
+CREATE TABLE IF NOT EXISTS interviewer_projects (
+  id          SERIAL PRIMARY KEY,
+  user_id     INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  title       TEXT    NOT NULL,
+  description TEXT,
+  created_at  TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS interviewer_candidates (
+  id                SERIAL PRIMARY KEY,
+  project_id        INTEGER NOT NULL REFERENCES interviewer_projects(id) ON DELETE CASCADE,
+  user_id           INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  name              TEXT    NOT NULL,
+  email             TEXT,
+  resume_path       TEXT,
+  resume_text       TEXT,
+  ai_summary        TEXT,
+  ai_score          INTEGER DEFAULT 0,
+  ai_matching       TEXT    DEFAULT '[]',
+  ai_gaps           TEXT    DEFAULT '[]',
+  ai_recommendation TEXT    DEFAULT 'consider',
+  notes             TEXT,
+  created_at        TIMESTAMPTZ DEFAULT NOW(),
+  updated_at        TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS interviewer_pipeline_cards (
+  id           SERIAL PRIMARY KEY,
+  candidate_id INTEGER NOT NULL REFERENCES interviewer_candidates(id) ON DELETE CASCADE,
+  project_id   INTEGER NOT NULL REFERENCES interviewer_projects(id) ON DELETE CASCADE,
+  user_id      INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  stage        TEXT    NOT NULL DEFAULT 'applied',  -- applied|screening|interview|offer|rejected
+  position     INTEGER NOT NULL DEFAULT 0,
+  created_at   TIMESTAMPTZ DEFAULT NOW(),
+  updated_at   TIMESTAMPTZ DEFAULT NOW()
+);

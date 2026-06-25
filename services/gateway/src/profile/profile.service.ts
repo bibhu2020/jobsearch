@@ -16,7 +16,7 @@ export class ProfileService {
   ) {}
 
   async getProfile(userId: number) {
-    const user = await this.db.get<any>('SELECT id, email, name FROM users WHERE id = ?', [userId]);
+    const user = await this.db.get<any>('SELECT id, email, name, mode FROM users WHERE id = ?', [userId]);
     const profile = await this.db.get<any>('SELECT * FROM user_profiles WHERE user_id = ?', [userId]);
     return {
       ...user,

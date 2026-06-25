@@ -9,6 +9,8 @@ const router = createRouter({
     { path: '/pipeline', component: () => import('@/views/PipelineView.vue') },
     { path: '/suggestions', component: () => import('@/views/SuggestionsView.vue') },
     { path: '/profile', component: () => import('@/views/ProfileView.vue') },
+    { path: '/interviewer', component: () => import('@/views/InterviewerProjectsView.vue') },
+    { path: '/interviewer/projects/:id', component: () => import('@/views/InterviewerProjectView.vue') },
   ],
 })
 

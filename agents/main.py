@@ -13,6 +13,7 @@ from agents.search_agent import router as search_router
 from agents.generate_agent import router as generate_router
 from agents.pdf_agent import router as pdf_router
 from agents.jobs_agent import router as jobs_router
+from agents.interviewer_agent import router as interviewer_router
 
 app = FastAPI(title="Linear Lantern Agents", version="0.1.0")
 
@@ -30,6 +31,7 @@ app.include_router(jobs_router, prefix="/jobs", tags=["jobs"])
 app.include_router(search_router, prefix="/search", tags=["search"])
 app.include_router(generate_router, prefix="/generate", tags=["generate"])
 app.include_router(pdf_router, prefix="/pdf", tags=["pdf"])
+app.include_router(interviewer_router, prefix="/interviewer", tags=["interviewer"])
 
 
 @app.get("/health")
