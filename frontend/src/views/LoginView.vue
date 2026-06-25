@@ -81,39 +81,39 @@ async function submit() {
     </div>
 
     <!-- Left: Login Form (1/3) -->
-    <div class="w-full lg:w-1/3 flex items-start justify-center bg-white px-8 pt-10 pb-12 relative z-10 shadow-2xl">
+    <div class="w-full lg:w-1/3 flex items-start justify-center bg-slate-900 border-r border-slate-700/60 px-8 pt-10 pb-12 relative z-10 shadow-2xl">
       <div class="w-full max-w-sm">
         <div class="mb-8">
-          <div class="text-3xl font-bold text-indigo-600 tracking-tight mb-1">🎯 JobQuest AI</div>
-          <p class="text-gray-400 text-sm mt-1">Welcome back — sign in to continue</p>
+          <div class="text-3xl font-bold text-indigo-400 tracking-tight mb-1">🎯 JobQuest AI</div>
+          <p class="text-slate-500 text-sm mt-1">Welcome back — sign in to continue</p>
         </div>
 
         <form @submit.prevent="submit" class="space-y-5">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1.5">Email address</label>
+            <label class="block text-sm font-medium text-slate-300 mb-1.5">Email address</label>
             <input v-model="email" type="email" required autocomplete="email" placeholder="you@example.com"
-              class="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition" />
+              class="w-full rounded-xl border border-slate-600 bg-slate-800 text-slate-100 placeholder-slate-500 px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition" />
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
+            <label class="block text-sm font-medium text-slate-300 mb-1.5">Password</label>
             <input v-model="password" type="password" required autocomplete="current-password" placeholder="••••••••"
-              class="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition" />
+              class="w-full rounded-xl border border-slate-600 bg-slate-800 text-slate-100 placeholder-slate-500 px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition" />
           </div>
 
-          <p v-if="error" class="text-red-500 text-sm bg-red-50 px-3 py-2 rounded-lg">{{ error }}</p>
+          <p v-if="error" class="text-red-400 text-sm bg-red-900/20 border border-red-700/40 px-3 py-2 rounded-lg">{{ error }}</p>
 
           <button type="submit" :disabled="loading"
-            class="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] text-white font-semibold text-sm transition-all disabled:opacity-50 shadow-md shadow-indigo-200">
+            class="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 active:scale-[0.98] text-white font-semibold text-sm transition-all disabled:opacity-50 shadow-md shadow-indigo-900/50">
             {{ loading ? 'Signing in…' : 'Sign In' }}
           </button>
         </form>
 
-        <div class="mt-8 pt-6 border-t border-gray-100 text-center">
-          <p class="text-sm text-gray-500">
+        <div class="mt-8 pt-6 border-t border-slate-700/60 text-center">
+          <p class="text-sm text-slate-500">
             Don't have an account?
           </p>
           <router-link to="/register"
-            class="mt-2 inline-block w-full py-3 rounded-xl border-2 border-indigo-600 text-indigo-600 font-semibold text-sm hover:bg-indigo-50 transition text-center">
+            class="mt-2 inline-block w-full py-3 rounded-xl border-2 border-indigo-600 text-indigo-400 font-semibold text-sm hover:bg-indigo-900/30 transition text-center">
             Create Free Account
           </router-link>
         </div>

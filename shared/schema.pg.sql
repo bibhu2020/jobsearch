@@ -114,3 +114,11 @@ CREATE TABLE IF NOT EXISTS interviewer_pipeline_cards (
   created_at   TIMESTAMPTZ DEFAULT NOW(),
   updated_at   TIMESTAMPTZ DEFAULT NOW()
 );
+
+CREATE TABLE IF NOT EXISTS interviewer_project_members (
+  project_id INTEGER NOT NULL REFERENCES interviewer_projects(id) ON DELETE CASCADE,
+  user_id    INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  role       TEXT NOT NULL DEFAULT 'editor',
+  invited_at TIMESTAMPTZ DEFAULT NOW(),
+  PRIMARY KEY (project_id, user_id)
+);

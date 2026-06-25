@@ -3,11 +3,7 @@ import { ref, computed } from 'vue'
 import { marked } from 'marked'
 import api from '@/api'
 
-const props = defineProps<{
-  cardId: number
-  jobTitle: string
-  company: string
-}>()
+const props = defineProps<{ cardId: number; jobTitle: string; company: string }>()
 
 interface Kit { id: number; type: string; content: string }
 
@@ -21,14 +17,13 @@ const downloading = ref(false)
 const error = ref('')
 
 const KIT_TYPES = [
-  { key: 'cover_letter',        label: 'Cover Letter',        icon: '✉️',  doc: true },
-  { key: 'resume',              label: 'Tailored Resume',     icon: '📄',  doc: true },
-  { key: 'interview_questions', label: 'Interview Questions', icon: '🎯',  doc: false },
-  { key: 'company_brief',       label: 'Company Brief',       icon: '🏢',  doc: false },
+  { key: 'cover_letter',        label: 'Cover Letter',    icon: '✉️',  color: 'indigo' },
+  { key: 'resume',              label: 'Tailored Resume', icon: '📄',  color: 'blue'   },
+  { key: 'interview_questions', label: 'Interview Prep',  icon: '🎯',  color: 'violet' },
+  { key: 'company_brief',       label: 'Company Brief',   icon: '🏢',  color: 'amber'  },
 ]
 
 const activeKitMeta = computed(() => KIT_TYPES.find(k => k.key === activeType.value))
-
 const preview = computed(() => marked(editContent.value || '') as string)
 
 async function loadKits() {
@@ -44,9 +39,9 @@ async function generate(type: string) {
     kits.value[type] = data
     activeType.value = type
     editContent.value = data.content
-    mode.value = 'preview'   // show preview immediately after generation
+    mode.value = 'preview'
   } catch {
-    error.value = 'Generation failed. Please try again.'
+    error.value = 'Generation failed — please try again.'
   } finally {
     generating.value = null
   }
@@ -77,7 +72,6 @@ async function save() {
 
 async function download() {
   if (!activeType.value) return
-  // Auto-save any unsaved edits first
   if (editContent.value !== kits.value[activeType.value]?.content) await save()
   downloading.value = true
   try {
@@ -85,12 +79,9 @@ async function download() {
     const response = await api.get(`/kits/${kit.id}/download`, { responseType: 'blob' })
     const slug = (t: string) => t.replace(/_/g, '-')
     const co = props.company.replace(/[^a-z0-9]/gi, '_').replace(/__+/g, '_')
-    const filename = `${co}_${slug(activeType.value)}.pdf`
+    const filename = `${co}_${slug(activeType.value!)}.pdf`
     const url = URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }))
-    const a = document.createElement('a')
-    a.href = url
-    a.download = filename
-    a.click()
+    const a = document.createElement('a'); a.href = url; a.download = filename; a.click()
     URL.revokeObjectURL(url)
   } finally {
     downloading.value = false
@@ -101,73 +92,90 @@ loadKits()
 </script>
 
 <template>
-  <div class="mt-4">
-    <h3 class="text-sm font-semibold text-gray-700 mb-3">Generate Kit</h3>
+  <div>
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Generate Kit</h3>
+      <span class="text-xs text-slate-600">Click to generate or open</span>
+    </div>
 
-    <!-- Kit type buttons -->
+    <!-- Kit type grid -->
     <div class="grid grid-cols-2 gap-2 mb-4">
       <button v-for="kt in KIT_TYPES" :key="kt.key"
         :class="[
-          'flex items-center gap-2 px-3 py-2 rounded-lg border text-sm font-medium transition',
+          'relative flex flex-col items-start gap-1 px-3 py-3 rounded-xl border text-left transition-all',
           activeType === kt.key
-            ? 'border-indigo-400 bg-indigo-100 text-indigo-800'
+            ? 'border-indigo-500/60 bg-indigo-900/30 shadow-sm'
             : kits[kt.key]
-              ? 'border-indigo-300 bg-indigo-50 text-indigo-700'
-              : 'border-gray-200 bg-white text-gray-700 hover:border-indigo-200 hover:bg-indigo-50',
+              ? 'border-indigo-700/40 bg-indigo-900/20 hover:border-indigo-600/60'
+              : 'border-slate-700/60 bg-slate-800/80 hover:border-slate-600 hover:bg-slate-700/50',
           generating === kt.key ? 'opacity-70 cursor-wait' : 'cursor-pointer',
         ]"
         @click="openKit(kt.key)">
-        <span>{{ kt.icon }}</span>
-        <span class="truncate">{{ kt.label }}</span>
-        <svg v-if="generating === kt.key" class="animate-spin h-3.5 w-3.5 ml-auto shrink-0" fill="none" viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
-          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
-        </svg>
-        <span v-else-if="kits[kt.key]" class="ml-auto text-emerald-500 text-xs shrink-0">✓</span>
+        <div class="flex items-center justify-between w-full">
+          <span class="text-base">{{ kt.icon }}</span>
+          <svg v-if="generating === kt.key" class="animate-spin h-3.5 w-3.5 text-indigo-400" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+          </svg>
+          <span v-else-if="kits[kt.key]"
+            class="flex items-center justify-center w-4 h-4 bg-emerald-900/40 text-emerald-400 rounded-full border border-emerald-700/40">
+            <svg class="h-2.5 w-2.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+            </svg>
+          </span>
+        </div>
+        <span class="text-xs font-semibold text-slate-300 leading-tight">{{ kt.label }}</span>
       </button>
     </div>
 
-    <p v-if="error" class="text-red-500 text-sm mb-3">{{ error }}</p>
+    <p v-if="error" class="text-xs text-red-400 bg-red-900/20 border border-red-700/40 rounded-lg px-3 py-2 mb-3">
+      {{ error }}
+    </p>
 
-    <div v-if="activeType" class="space-y-2">
-      <!-- Toolbar: label + tabs + regenerate -->
-      <div class="flex flex-wrap items-center gap-2">
-        <span class="text-sm font-medium text-gray-700 mr-auto">{{ activeKitMeta?.label }}</span>
-        <div class="flex rounded-md border border-gray-200 overflow-hidden text-xs">
+    <!-- Kit editor -->
+    <div v-if="activeType" class="space-y-2.5">
+
+      <!-- Toolbar -->
+      <div class="flex items-center gap-2 flex-wrap">
+        <span class="text-sm font-semibold text-slate-200 mr-auto">{{ activeKitMeta?.label }}</span>
+
+        <div class="flex rounded-lg border border-slate-700 overflow-hidden text-xs">
           <button @click="mode = 'preview'"
-            :class="['px-3 py-1 transition', mode === 'preview' ? 'bg-indigo-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50']">
+            :class="['px-3 py-1.5 font-medium transition', mode === 'preview' ? 'bg-indigo-600 text-white' : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-slate-200']">
             Preview
           </button>
           <button @click="mode = 'edit'"
-            :class="['px-3 py-1 transition', mode === 'edit' ? 'bg-indigo-600 text-white' : 'bg-white text-gray-600 hover:bg-gray-50']">
+            :class="['px-3 py-1.5 font-medium transition border-l border-slate-700', mode === 'edit' ? 'bg-indigo-600 text-white' : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-slate-200']">
             Edit
           </button>
         </div>
+
         <button @click="generate(activeType!)"
-          class="text-xs text-indigo-500 hover:text-indigo-700 transition whitespace-nowrap">
-          ↺ Regenerate
+          class="flex items-center gap-1 text-xs text-slate-500 hover:text-indigo-400 transition font-medium">
+          <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+          </svg>
+          Regenerate
         </button>
       </div>
 
-      <!-- PREVIEW mode: rendered markdown document -->
+      <!-- Preview / Edit -->
       <div v-if="mode === 'preview'"
-        class="kit-preview rounded-lg border border-gray-200 bg-white p-5 min-h-[280px] overflow-y-auto max-h-[480px]"
+        class="kit-preview rounded-xl border border-slate-700/60 bg-slate-800 p-5 min-h-[260px] overflow-y-auto max-h-[480px]"
         v-html="preview" />
-
-      <!-- EDIT mode: clean textarea -->
-      <textarea v-else v-model="editContent" rows="18"
-        class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 text-sm leading-relaxed resize-y font-sans"
+      <textarea v-else v-model="editContent" rows="16"
+        class="w-full rounded-xl border-slate-600 bg-slate-700/50 text-slate-100 placeholder-slate-500 focus:bg-slate-700 focus:border-indigo-500 focus:ring-indigo-500 text-sm leading-relaxed resize-y font-sans transition"
         placeholder="Generated content will appear here…" />
 
       <!-- Actions -->
-      <div class="flex gap-2 pt-1">
+      <div class="flex gap-2">
         <button @click="save" :disabled="saving"
-          class="flex-1 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 text-sm rounded-lg transition disabled:opacity-50">
-          {{ saving ? 'Saving…' : '💾 Save Edits' }}
+          class="flex-1 py-2.5 border border-slate-700 hover:bg-slate-700 text-slate-300 text-sm rounded-xl transition font-medium disabled:opacity-50">
+          {{ saving ? 'Saving…' : 'Save Edits' }}
         </button>
         <button @click="download" :disabled="downloading"
-          class="flex-1 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white text-sm rounded-lg font-medium transition">
-          {{ downloading ? 'Preparing…' : '⬇️ Download PDF' }}
+          class="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white text-sm rounded-xl font-semibold transition shadow-sm shadow-indigo-900/50">
+          {{ downloading ? 'Preparing…' : '↓ Download PDF' }}
         </button>
       </div>
     </div>
@@ -175,13 +183,13 @@ loadKits()
 </template>
 
 <style scoped>
-.kit-preview { font-size: 13px; line-height: 1.65; color: #1f2937; }
-.kit-preview :deep(h1) { font-size: 1.25rem; font-weight: 700; margin: 0 0 .6rem; color: #111827; }
-.kit-preview :deep(h2) { font-size: 1rem; font-weight: 700; margin: 1rem 0 .35rem; color: #111827; border-bottom: 1px solid #e5e7eb; padding-bottom: .2rem; }
-.kit-preview :deep(h3) { font-size: .9rem; font-weight: 600; margin: .75rem 0 .2rem; color: #374151; }
-.kit-preview :deep(p)  { margin: .4rem 0; }
-.kit-preview :deep(ul) { margin: .3rem 0 .3rem 1.25rem; list-style: disc; }
-.kit-preview :deep(li) { margin: .15rem 0; }
-.kit-preview :deep(strong) { font-weight: 600; }
-.kit-preview :deep(hr) { border: none; border-top: 1px solid #e5e7eb; margin: .75rem 0; }
+.kit-preview { font-size: 13px; line-height: 1.7; color: #cbd5e1; }
+.kit-preview :deep(h1) { font-size: 1.2rem; font-weight: 700; margin: 0 0 .5rem; color: #f1f5f9; }
+.kit-preview :deep(h2) { font-size: .95rem; font-weight: 700; margin: 1rem 0 .3rem; color: #f1f5f9; border-bottom: 1px solid #334155; padding-bottom: .25rem; }
+.kit-preview :deep(h3) { font-size: .875rem; font-weight: 600; margin: .75rem 0 .2rem; color: #e2e8f0; }
+.kit-preview :deep(p)  { margin: .35rem 0; }
+.kit-preview :deep(ul) { margin: .3rem 0 .3rem 1.1rem; list-style: disc; }
+.kit-preview :deep(li) { margin: .1rem 0; }
+.kit-preview :deep(strong) { font-weight: 600; color: #f1f5f9; }
+.kit-preview :deep(hr) { border: none; border-top: 1px solid #334155; margin: .75rem 0; }
 </style>

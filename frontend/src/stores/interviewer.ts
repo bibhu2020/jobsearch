@@ -18,6 +18,7 @@ export interface Candidate {
   stage: string
   position: number
   card_id: number
+  created_at: string
 }
 
 export interface Project {
@@ -26,7 +27,16 @@ export interface Project {
   description: string | null
   candidate_count: number
   created_at: string
+  is_owner?: boolean
   cards?: Candidate[]
+}
+
+export interface ProjectMember {
+  user_id: number
+  name: string
+  email: string
+  role: string
+  invited_at: string
 }
 
 export const useInterviewerStore = defineStore('interviewer', () => {
@@ -49,6 +59,13 @@ export const useInterviewerStore = defineStore('interviewer', () => {
   async function createProject(title: string, description?: string) {
     const { data } = await api.post('/interviewer/projects', { title, description })
     projects.value.unshift({ ...data, candidate_count: 0 })
+    return data
+  }
+
+  async function updateProject(id: number, title: string, description?: string) {
+    const { data } = await api.put(`/interviewer/projects/${id}`, { title, description })
+    const idx = projects.value.findIndex(p => p.id === id)
+    if (idx !== -1) projects.value[idx] = { ...projects.value[idx], ...data }
     return data
   }
 
@@ -127,9 +144,12 @@ export const useInterviewerStore = defineStore('interviewer', () => {
   }
 
   async function moveCard(cardId: number, stage: string, position: number) {
-    if (!currentProject.value) return
-    const { data } = await api.put(`/interviewer/cards/${cardId}/move`, { stage, position })
-    currentProject.value = data
+    if (!currentProject.value?.cards) return
+    // optimistic update — same pattern as candidate pipeline store
+    currentProject.value.cards = currentProject.value.cards.map(c =>
+      c.card_id === cardId ? { ...c, stage, position } : c,
+    )
+    await api.put(`/interviewer/cards/${cardId}/move`, { stage, position })
   }
 
   async function refreshCandidate(projectId: number, candidateId: number) {
@@ -141,10 +161,26 @@ export const useInterviewerStore = defineStore('interviewer', () => {
     return data
   }
 
+  async function fetchMembers(projectId: number): Promise<ProjectMember[]> {
+    const { data } = await api.get(`/interviewer/projects/${projectId}/members`)
+    return data
+  }
+
+  async function inviteMember(projectId: number, email: string): Promise<ProjectMember[]> {
+    const { data } = await api.post(`/interviewer/projects/${projectId}/members`, { email })
+    return data
+  }
+
+  async function removeMember(projectId: number, userId: number): Promise<ProjectMember[]> {
+    const { data } = await api.delete(`/interviewer/projects/${projectId}/members/${userId}`)
+    return data
+  }
+
   return {
     projects, currentProject, loading, scanning, uploading,
-    fetchProjects, createProject, deleteProject,
+    fetchProjects, createProject, updateProject, deleteProject,
     fetchProject, addCandidate, uploadResume, scanResume,
     updateNotes, deleteCandidate, moveCard, refreshCandidate,
+    fetchMembers, inviteMember, removeMember,
   }
 })
