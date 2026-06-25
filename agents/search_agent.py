@@ -164,7 +164,18 @@ Be honest — do not recommend applying for jobs with hard requirements the cand
         return [j for j in top if j.get("match_score", 0) >= 70]
     except Exception as e:
         print(f"[score_and_rank] Error: {e}")
-        return []
+        # AI unavailable — return top results with a neutral score so the run isn't wasted
+        fallback = []
+        for job in jobs[:10]:
+            j = job.copy()
+            j.setdefault("match_score", 75)
+            j.setdefault("matching", [])
+            j.setdefault("gaps", [])
+            j.setdefault("recommendation", "consider")
+            j.setdefault("match_reason", "AI scoring unavailable — listed based on keyword relevance.")
+            fallback.append(j)
+        print(f"[score_and_rank] Falling back to {len(fallback)} unscored results")
+        return fallback
 
 
 @router.post("/jobs")

@@ -46,9 +46,40 @@ export class InterviewerController {
     return this.svc.getProject(req.user.userId, parseInt(id));
   }
 
+  @Put('projects/:id')
+  updateProject(
+    @Request() req,
+    @Param('id') id: string,
+    @Body('title') title: string,
+    @Body('description') description?: string,
+  ) {
+    return this.svc.updateProject(req.user.userId, parseInt(id), title, description);
+  }
+
   @Delete('projects/:id')
   deleteProject(@Request() req, @Param('id') id: string) {
     return this.svc.deleteProject(req.user.userId, parseInt(id));
+  }
+
+  // ── Members ───────────────────────────────────────────────────────────────────
+
+  @Get('projects/:id/members')
+  listMembers(@Request() req, @Param('id') id: string) {
+    return this.svc.listMembers(req.user.userId, parseInt(id));
+  }
+
+  @Post('projects/:id/members')
+  inviteMember(@Request() req, @Param('id') id: string, @Body('email') email: string) {
+    return this.svc.inviteMember(req.user.userId, parseInt(id), email);
+  }
+
+  @Delete('projects/:id/members/:memberId')
+  removeMember(
+    @Request() req,
+    @Param('id') id: string,
+    @Param('memberId') memberId: string,
+  ) {
+    return this.svc.removeMember(req.user.userId, parseInt(id), parseInt(memberId));
   }
 
   // ── Candidates ────────────────────────────────────────────────────────────────

@@ -26,46 +26,46 @@ async function submit() {
   <div class="min-h-screen flex">
 
     <!-- Left: Register Form (1/3) -->
-    <div class="w-full lg:w-1/3 flex items-center justify-center bg-white px-8 py-12 relative z-10 shadow-2xl">
+    <div class="w-full lg:w-1/3 flex items-center justify-center bg-slate-900 border-r border-slate-700/60 px-8 py-12 relative z-10 shadow-2xl">
       <div class="w-full max-w-sm">
         <div class="mb-8">
-          <div class="text-3xl font-bold text-indigo-600 tracking-tight mb-1">🎯 JobQuest AI</div>
-          <p class="text-gray-400 text-sm mt-1">Create your free account — takes 30 seconds</p>
+          <div class="text-3xl font-bold text-indigo-400 tracking-tight mb-1">🎯 JobQuest AI</div>
+          <p class="text-slate-500 text-sm mt-1">Create your free account — takes 30 seconds</p>
         </div>
 
         <form @submit.prevent="submit" class="space-y-4">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1.5">Full name</label>
+            <label class="block text-sm font-medium text-slate-300 mb-1.5">Full name</label>
             <input v-model="name" type="text" required placeholder="Jane Smith"
-              class="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition" />
+              class="w-full rounded-xl border border-slate-600 bg-slate-800 text-slate-100 placeholder-slate-500 px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition" />
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1.5">Email address</label>
+            <label class="block text-sm font-medium text-slate-300 mb-1.5">Email address</label>
             <input v-model="email" type="email" required placeholder="you@example.com"
-              class="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition" />
+              class="w-full rounded-xl border border-slate-600 bg-slate-800 text-slate-100 placeholder-slate-500 px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition" />
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
+            <label class="block text-sm font-medium text-slate-300 mb-1.5">Password</label>
             <input v-model="password" type="password" required minlength="6" placeholder="Min. 6 characters"
-              class="w-full rounded-xl border border-gray-200 px-4 py-3 text-sm shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition" />
+              class="w-full rounded-xl border border-slate-600 bg-slate-800 text-slate-100 placeholder-slate-500 px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition" />
           </div>
 
-          <p v-if="error" class="text-red-500 text-sm bg-red-50 px-3 py-2 rounded-lg">{{ error }}</p>
+          <p v-if="error" class="text-red-400 text-sm bg-red-900/20 border border-red-700/40 px-3 py-2 rounded-lg">{{ error }}</p>
 
           <button type="submit" :disabled="loading"
-            class="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] text-white font-semibold text-sm transition-all disabled:opacity-50 shadow-md shadow-indigo-200">
+            class="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 active:scale-[0.98] text-white font-semibold text-sm transition-all disabled:opacity-50 shadow-md shadow-indigo-900/50">
             {{ loading ? 'Creating account…' : 'Create Free Account' }}
           </button>
         </form>
 
-        <p class="mt-4 text-center text-xs text-gray-400">
+        <p class="mt-4 text-center text-xs text-slate-600">
           By signing up you agree to use this tool responsibly.
         </p>
 
-        <div class="mt-6 pt-6 border-t border-gray-100 text-center">
-          <p class="text-sm text-gray-500">Already have an account?</p>
+        <div class="mt-6 pt-6 border-t border-slate-700/60 text-center">
+          <p class="text-sm text-slate-500">Already have an account?</p>
           <router-link to="/login"
-            class="mt-2 inline-block w-full py-3 rounded-xl border-2 border-indigo-600 text-indigo-600 font-semibold text-sm hover:bg-indigo-50 transition text-center">
+            class="mt-2 inline-block w-full py-3 rounded-xl border-2 border-indigo-600 text-indigo-400 font-semibold text-sm hover:bg-indigo-900/30 transition text-center">
             Sign In
           </router-link>
         </div>
@@ -102,7 +102,7 @@ async function submit() {
           <div class="space-y-4">
             <div v-for="(step, i) in [
               { n: '1', label: 'Upload your resume',       desc: 'AI extracts your skills and experience in seconds.',            color: 'bg-violet-500' },
-              { n: '2', label: 'Discover matched jobs',    desc: 'Weekly agent scans 5 sources and scores relevance for you.',    color: 'bg-blue-500'   },
+              { n: '2', label: 'Discover matched jobs',    desc: 'AI agent scans 10 sources on demand and scores relevance for you.', color: 'bg-blue-500'   },
               { n: '3', label: 'Generate your kit',        desc: 'One click produces a cover letter, resume rewrite & prep guide.', color: 'bg-amber-500'  },
               { n: '4', label: 'Track your pipeline',      desc: 'Drag cards from Applied to Offer on your personal Kanban board.', color: 'bg-emerald-500'},
             ]" :key="i" class="flex items-start gap-4">
@@ -162,8 +162,8 @@ async function submit() {
           </div>
           <div class="w-px h-8 bg-white/10"></div>
           <div>
-            <div class="text-2xl font-bold text-white">5 Sources</div>
-            <div class="text-indigo-400 text-xs mt-0.5">Jobs aggregated weekly</div>
+            <div class="text-2xl font-bold text-white">10 Sources</div>
+            <div class="text-indigo-400 text-xs mt-0.5">Jobs aggregated</div>
           </div>
           <div class="w-px h-8 bg-white/10"></div>
           <div>

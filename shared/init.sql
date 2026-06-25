@@ -119,3 +119,13 @@ CREATE TABLE IF NOT EXISTS interviewer_pipeline_cards (
   FOREIGN KEY (project_id)   REFERENCES interviewer_projects(id) ON DELETE CASCADE,
   FOREIGN KEY (user_id)      REFERENCES users(id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS interviewer_project_members (
+  project_id INTEGER NOT NULL,
+  user_id    INTEGER NOT NULL,
+  role       TEXT NOT NULL DEFAULT 'editor',
+  invited_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (project_id, user_id),
+  FOREIGN KEY (project_id) REFERENCES interviewer_projects(id) ON DELETE CASCADE,
+  FOREIGN KEY (user_id)    REFERENCES users(id) ON DELETE CASCADE
+);
