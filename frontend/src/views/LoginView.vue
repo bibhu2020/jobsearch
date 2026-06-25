@@ -22,7 +22,63 @@ async function submit() {
 </script>
 
 <template>
-  <div class="min-h-screen flex">
+  <div class="min-h-screen flex flex-col lg:flex-row">
+
+    <!-- Mobile hero (top, hidden on lg+) -->
+    <div class="lg:hidden bg-gradient-to-br from-indigo-950 via-indigo-900 to-violet-900 px-6 pt-8 pb-7 relative overflow-hidden">
+      <!-- Decorative orbs -->
+      <div class="absolute -top-12 -right-12 w-48 h-48 bg-indigo-500 opacity-10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-12 -left-8 w-40 h-40 bg-violet-500 opacity-15 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative z-10">
+        <!-- Badge -->
+        <div class="inline-flex items-center gap-2 bg-indigo-800/60 border border-indigo-700/50 rounded-full px-3 py-1 mb-3">
+          <span class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
+          <span class="text-indigo-200 text-xs font-medium tracking-wide">AI-Powered Job Tracker</span>
+        </div>
+
+        <!-- Headline -->
+        <h1 class="text-2xl font-bold text-white leading-snug mb-1">
+          Land your dream job<br/>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-violet-300">faster with AI</span>
+        </h1>
+        <p class="text-indigo-300 text-xs leading-relaxed mt-1 mb-5">
+          Track every application, generate tailored documents, and discover new opportunities — automatically.
+        </p>
+
+        <!-- Feature pills -->
+        <div class="flex flex-wrap gap-2 mb-5">
+          <span v-for="f in [
+            { icon: '🗂️', label: 'Kanban pipeline' },
+            { icon: '🤖', label: 'AI cover letters' },
+            { icon: '🔍', label: 'Job discovery' },
+            { icon: '📄', label: 'Resume analysis' },
+          ]" :key="f.label"
+            class="flex items-center gap-1.5 bg-white/10 border border-white/10 rounded-full px-3 py-1 text-xs text-indigo-200 font-medium backdrop-blur-sm">
+            <span>{{ f.icon }}</span>
+            <span>{{ f.label }}</span>
+          </span>
+        </div>
+
+        <!-- Stats row -->
+        <div class="flex items-center gap-5 pt-4 border-t border-white/10">
+          <div>
+            <div class="text-base font-bold text-white">GPT-4o</div>
+            <div class="text-indigo-400 text-[10px] mt-0.5">Powered by OpenAI</div>
+          </div>
+          <div class="w-px h-6 bg-white/10"></div>
+          <div>
+            <div class="text-base font-bold text-white">10 Sources</div>
+            <div class="text-indigo-400 text-[10px] mt-0.5">Jobs aggregated</div>
+          </div>
+          <div class="w-px h-6 bg-white/10"></div>
+          <div>
+            <div class="text-base font-bold text-white">Free</div>
+            <div class="text-indigo-400 text-[10px] mt-0.5">No credit card</div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Left: Login Form (1/3) -->
     <div class="w-full lg:w-1/3 flex items-start justify-center bg-white px-8 pt-10 pb-12 relative z-10 shadow-2xl">
@@ -129,7 +185,7 @@ async function submit() {
             },
             {
               title: 'Weekly Job Discovery',
-              desc: 'AI agent scans 5 job sources every Friday night and surfaces the best fits.',
+              desc: 'AI agent scans 10 job sources on demand and surfaces only the best-matched roles.',
               svg: `<svg class='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'/></svg>`,
               color: 'text-emerald-300',
               bg: 'bg-emerald-500/10 border-emerald-500/20',
@@ -157,8 +213,8 @@ async function submit() {
           </div>
           <div class="w-px h-8 bg-white/10"></div>
           <div>
-            <div class="text-2xl font-bold text-white">5 Sources</div>
-            <div class="text-indigo-400 text-xs mt-0.5">Jobs aggregated weekly</div>
+            <div class="text-2xl font-bold text-white">10 Sources</div>
+            <div class="text-indigo-400 text-xs mt-0.5">Jobs aggregated</div>
           </div>
           <div class="w-px h-8 bg-white/10"></div>
           <div>
