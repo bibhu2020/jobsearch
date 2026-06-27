@@ -7,6 +7,8 @@ export interface Candidate {
   project_id: number
   name: string
   email: string | null
+  phone: string | null
+  location: string | null
   resume_path: string | null
   resume_text: string | null
   ai_summary: string | null

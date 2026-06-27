@@ -31,8 +31,10 @@ async function main() {
 
   // Additive migrations — safe to re-run
   const migrations = [
-    `ALTER TABLE interviewer_projects ADD COLUMN IF NOT EXISTS location TEXT`,
+    `ALTER TABLE interviewer_projects    ADD COLUMN IF NOT EXISTS location TEXT`,
     `ALTER TABLE interviewer_project_members ADD COLUMN IF NOT EXISTS role TEXT NOT NULL DEFAULT 'editor'`,
+    `ALTER TABLE interviewer_candidates  ADD COLUMN IF NOT EXISTS phone    TEXT`,
+    `ALTER TABLE interviewer_candidates  ADD COLUMN IF NOT EXISTS location TEXT`,
   ];
   for (const m of migrations) {
     await client.query(m);
