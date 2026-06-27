@@ -569,6 +569,7 @@ function timeAgo(dateStr: string) {
       v-if="selectedCandidate"
       :candidate="selectedCandidate"
       :project-id="projectId"
+      :job-description="store.currentProject?.description?.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim() || ''"
       @close="selectedCandidate = null"
       @updated="onCandidateUpdated"
     />

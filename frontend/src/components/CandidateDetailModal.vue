@@ -5,6 +5,7 @@ import { useInterviewerStore, type Candidate } from '@/stores/interviewer'
 const props = defineProps<{
   candidate: Candidate
   projectId: number
+  jobDescription?: string   // pre-filled from the project JD (plain text, HTML stripped)
 }>()
 
 const emit = defineEmits<{
@@ -15,8 +16,6 @@ const emit = defineEmits<{
 const store = useInterviewerStore()
 const fileInput = ref<HTMLInputElement>()
 const notes = ref(props.candidate.notes ?? '')
-const jobDescription = ref('')
-const showScanOptions = ref(false)
 const savingNotes = ref(false)
 const notesSaved = ref(false)
 
@@ -39,8 +38,7 @@ async function onFileChange(e: Event) {
 }
 
 async function scan() {
-  await store.scanResume(props.projectId, props.candidate.id, jobDescription.value || undefined)
-  showScanOptions.value = false
+  await store.scanResume(props.projectId, props.candidate.id, props.jobDescription || undefined)
   emit('updated')
 }
 
@@ -188,8 +186,8 @@ async function removeCandidate() {
               class="px-3 py-1.5 border border-slate-600 hover:bg-slate-700 rounded-lg text-xs font-medium text-slate-300 transition disabled:opacity-50">
               {{ store.uploading ? 'Uploading…' : '📎 Upload Resume' }}
             </button>
-            <button @click="showScanOptions = !showScanOptions"
-              :disabled="!candidate.resume_text && !candidate.resume_path || store.scanning"
+            <button @click="scan"
+              :disabled="(!candidate.resume_text && !candidate.resume_path) || store.scanning"
               class="px-3 py-1.5 bg-violet-600 hover:bg-violet-500 disabled:opacity-40 text-white rounded-lg text-xs font-medium transition flex items-center gap-1.5">
               <svg v-if="store.scanning" class="animate-spin h-3 w-3" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
@@ -198,24 +196,12 @@ async function removeCandidate() {
               {{ store.scanning ? 'Scanning…' : '🤖 AI Scan' }}
             </button>
           </div>
-
-          <!-- Scan options -->
-          <div v-if="showScanOptions" class="bg-violet-900/20 rounded-lg p-3 border border-violet-700/40 space-y-2">
-            <p class="text-xs text-violet-300 font-medium">Optional: paste job description for a better match score</p>
-            <textarea v-model="jobDescription" rows="3"
-              placeholder="Paste the job description here…"
-              class="w-full rounded-lg border-violet-700/60 bg-slate-800 text-slate-200 placeholder-slate-500 focus:border-violet-500 focus:ring-violet-500 text-xs resize-none" />
-            <div class="flex gap-2">
-              <button @click="scan" :disabled="store.scanning"
-                class="px-3 py-1.5 bg-violet-600 hover:bg-violet-500 disabled:opacity-40 text-white rounded-lg text-xs font-medium transition">
-                {{ store.scanning ? 'Scanning…' : 'Run Scan' }}
-              </button>
-              <button @click="showScanOptions = false"
-                class="px-3 py-1.5 border border-violet-700/40 hover:bg-slate-700 text-violet-400 rounded-lg text-xs transition">
-                Cancel
-              </button>
-            </div>
-          </div>
+          <p v-if="jobDescription" class="text-xs text-slate-500">
+            Scoring against the project job description.
+          </p>
+          <p v-else class="text-xs text-slate-600">
+            No JD on this project — scan will give a general assessment.
+          </p>
         </div>
 
         <!-- Notes -->
