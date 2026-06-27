@@ -82,7 +82,8 @@ export class InterviewerService {
 
     const cards = await this.db.query<any>(
       `SELECT ipc.id AS card_id, ipc.stage, ipc.position, ipc.created_at,
-              ic.id, ic.project_id, ic.name, ic.email, ic.resume_path, ic.resume_text,
+              ic.id, ic.project_id, ic.name, ic.email, ic.phone, ic.location,
+              ic.resume_path, ic.resume_text,
               ic.ai_summary, ic.ai_score, ic.ai_matching, ic.ai_gaps, ic.ai_recommendation, ic.notes
        FROM interviewer_pipeline_cards ipc
        JOIN interviewer_candidates ic ON ic.id = ipc.candidate_id
@@ -255,17 +256,21 @@ export class InterviewerService {
       }
     } catch { /* unreadable format — carry on with empty text */ }
 
-    // Ask the AI agent to identify name + email from the resume
+    // Ask the AI agent to identify name, email, phone, location from the resume
     let name = originalname.replace(/\.(pdf|docx?)$/i, '').replace(/[-_]/g, ' ').trim();
     let email: string | null = null;
+    let phone: string | null = null;
+    let location: string | null = null;
     if (resumeText.trim()) {
       try {
         const { data: extracted } = await axios.post(
           `${this.agentsUrl}/interviewer/extract-candidate`,
           { resume_text: resumeText.slice(0, 3000) },
         );
-        if (extracted.name) name = extracted.name;
-        if (extracted.email) email = extracted.email;
+        if (extracted.name)     name     = extracted.name;
+        if (extracted.email)    email    = extracted.email;
+        if (extracted.phone)    phone    = extracted.phone;
+        if (extracted.location) location = extracted.location;
       } catch { /* agent unreachable — fall back to filename */ }
     }
 
@@ -275,9 +280,9 @@ export class InterviewerService {
 
     // Create the candidate record
     const candidateId = await this.db.insert(
-      `INSERT INTO interviewer_candidates (project_id, user_id, name, email, resume_path, resume_text)
-       VALUES (?, ?, ?, ?, ?, ?)`,
-      [projectId, ownerId, name, email, resumeUrl, resumeText],
+      `INSERT INTO interviewer_candidates (project_id, user_id, name, email, phone, location, resume_path, resume_text)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      [projectId, ownerId, name, email, phone, location, resumeUrl, resumeText],
     );
 
     // Create the pipeline card in the target stage

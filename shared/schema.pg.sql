@@ -93,6 +93,8 @@ CREATE TABLE IF NOT EXISTS interviewer_candidates (
   user_id           INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   name              TEXT    NOT NULL,
   email             TEXT,
+  phone             TEXT,
+  location          TEXT,
   resume_path       TEXT,
   resume_text       TEXT,
   ai_summary        TEXT,

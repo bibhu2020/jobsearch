@@ -5,6 +5,7 @@ import { useInterviewerStore, type Candidate } from '@/stores/interviewer'
 const props = defineProps<{
   candidate: Candidate
   projectId: number
+  jobDescription?: string   // pre-filled from the project JD (plain text, HTML stripped)
 }>()
 
 const emit = defineEmits<{
@@ -15,8 +16,6 @@ const emit = defineEmits<{
 const store = useInterviewerStore()
 const fileInput = ref<HTMLInputElement>()
 const notes = ref(props.candidate.notes ?? '')
-const jobDescription = ref('')
-const showScanOptions = ref(false)
 const savingNotes = ref(false)
 const notesSaved = ref(false)
 
@@ -39,8 +38,7 @@ async function onFileChange(e: Event) {
 }
 
 async function scan() {
-  await store.scanResume(props.projectId, props.candidate.id, jobDescription.value || undefined)
-  showScanOptions.value = false
+  await store.scanResume(props.projectId, props.candidate.id, props.jobDescription || undefined)
   emit('updated')
 }
 
@@ -75,7 +73,30 @@ async function removeCandidate() {
       <div class="flex items-start justify-between p-5 border-b border-slate-700/60">
         <div class="flex-1 min-w-0">
           <h2 class="text-lg font-semibold text-slate-100 truncate">{{ candidate.name }}</h2>
-          <p v-if="candidate.email" class="text-sm text-slate-400 mt-0.5">{{ candidate.email }}</p>
+          <div class="flex flex-wrap items-center gap-x-3 gap-y-0.5 mt-1">
+            <a v-if="candidate.email" :href="`mailto:${candidate.email}`"
+              class="flex items-center gap-1 text-sm text-slate-400 hover:text-indigo-400 transition truncate">
+              <svg class="h-3.5 w-3.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/>
+              </svg>
+              {{ candidate.email }}
+            </a>
+            <a v-if="candidate.phone" :href="`tel:${candidate.phone}`"
+              class="flex items-center gap-1 text-sm text-slate-400 hover:text-indigo-400 transition">
+              <svg class="h-3.5 w-3.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/>
+              </svg>
+              {{ candidate.phone }}
+            </a>
+            <span v-if="candidate.location"
+              class="flex items-center gap-1 text-sm text-slate-400">
+              <svg class="h-3.5 w-3.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+              </svg>
+              {{ candidate.location }}
+            </span>
+          </div>
         </div>
         <div class="flex items-center gap-2 ml-3 shrink-0">
           <button @click="removeCandidate"
@@ -165,8 +186,8 @@ async function removeCandidate() {
               class="px-3 py-1.5 border border-slate-600 hover:bg-slate-700 rounded-lg text-xs font-medium text-slate-300 transition disabled:opacity-50">
               {{ store.uploading ? 'Uploading…' : '📎 Upload Resume' }}
             </button>
-            <button @click="showScanOptions = !showScanOptions"
-              :disabled="!candidate.resume_text && !candidate.resume_path || store.scanning"
+            <button @click="scan"
+              :disabled="(!candidate.resume_text && !candidate.resume_path) || store.scanning"
               class="px-3 py-1.5 bg-violet-600 hover:bg-violet-500 disabled:opacity-40 text-white rounded-lg text-xs font-medium transition flex items-center gap-1.5">
               <svg v-if="store.scanning" class="animate-spin h-3 w-3" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
@@ -175,24 +196,12 @@ async function removeCandidate() {
               {{ store.scanning ? 'Scanning…' : '🤖 AI Scan' }}
             </button>
           </div>
-
-          <!-- Scan options -->
-          <div v-if="showScanOptions" class="bg-violet-900/20 rounded-lg p-3 border border-violet-700/40 space-y-2">
-            <p class="text-xs text-violet-300 font-medium">Optional: paste job description for a better match score</p>
-            <textarea v-model="jobDescription" rows="3"
-              placeholder="Paste the job description here…"
-              class="w-full rounded-lg border-violet-700/60 bg-slate-800 text-slate-200 placeholder-slate-500 focus:border-violet-500 focus:ring-violet-500 text-xs resize-none" />
-            <div class="flex gap-2">
-              <button @click="scan" :disabled="store.scanning"
-                class="px-3 py-1.5 bg-violet-600 hover:bg-violet-500 disabled:opacity-40 text-white rounded-lg text-xs font-medium transition">
-                {{ store.scanning ? 'Scanning…' : 'Run Scan' }}
-              </button>
-              <button @click="showScanOptions = false"
-                class="px-3 py-1.5 border border-violet-700/40 hover:bg-slate-700 text-violet-400 rounded-lg text-xs transition">
-                Cancel
-              </button>
-            </div>
-          </div>
+          <p v-if="jobDescription" class="text-xs text-slate-500">
+            Scoring against the project job description.
+          </p>
+          <p v-else class="text-xs text-slate-600">
+            No JD on this project — scan will give a general assessment.
+          </p>
         </div>
 
         <!-- Notes -->

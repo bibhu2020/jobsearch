@@ -53,16 +53,18 @@ class ExtractRequest(BaseModel):
 
 @router.post("/extract-candidate")
 async def extract_candidate(body: ExtractRequest):
-    prompt = f"""Extract the candidate's personal contact information from this resume.
+    prompt = f"""Extract personal contact information from this resume.
 
 Resume (first 3000 chars):
 {body.resume_text[:3000]}
 
 Return a JSON object with exactly these keys:
-- "name": full name of the candidate (string — infer from email username if not obvious, never null)
-- "email": email address found in the resume (string or null)
+- "name":     full name (string, never null — infer from email username if not visible)
+- "email":    email address (string or null)
+- "phone":    phone number as written in the resume, including country code if present (string or null)
+- "location": city, state/country of residence as written (string or null — e.g. "San Francisco, CA" or "London, UK")
 
-Return ONLY the JSON, no explanation.
+Return ONLY the JSON object, no explanation.
 """
     raw = await _call_ai(prompt)
     try:
@@ -72,9 +74,15 @@ Return ONLY the JSON, no explanation.
         m = re.search(r'\{.*\}', raw, re.DOTALL)
         data = json.loads(m.group()) if m else {}
 
+    def clean(v: object) -> str | None:
+        s = (v or "").strip() if isinstance(v, str) else None
+        return s or None
+
     return {
-        "name": (data.get("name") or "").strip() or "Unknown Candidate",
-        "email": (data.get("email") or "").strip() or None,
+        "name":     clean(data.get("name")) or "Unknown Candidate",
+        "email":    clean(data.get("email")),
+        "phone":    clean(data.get("phone")),
+        "location": clean(data.get("location")),
     }
 
 
