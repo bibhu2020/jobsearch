@@ -37,8 +37,9 @@ export class InterviewerController {
     @Request() req,
     @Body('title') title: string,
     @Body('description') description?: string,
+    @Body('location') location?: string,
   ) {
-    return this.svc.createProject(req.user.userId, title, description);
+    return this.svc.createProject(req.user.userId, title, description, location);
   }
 
   @Get('projects/:id')
@@ -52,13 +53,19 @@ export class InterviewerController {
     @Param('id') id: string,
     @Body('title') title: string,
     @Body('description') description?: string,
+    @Body('location') location?: string,
   ) {
-    return this.svc.updateProject(req.user.userId, parseInt(id), title, description);
+    return this.svc.updateProject(req.user.userId, parseInt(id), title, description, location);
   }
 
   @Delete('projects/:id')
   deleteProject(@Request() req, @Param('id') id: string) {
     return this.svc.deleteProject(req.user.userId, parseInt(id));
+  }
+
+  @Post('format-jd')
+  formatJd(@Body('text') text: string) {
+    return this.svc.formatJd(text);
   }
 
   // ── Members ───────────────────────────────────────────────────────────────────
@@ -83,6 +90,30 @@ export class InterviewerController {
   }
 
   // ── Candidates ────────────────────────────────────────────────────────────────
+
+  @Post('projects/:pid/candidates/from-resume')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: memoryStorage(),
+      fileFilter: (_req, file, cb) => {
+        const allowed = ['.pdf', '.doc', '.docx'];
+        cb(null, allowed.includes(extname(file.originalname).toLowerCase()));
+      },
+      limits: { fileSize: 10 * 1024 * 1024 },
+    }),
+  )
+  addCandidateFromResume(
+    @Request() req,
+    @Param('pid') pid: string,
+    @UploadedFile() file: Express.Multer.File,
+    @Body('stage') stage?: string,
+  ) {
+    return this.svc.addCandidateFromResume(
+      req.user.userId, parseInt(pid),
+      stage || 'applied',
+      file.buffer, file.originalname,
+    );
+  }
 
   @Post('projects/:pid/candidates')
   addCandidate(

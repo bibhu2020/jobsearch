@@ -47,6 +47,93 @@ async def _call_ai(prompt: str) -> str:
     return resp.choices[0].message.content
 
 
+class ExtractRequest(BaseModel):
+    resume_text: str
+
+
+@router.post("/extract-candidate")
+async def extract_candidate(body: ExtractRequest):
+    prompt = f"""Extract the candidate's personal contact information from this resume.
+
+Resume (first 3000 chars):
+{body.resume_text[:3000]}
+
+Return a JSON object with exactly these keys:
+- "name": full name of the candidate (string — infer from email username if not obvious, never null)
+- "email": email address found in the resume (string or null)
+
+Return ONLY the JSON, no explanation.
+"""
+    raw = await _call_ai(prompt)
+    try:
+        data = json.loads(raw)
+    except Exception:
+        import re
+        m = re.search(r'\{.*\}', raw, re.DOTALL)
+        data = json.loads(m.group()) if m else {}
+
+    return {
+        "name": (data.get("name") or "").strip() or "Unknown Candidate",
+        "email": (data.get("email") or "").strip() or None,
+    }
+
+
+class FormatJdRequest(BaseModel):
+    text: str
+
+
+@router.post("/format-jd")
+async def format_jd(body: FormatJdRequest):
+    prompt = f"""Format this job description as compact HTML for a rich text editor.
+
+Input text:
+{body.text[:6000]}
+
+Return JSON: {{"html": "..."}}
+
+HTML rules (strict):
+- <h2>Section Name</h2> for content sections (Responsibilities, Requirements, Nice to Have, Benefits, etc.)
+- <ul><li>item text</li></ul> for bullet lists — NO <p> inside <li>, text goes directly in <li>
+- <p>text</p> for introductory overview paragraphs only
+- <strong>term</strong> only for key technical terms when needed
+- COMPACT: absolutely NO whitespace or newlines between tags — every tag immediately follows the last closing tag
+
+SKIP these entirely — they are captured in separate form fields:
+- Job title / role name lines
+- Location / office / remote lines
+- Experience level lines (e.g. "5-10 Years", "3+ years")
+- Employment type lines (Full-Time, Contract, Part-Time)
+- Salary / compensation lines
+- Any single-word label + value pairs at the top of the JD
+
+Preserve all responsibilities, requirements, and qualifications.
+
+Example: {{"html": "<h2>About the Role</h2><p>We are seeking a senior engineer...</p><h2>Responsibilities</h2><ul><li>Design RESTful APIs</li><li>Build microservices</li></ul><h2>Requirements</h2><ul><li>5+ years Node.js</li><li>Experience with PostgreSQL</li></ul>"}}
+"""
+    raw = await _call_ai(prompt)
+
+    import re
+    # _call_ai returns JSON string — parse it to extract the html field
+    try:
+        data = json.loads(raw)
+        html = data.get("html") or data.get("content") or data.get("result") or ""
+    except Exception:
+        # Fallback: AI returned raw HTML or something else
+        html = raw
+        html = re.sub(r'^```(?:html)?\s*', '', html.strip(), flags=re.IGNORECASE)
+        html = re.sub(r'\s*```$', '', html)
+
+    # Remove any remaining whitespace between tags that the AI snuck in
+    html = re.sub(r'>\s+<', '><', html.strip())
+    # Remove <p> wrappers inside <li> elements
+    html = re.sub(r'<li>\s*<p>', '<li>', html, flags=re.IGNORECASE)
+    html = re.sub(r'</p>\s*</li>', '</li>', html, flags=re.IGNORECASE)
+    # Remove empty paragraphs
+    html = re.sub(r'<p>\s*</p>', '', html, flags=re.IGNORECASE)
+
+    return {"html": html.strip()}
+
+
 class ScanRequest(BaseModel):
     resume_text: str
     job_description: str = ""

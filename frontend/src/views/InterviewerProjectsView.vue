@@ -1,50 +1,92 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import Navbar from '@/components/Navbar.vue'
+import RichTextEditor from '@/components/RichTextEditor.vue'
 import { useInterviewerStore } from '@/stores/interviewer'
 import { useRouter } from 'vue-router'
 
 const store = useInterviewerStore()
 const router = useRouter()
 
-const showCreate = ref(false)
-const newTitle = ref('')
-const newDesc = ref('')
-const creating = ref(false)
+// ── Create ────────────────────────────────────────────────────────────────────
 
-const editingId = ref<number | null>(null)
-const editTitle = ref('')
-const editDesc = ref('')
-const saving = ref(false)
+const showCreate = ref(false)
+const newTitle    = ref('')
+const newDesc     = ref('')
+const newLocation = ref('')
+const creating    = ref(false)
+const createFormatState = ref<'idle' | 'formatting'>('idle')
+
+// ── Edit ──────────────────────────────────────────────────────────────────────
+
+const editingId   = ref<number | null>(null)
+const editTitle   = ref('')
+const editDesc    = ref('')
+const editLocation = ref('')
+const saving      = ref(false)
+const saveError   = ref('')
+const createError = ref('')
+const editFormatState = ref<'idle' | 'formatting'>('idle')
 
 onMounted(() => store.fetchProjects())
+
+async function handleFormatRequest(text: string, target: 'create' | 'edit') {
+  if (!text.trim()) return
+  const stateRef = target === 'create' ? createFormatState : editFormatState
+  const descRef  = target === 'create' ? newDesc : editDesc
+  stateRef.value = 'formatting'
+  try {
+    descRef.value = await store.formatJd(text)
+  } catch {
+    // silently fall back — user keeps their plain-text paste
+  } finally {
+    stateRef.value = 'idle'
+  }
+}
 
 async function createProject() {
   if (!newTitle.value.trim()) return
   creating.value = true
+  createError.value = ''
   try {
-    const p = await store.createProject(newTitle.value.trim(), newDesc.value.trim() || undefined)
-    newTitle.value = ''
-    newDesc.value = ''
-    showCreate.value = false
+    const p = await store.createProject(
+      newTitle.value.trim(),
+      newDesc.value || undefined,
+      newLocation.value.trim() || undefined,
+    )
+    newTitle.value    = ''
+    newDesc.value     = ''
+    newLocation.value = ''
+    showCreate.value  = false
     router.push(`/interviewer/projects/${p.id}`)
+  } catch (e: any) {
+    createError.value = e.response?.data?.message || 'Failed to create project. Run npm run db:init if this is a new install.'
   } finally {
     creating.value = false
   }
 }
 
-function startEdit(p: { id: number; title: string; description?: string | null }) {
-  editingId.value = p.id
-  editTitle.value = p.title
-  editDesc.value = p.description || ''
+function startEdit(p: { id: number; title: string; description?: string | null; location?: string | null }) {
+  editingId.value    = p.id
+  editTitle.value    = p.title
+  editDesc.value     = p.description || ''
+  editLocation.value = p.location || ''
 }
 
 async function saveEdit() {
   if (!editTitle.value.trim() || editingId.value === null) return
   saving.value = true
+  saveError.value = ''
   try {
-    await store.updateProject(editingId.value, editTitle.value.trim(), editDesc.value.trim() || undefined)
+    await store.updateProject(
+      editingId.value,
+      editTitle.value.trim(),
+      editDesc.value || undefined,
+      editLocation.value.trim() || undefined,
+    )
     editingId.value = null
+  } catch (e: any) {
+    saveError.value = e.response?.data?.message || 'Save failed. Run npm run db:init to apply DB migrations.'
   } finally {
     saving.value = false
   }
@@ -72,28 +114,52 @@ async function saveEdit() {
         <!-- Create form -->
         <div v-if="showCreate" class="bg-slate-800 border border-slate-700/60 rounded-xl p-4 sm:p-6 mb-6 space-y-3">
           <h2 class="text-sm font-semibold text-slate-200">New Hiring Project</h2>
-          <input v-model="newTitle" type="text" placeholder="e.g. Senior Backend Engineer"
-            class="w-full rounded-lg border-slate-600 bg-slate-700/50 text-slate-100 placeholder-slate-500 focus:bg-slate-700 focus:border-indigo-500 focus:ring-indigo-500 text-sm" />
-          <textarea v-model="newDesc" rows="2" placeholder="Optional: describe the role or requirements…"
-            class="w-full rounded-lg border-slate-600 bg-slate-700/50 text-slate-100 placeholder-slate-500 focus:bg-slate-700 focus:border-indigo-500 focus:ring-indigo-500 text-sm resize-none" />
-          <div class="flex gap-2">
+
+          <!-- Title + Location row -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-medium text-slate-400 mb-1">Role title <span class="text-red-400">*</span></label>
+              <input v-model="newTitle" type="text" placeholder="e.g. Senior Backend Engineer"
+                class="w-full rounded-lg border-slate-600 bg-slate-700/50 text-slate-100 placeholder-slate-500 focus:bg-slate-700 focus:border-indigo-500 focus:ring-indigo-500 text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-400 mb-1">Location</label>
+              <input v-model="newLocation" type="text" placeholder="e.g. Remote · US · London"
+                class="w-full rounded-lg border-slate-600 bg-slate-700/50 text-slate-100 placeholder-slate-500 focus:bg-slate-700 focus:border-indigo-500 focus:ring-indigo-500 text-sm" />
+            </div>
+          </div>
+
+          <!-- Job description rich editor -->
+          <div>
+            <label class="block text-xs font-medium text-slate-400 mb-1">Job description</label>
+            <p class="text-xs text-slate-500 mb-2">Paste a job description — AI will format it automatically. You can also edit and format manually.</p>
+            <RichTextEditor
+              v-model="newDesc"
+              :formatting="true"
+              :format-state="createFormatState"
+              placeholder="Paste or type a job description…"
+              @format-request="handleFormatRequest($event, 'create')"
+            />
+          </div>
+
+          <div class="flex gap-2 pt-1">
             <button @click="createProject" :disabled="!newTitle.trim() || creating"
               class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 text-white rounded-lg text-sm font-medium transition">
               {{ creating ? 'Creating…' : 'Create' }}
             </button>
-            <button @click="showCreate = false"
+            <button @click="showCreate = false; createError = ''"
               class="px-4 py-2 border border-slate-600 hover:bg-slate-700 rounded-lg text-sm text-slate-400 transition">
               Cancel
             </button>
           </div>
+          <p v-if="createError" class="text-xs text-red-400">{{ createError }}</p>
         </div>
 
         <!-- Loading -->
         <div v-if="store.loading" class="text-center py-16 text-slate-500">Loading…</div>
 
         <!-- Empty state -->
-        <div v-else-if="store.projects.length === 0"
-          class="text-center py-16">
+        <div v-else-if="store.projects.length === 0" class="text-center py-16">
           <div class="text-4xl mb-3">🗂️</div>
           <p class="font-medium text-slate-400">No hiring projects yet</p>
           <p class="text-sm mt-1 text-slate-500">Create a project for each open role to track candidates.</p>
@@ -105,21 +171,44 @@ async function saveEdit() {
             class="bg-slate-800 border border-slate-700/60 rounded-xl overflow-hidden hover:border-slate-600 transition">
 
             <!-- Edit mode -->
-            <div v-if="editingId === p.id" class="p-4 space-y-3">
-              <input v-model="editTitle" type="text" placeholder="Project title"
-                class="w-full rounded-lg border-slate-600 bg-slate-700/50 text-slate-100 placeholder-slate-500 focus:bg-slate-700 focus:border-indigo-500 focus:ring-indigo-500 text-sm" />
-              <textarea v-model="editDesc" rows="2" placeholder="Description / job requirements…"
-                class="w-full rounded-lg border-slate-600 bg-slate-700/50 text-slate-100 placeholder-slate-500 focus:bg-slate-700 focus:border-indigo-500 focus:ring-indigo-500 text-sm resize-none" />
+            <div v-if="editingId === p.id" class="p-4 sm:p-5 space-y-3">
+              <h2 class="text-sm font-semibold text-slate-200">Edit Project</h2>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-medium text-slate-400 mb-1">Role title</label>
+                  <input v-model="editTitle" type="text" placeholder="Project title"
+                    class="w-full rounded-lg border-slate-600 bg-slate-700/50 text-slate-100 placeholder-slate-500 focus:bg-slate-700 focus:border-indigo-500 focus:ring-indigo-500 text-sm" />
+                </div>
+                <div>
+                  <label class="block text-xs font-medium text-slate-400 mb-1">Location</label>
+                  <input v-model="editLocation" type="text" placeholder="e.g. Remote · US · London"
+                    class="w-full rounded-lg border-slate-600 bg-slate-700/50 text-slate-100 placeholder-slate-500 focus:bg-slate-700 focus:border-indigo-500 focus:ring-indigo-500 text-sm" />
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-medium text-slate-400 mb-1">Job description</label>
+                <RichTextEditor
+                  v-model="editDesc"
+                  :formatting="true"
+                  :format-state="editFormatState"
+                  placeholder="Paste or type a job description…"
+                  @format-request="handleFormatRequest($event, 'edit')"
+                />
+              </div>
+
               <div class="flex gap-2">
                 <button @click="saveEdit" :disabled="!editTitle.trim() || saving"
                   class="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 text-white rounded-lg text-sm font-medium transition">
                   {{ saving ? 'Saving…' : 'Save' }}
                 </button>
-                <button @click="editingId = null"
+                <button @click="editingId = null; saveError = ''"
                   class="px-4 py-1.5 border border-slate-600 hover:bg-slate-700 rounded-lg text-sm text-slate-400 transition">
                   Cancel
                 </button>
               </div>
+              <p v-if="saveError" class="text-xs text-red-400">{{ saveError }}</p>
             </div>
 
             <!-- View mode -->
@@ -133,7 +222,19 @@ async function saveEdit() {
                       shared
                     </span>
                   </div>
-                  <p v-if="p.description" class="text-sm text-slate-500 mt-0.5 line-clamp-2">{{ p.description }}</p>
+                  <!-- Location badge -->
+                  <div v-if="p.location" class="flex items-center gap-1 mt-1">
+                    <svg class="h-3 w-3 text-slate-500 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+                    </svg>
+                    <span class="text-xs text-slate-500">{{ p.location }}</span>
+                  </div>
+                  <!-- JD preview (strip HTML tags) -->
+                  <p v-if="p.description"
+                    class="text-sm text-slate-500 mt-1 line-clamp-2"
+                    v-html="p.description.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()">
+                  </p>
                 </div>
                 <div class="flex items-center gap-2 shrink-0">
                   <span class="text-sm text-slate-500">

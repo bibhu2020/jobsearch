@@ -25,6 +25,7 @@ export interface Project {
   id: number
   title: string
   description: string | null
+  location: string | null
   candidate_count: number
   created_at: string
   is_owner?: boolean
@@ -56,17 +57,22 @@ export const useInterviewerStore = defineStore('interviewer', () => {
     }
   }
 
-  async function createProject(title: string, description?: string) {
-    const { data } = await api.post('/interviewer/projects', { title, description })
+  async function createProject(title: string, description?: string, location?: string) {
+    const { data } = await api.post('/interviewer/projects', { title, description, location })
     projects.value.unshift({ ...data, candidate_count: 0 })
     return data
   }
 
-  async function updateProject(id: number, title: string, description?: string) {
-    const { data } = await api.put(`/interviewer/projects/${id}`, { title, description })
+  async function updateProject(id: number, title: string, description?: string, location?: string) {
+    const { data } = await api.put(`/interviewer/projects/${id}`, { title, description, location })
     const idx = projects.value.findIndex(p => p.id === id)
     if (idx !== -1) projects.value[idx] = { ...projects.value[idx], ...data }
     return data
+  }
+
+  async function formatJd(text: string): Promise<string> {
+    const { data } = await api.post('/interviewer/format-jd', { text })
+    return data.html as string
   }
 
   async function deleteProject(id: number) {
@@ -92,6 +98,26 @@ export const useInterviewerStore = defineStore('interviewer', () => {
       currentProject.value.cards.push(data)
     }
     return data
+  }
+
+  async function addCandidateFromResume(projectId: number, stage: string, file: File): Promise<Candidate> {
+    uploading.value = true
+    try {
+      const form = new FormData()
+      form.append('file', file)
+      form.append('stage', stage)
+      const { data } = await api.post(
+        `/interviewer/projects/${projectId}/candidates/from-resume`,
+        form,
+        { headers: { 'Content-Type': 'multipart/form-data' } },
+      )
+      if (currentProject.value?.cards) {
+        currentProject.value.cards.push(data)
+      }
+      return data
+    } finally {
+      uploading.value = false
+    }
   }
 
   async function uploadResume(projectId: number, candidateId: number, file: File) {
@@ -178,8 +204,8 @@ export const useInterviewerStore = defineStore('interviewer', () => {
 
   return {
     projects, currentProject, loading, scanning, uploading,
-    fetchProjects, createProject, updateProject, deleteProject,
-    fetchProject, addCandidate, uploadResume, scanResume,
+    fetchProjects, createProject, updateProject, deleteProject, formatJd,
+    fetchProject, addCandidate, addCandidateFromResume, uploadResume, scanResume,
     updateNotes, deleteCandidate, moveCard, refreshCandidate,
     fetchMembers, inviteMember, removeMember,
   }
