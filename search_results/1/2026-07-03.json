@@ -1,0 +1,105 @@
+[
+  {
+    "title": "Principal AI Solutions Architect, Healthcare & Life Sciences - US",
+    "company": "DataArt Solutions",
+    "location": "Dallas, Texas",
+    "description": "Principal AI Solutions Architect, Healthcare & Life Sciences - US at DataArt Solutions (Dallas, Texas)",
+    "url": "https://www.dice.com/job-detail/83a51089-9403-4270-a319-34b5e8a92978",
+    "source": "dice",
+    "match_score": 95,
+    "matching": [
+      "Principal AI Solutions Architect role aligns with current position",
+      "Deep domain expertise in Healthcare",
+      "Experience in Generative AI and Azure services mentioned in post"
+    ],
+    "gaps": [],
+    "recommendation": "apply",
+    "match_reason": "Perfect alignment in terms of role, domain expertise, and skillset. No geographical constraints.",
+    "user_id": 1,
+    "search_date": "2026-07-03"
+  },
+  {
+    "title": "Principal / Master Principal Cloud Architect",
+    "company": "Oracle Corporation",
+    "location": "Reston, Virginia",
+    "description": "Principal / Master Principal Cloud Architect at Oracle Corporation (Reston, Virginia)",
+    "url": "https://www.dice.com/job-detail/4cc35b3a-7c08-4669-9c83-780e30b2b68e",
+    "source": "dice",
+    "match_score": 90,
+    "matching": [
+      "Principal Cloud Architect matches seniority level",
+      "Extensive Azure experience relevant",
+      "No geographic constraints"
+    ],
+    "gaps": [
+      "Role may require Oracle Cloud experience not listed in profile"
+    ],
+    "recommendation": "apply",
+    "match_reason": "Strong fit based on cloud architecture experience; Oracle experience might be needed but main skills fit well.",
+    "user_id": 1,
+    "search_date": "2026-07-03"
+  },
+  {
+    "title": "AI Solutions Engineer",
+    "company": "Affirm",
+    "location": "Remote: \ud83c\uddfa\ud83c\uddf8 USA",
+    "description": "AI Solutions Engineer at Affirm",
+    "url": "https://remote100k.com/remote-job/affirm-ai-solutions-engineer",
+    "source": "remote100k",
+    "match_score": 86,
+    "matching": [
+      "AI Solutions Engineer aligns with engineering and AI experience",
+      "Remote position available for US candidates",
+      "Experience with Azure and AI relevant"
+    ],
+    "gaps": [
+      "Potentially less managerial responsibilities than current role"
+    ],
+    "recommendation": "apply",
+    "match_reason": "The role aligns with AI and engineering skills and is remote-friendly for US candidates.",
+    "user_id": 1,
+    "search_date": "2026-07-03"
+  },
+  {
+    "title": "Senior Engineering Manager - Enablement",
+    "company": "Honeycomb.io",
+    "location": "Remote: \ud83c\uddfa\ud83c\uddf8 USA",
+    "description": "Senior Engineering Manager - Enablement at Honeycomb.io",
+    "url": "https://remote100k.com/remote-job/honeycomb-io-senior-engineering-manager-enablement",
+    "source": "remote100k",
+    "match_score": 83,
+    "matching": [
+      "Engineering manager role aligns with leadership experience",
+      "Remote position for US candidates",
+      "Relevant experience in CI/CD and team leadership"
+    ],
+    "gaps": [
+      "Specific industry experience not clearly aligned"
+    ],
+    "recommendation": "apply",
+    "match_reason": "Managerial and delivery management experience make this role a strong fit despite industry differences.",
+    "user_id": 1,
+    "search_date": "2026-07-03"
+  },
+  {
+    "title": "AI Architect / Principal Engineer",
+    "company": "PeopleNTech",
+    "location": "Hybrid in Exton, Pennsylvania",
+    "description": "AI Architect / Principal Engineer at PeopleNTech (Hybrid in Exton, Pennsylvania)",
+    "url": "https://www.dice.com/job-detail/3cfcf791-8e2f-4779-984e-0d1afa83553e",
+    "source": "dice",
+    "match_score": 82,
+    "matching": [
+      "AI Architect role fits with experience in AI and architecture",
+      "Principal level mentioned suits seniority",
+      "Hybrid role can be considered based on candidate's location preference"
+    ],
+    "gaps": [
+      "Located in Pennsylvania, hybrid may require some relocation/travel"
+    ],
+    "recommendation": "apply",
+    "match_reason": "Skills and expertise match the role closely, hybrid nature is a small concern but manageable if flexible.",
+    "user_id": 1,
+    "search_date": "2026-07-03"
+  }
+]
