@@ -33,6 +33,7 @@ function isActive(path: string) {
           { to: '/pipeline', label: 'Pipeline' },
           { to: '/suggestions', label: 'Job Search' },
           { to: '/profile', label: 'Profile' },
+          { to: '/guide', label: 'Guide' },
         ]" :key="link.to" :to="link.to"
           :class="[
             'flex items-center h-full px-3 text-sm font-medium border-b-2 transition-colors',
@@ -49,6 +50,7 @@ function isActive(path: string) {
         <router-link v-for="link in [
           { to: '/interviewer', label: 'Projects' },
           { to: '/profile', label: 'Profile' },
+          { to: '/guide', label: 'Guide' },
         ]" :key="link.to" :to="link.to"
           :class="[
             'flex items-center h-full px-3 text-sm font-medium border-b-2 transition-colors',

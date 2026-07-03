@@ -169,7 +169,7 @@ export const useSuggestionsStore = defineStore('suggestions', () => {
         }
       } else {
         workflowMessage.value = data.status === 'in_progress'
-          ? 'Agent is running job search across 10 sources…'
+          ? 'Agent is running job search across 9 sources…'
           : 'Waiting for a GitHub Actions runner to pick up the job…'
       }
     } catch {

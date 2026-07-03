@@ -193,7 +193,7 @@ const isRunning = computed(() =>
         <h2 class="text-base font-semibold text-slate-200 mb-1">No suggestions yet</h2>
         <p class="text-sm text-slate-500 max-w-sm leading-relaxed">
           Click <span class="font-semibold text-indigo-400">Run Job Search</span> — your profile is used to find
-          matching roles across 10 sources. Results appear automatically when the search completes (~5 min).
+          matching roles across 9 sources. Results appear automatically when the search completes (~5 min).
         </p>
       </div>
 

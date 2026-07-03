@@ -10,7 +10,6 @@ from agents.sources.linkedin import linkedin_source
 from agents.sources.indeed import indeed_source
 from agents.sources.dice import dice_source
 from agents.sources.builtin import builtin_source
-from agents.sources.wellfound import wellfound_source
 from agents.sources.remote100k import remote100k_source
 from agents.sources.remoterocketship import remoterocketship_source
 
@@ -189,7 +188,6 @@ async def search_jobs(req: SearchRequest):
         remotive_source(queries),
         dice_source(queries, country),
         builtin_source(queries, country),
-        wellfound_source(queries, country),
         linkedin_source(queries),
         # Tier 2 — vetted senior / remote
         remote100k_source(queries, country),
@@ -202,7 +200,7 @@ async def search_jobs(req: SearchRequest):
     )
 
     source_names = [
-        "remotive", "dice", "builtin", "wellfound", "linkedin",
+        "remotive", "dice", "builtin", "linkedin",
         "remote100k", "remoterocketship", "weworkremotely", "remoteok", "indeed",
     ]
     # Cap each source equally so high-volume sources (LinkedIn, Indeed) don't crowd out others

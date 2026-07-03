@@ -12,6 +12,53 @@ const profileSummary = ref('')
 const skillsText = ref('')
 const successMsg = ref('')
 
+// ── Resume drag-and-drop ───────────────────────────────────────────────────────
+const isDraggingFile = ref(false)
+const dropError = ref('')
+let dragCounter = 0
+
+function isFileDrag(e: DragEvent) {
+  return e.dataTransfer?.types.includes('Files') ?? false
+}
+
+function onDragEnter(e: DragEvent) {
+  if (!isFileDrag(e)) return
+  dragCounter++
+  isDraggingFile.value = true
+}
+
+function onDragLeave(e: DragEvent) {
+  if (!isFileDrag(e)) return
+  dragCounter = Math.max(0, dragCounter - 1)
+  if (dragCounter === 0) isDraggingFile.value = false
+}
+
+function onDragOver(e: DragEvent) {
+  if (!isFileDrag(e)) return
+  e.preventDefault()
+  if (e.dataTransfer) e.dataTransfer.dropEffect = 'copy'
+}
+
+async function onFileDrop(e: DragEvent) {
+  dragCounter = 0
+  isDraggingFile.value = false
+  if (!isFileDrag(e)) return
+  e.preventDefault()
+  dropError.value = ''
+
+  const file = e.dataTransfer?.files[0]
+  if (!file) return
+
+  const ext = file.name.split('.').pop()?.toLowerCase() || ''
+  if (!['pdf', 'doc', 'docx'].includes(ext)) {
+    dropError.value = 'Only PDF, DOC, and DOCX files are supported.'
+    setTimeout(() => { dropError.value = '' }, 4000)
+    return
+  }
+
+  await store.uploadResume(file)
+}
+
 onMounted(async () => {
   await store.fetchProfile()
   name.value = store.profile?.name || ''
@@ -98,26 +145,50 @@ const skillList = () => skillsText.value.split(',').map(s => s.trim()).filter(Bo
           </div>
           <div class="px-5 py-5">
             <input ref="fileInput" type="file" accept=".pdf,.doc,.docx" class="hidden" @change="onFileChange" />
-            <div class="flex flex-col sm:flex-row gap-3">
-              <button @click="fileInput?.click()" :disabled="store.uploading"
-                class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 py-2.5 border border-slate-600 hover:bg-slate-700 hover:border-slate-500 rounded-xl text-sm font-medium text-slate-300 transition disabled:opacity-50">
-                <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.372L8.552 18.32m.009-.01l-.01.01m5.699-9.941l-7.81 7.81a1.5 1.5 0 002.112 2.13" />
-                </svg>
-                {{ store.uploading ? 'Uploading…' : 'Upload Resume' }}
-              </button>
-              <button @click="analyze" :disabled="store.analyzing || !store.profile?.profile?.resume_path"
-                class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-violet-600 hover:bg-violet-500 disabled:opacity-40 text-white rounded-xl text-sm font-semibold transition shadow-sm shadow-violet-900/50">
-                <svg v-if="store.analyzing" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
-                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
-                </svg>
-                <svg v-else class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
-                </svg>
-                {{ store.analyzing ? 'Analyzing…' : 'AI Analyze Resume' }}
-              </button>
+
+            <!-- Dropzone -->
+            <div
+              @dragenter="onDragEnter"
+              @dragleave="onDragLeave"
+              @dragover="onDragOver"
+              @drop="onFileDrop"
+              class="relative rounded-xl border-2 border-dashed transition-colors px-5 py-6 flex flex-col items-center justify-center gap-1.5 text-center"
+              :class="isDraggingFile ? 'border-indigo-500 bg-indigo-950/40' : 'border-slate-600'">
+              <svg class="h-6 w-6 text-slate-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+              </svg>
+              <p class="text-sm text-slate-400">
+                <span class="font-medium text-indigo-400">Drag &amp; drop</span> your resume, or
+                <button @click="fileInput?.click()" :disabled="store.uploading"
+                  class="font-medium text-indigo-400 hover:underline disabled:opacity-50">browse</button>
+              </p>
+              <p class="text-xs text-slate-600">{{ store.uploading ? 'Uploading…' : 'PDF, DOC, or DOCX' }}</p>
+
+              <!-- Drag-over overlay -->
+              <Transition name="drop-fade">
+                <div v-if="isDraggingFile"
+                  class="absolute inset-0 rounded-xl bg-indigo-950/80 backdrop-blur-sm flex items-center justify-center pointer-events-none">
+                  <span class="text-sm font-semibold text-indigo-300">Drop to upload</span>
+                </div>
+              </Transition>
             </div>
+
+            <!-- Invalid file type -->
+            <Transition name="fade">
+              <p v-if="dropError" class="text-xs text-red-400 mt-2">{{ dropError }}</p>
+            </Transition>
+
+            <button @click="analyze" :disabled="store.analyzing || !store.profile?.profile?.resume_path"
+              class="w-full sm:w-auto mt-3 inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-violet-600 hover:bg-violet-500 disabled:opacity-40 text-white rounded-xl text-sm font-semibold transition shadow-sm shadow-violet-900/50">
+              <svg v-if="store.analyzing" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+              </svg>
+              <svg v-else class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+              </svg>
+              {{ store.analyzing ? 'Analyzing…' : 'AI Analyze Resume' }}
+            </button>
             <p v-if="!store.profile?.profile?.resume_path" class="text-xs text-slate-500 mt-2">
               Upload your resume first, then click "AI Analyze" to auto-fill your profile.
             </p>
@@ -177,4 +248,6 @@ const skillList = () => skillsText.value.split(',').map(s => s.trim()).filter(Bo
 <style scoped>
 .fade-enter-active, .fade-leave-active { transition: opacity 0.3s; }
 .fade-enter-from, .fade-leave-to { opacity: 0; }
+.drop-fade-enter-active, .drop-fade-leave-active { transition: opacity 0.15s; }
+.drop-fade-enter-from, .drop-fade-leave-to { opacity: 0; }
 </style>

@@ -1,8 +1,14 @@
+import re
 import urllib.parse
 from playwright.async_api import async_playwright
 
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
       "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+
+
+def _query_to_slug(query: str) -> str:
+    slug = re.sub(r"[^a-z0-9]+", "-", query.lower()).strip("-")
+    return slug or "remote"
 
 
 async def remoterocketship_source(queries: list[str], country: str = "") -> list[dict]:
@@ -16,21 +22,21 @@ async def remoterocketship_source(queries: list[str], country: str = "") -> list
 
             for query in queries[:2]:
                 try:
-                    q = urllib.parse.quote_plus(query)
-                    url = f"https://remoterocketship.com/jobs?search={q}"
-                    await page.goto(url, timeout=25000)
-                    await page.wait_for_timeout(2500)
-
-                    cards = await page.query_selector_all(
-                        "tr[class*='job'], .job-row, [class*='JobRow'], "
-                        "li[class*='job'], div[class*='job-card'], article"
+                    slug = _query_to_slug(query)
+                    job_title = urllib.parse.quote_plus(query)
+                    url = (
+                        f"https://www.remoterocketship.com/jobs/{slug}/"
+                        f"?page=1&sort=DateAdded&jobTitle={job_title}"
                     )
+                    await page.goto(url, timeout=25000)
+                    await page.wait_for_timeout(4000)
 
+                    cards = await page.query_selector_all("div[role='button']")
                     for card in cards:
                         try:
-                            t_el  = await card.query_selector("a[href*='/jobs/'], a[class*='title'], h2 a, h3 a")
-                            co_el = await card.query_selector("[class*='company'], td:nth-child(2)")
-                            lo_el = await card.query_selector("[class*='location'], td[class*='loc']")
+                            t_el  = await card.query_selector("h3 a")
+                            co_el = await card.query_selector("h4 a")
+                            lo_el = await card.query_selector("a[href^='/country/']")
 
                             title    = (await t_el.inner_text()).strip()  if t_el  else ""
                             company  = (await co_el.inner_text()).strip() if co_el else ""
@@ -39,7 +45,7 @@ async def remoterocketship_source(queries: list[str], country: str = "") -> list
 
                             if title and href and href not in seen:
                                 seen.add(href)
-                                full_url = href if href.startswith("http") else f"https://remoterocketship.com{href}"
+                                full_url = href if href.startswith("http") else f"https://www.remoterocketship.com{href}"
                                 results.append({
                                     "title": title,
                                     "company": company,

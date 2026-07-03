@@ -68,7 +68,7 @@ async function submit() {
           </div>
           <div class="w-px h-6 bg-white/10"></div>
           <div>
-            <div class="text-base font-bold text-white">10 Sources</div>
+            <div class="text-base font-bold text-white">9 Sources</div>
             <div class="text-indigo-400 text-[10px] mt-0.5">Jobs aggregated</div>
           </div>
           <div class="w-px h-6 bg-white/10"></div>
@@ -213,7 +213,7 @@ async function submit() {
           </div>
           <div class="w-px h-8 bg-white/10"></div>
           <div>
-            <div class="text-2xl font-bold text-white">10 Sources</div>
+            <div class="text-2xl font-bold text-white">9 Sources</div>
             <div class="text-indigo-400 text-xs mt-0.5">Jobs aggregated</div>
           </div>
           <div class="w-px h-8 bg-white/10"></div>

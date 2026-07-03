@@ -69,9 +69,9 @@ All routes prefixed with `/api`. Protected by `JwtAuthGuard` except `/api/auth/*
 - `profile_agent.py` — Resume text analysis via OpenAI
 - `generate_agent.py` — Cover letter, resume rewrite, interview Qs, company brief (gpt-4o → Gemini fallback)
 - `pdf_agent.py` — Playwright HTML→PDF using Jinja2 templates in `agents/templates/`
-- `search_agent.py` — Orchestrates 10 parallel sources + OpenAI scoring (only returns `match_score >= 70`)
+- `search_agent.py` — Orchestrates 9 parallel sources + OpenAI scoring (only returns `match_score >= 70`)
 - `jobs_agent.py` — Extracts structured job info from raw content
-- `sources/` — 10 active sources: remotive, remoteok, weworkremotely, linkedin, indeed, dice, builtin, wellfound, remote100k, remoterocketship
+- `sources/` — 9 active sources: remotive, remoteok, weworkremotely, linkedin, indeed, dice, builtin, remote100k, remoterocketship (wellfound dropped — hard-blocked by anti-bot protection)
 - `run_search.py` — Standalone script for GitHub Actions; reads all config from env vars, writes `search_results/{user_id}/YYYY-MM-DD.json`
 
 ### Frontend (`frontend/src/`)

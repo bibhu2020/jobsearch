@@ -102,7 +102,7 @@ async function submit() {
           <div class="space-y-4">
             <div v-for="(step, i) in [
               { n: '1', label: 'Upload your resume',       desc: 'AI extracts your skills and experience in seconds.',            color: 'bg-violet-500' },
-              { n: '2', label: 'Discover matched jobs',    desc: 'AI agent scans 10 sources on demand and scores relevance for you.', color: 'bg-blue-500'   },
+              { n: '2', label: 'Discover matched jobs',    desc: 'AI agent scans 9 sources on demand and scores relevance for you.', color: 'bg-blue-500'   },
               { n: '3', label: 'Generate your kit',        desc: 'One click produces a cover letter, resume rewrite & prep guide.', color: 'bg-amber-500'  },
               { n: '4', label: 'Track your pipeline',      desc: 'Drag cards from Applied to Offer on your personal Kanban board.', color: 'bg-emerald-500'},
             ]" :key="i" class="flex items-start gap-4">
@@ -162,7 +162,7 @@ async function submit() {
           </div>
           <div class="w-px h-8 bg-white/10"></div>
           <div>
-            <div class="text-2xl font-bold text-white">10 Sources</div>
+            <div class="text-2xl font-bold text-white">9 Sources</div>
             <div class="text-indigo-400 text-xs mt-0.5">Jobs aggregated</div>
           </div>
           <div class="w-px h-8 bg-white/10"></div>
