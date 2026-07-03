@@ -8,98 +8,91 @@
     "source": "dice",
     "match_score": 95,
     "matching": [
-      "Principal AI Solutions Architect role aligns with experience",
-      "Deep domain expertise in Healthcare",
-      "Strong Azure experience (AKS, App Services, Functions, Cosmos DB)",
-      "Generative AI platforms expertise"
+      "Principal AI Solutions Architect aligns with current role",
+      "Healthcare & Life Sciences domain expertise",
+      "Located in the US matches location requirements",
+      "Experience with Azure and AI solutions"
     ],
     "gaps": [],
     "recommendation": "apply",
-    "match_reason": "The role is highly aligned with the candidate\u2019s extensive experience in healthcare and AI, making it an excellent fit.",
+    "match_reason": "Highly aligns with candidate's expertise and domain knowledge, with no significant gaps noted.",
     "user_id": 1,
     "search_date": "2026-07-03"
   },
   {
-    "title": "Staff Machine Learning Research Engineer, Agent Post-training - Enterprise GenAI",
-    "company": "Scale AI",
-    "location": "San Francisco, California",
-    "description": "Staff Machine Learning Research Engineer, Agent Post-training - Enterprise GenAI at Scale AI (San Francisco, California)",
-    "url": "https://www.dice.com/job-detail/55c78c8b-e92e-4a75-9c88-83b8813aea71",
-    "source": "dice",
+    "title": "Director, Enterprise AI Platform Architect",
+    "company": "Vista Equity Partners",
+    "location": "United States",
+    "description": "Director, Enterprise AI Platform Architect at Vista Equity Partners (United States)",
+    "url": "https://www.linkedin.com/jobs/view/director-enterprise-ai-platform-architect-at-vista-equity-partners-4373021114",
+    "source": "linkedin",
     "match_score": 90,
     "matching": [
-      "Relevant experience with Agentic AI and Generative AI",
-      "Experience in leading engineering projects and teams",
-      "Expertise in Azure and ML/DL"
+      "Director, Enterprise AI Platform Architect role matches leadership experience",
+      "Based in the United States fits location",
+      "Strong relevance to AI and enterprise architecture"
     ],
-    "gaps": [
-      "Hybrid location in San Francisco might be a constraint if physical presence is needed"
-    ],
+    "gaps": [],
     "recommendation": "apply",
-    "match_reason": "The job aligns well with the candidate\u2019s expertise in AI engineering and solution architecture.",
+    "match_reason": "Direct fit for leadership and technology skills, US-based role is fully suitable.",
     "user_id": 1,
     "search_date": "2026-07-03"
   },
   {
-    "title": "Senior Backend Engineer, IAM",
-    "company": "Reddit",
-    "location": "Remote: \ud83c\uddfa\ud83c\uddf8 USA",
-    "description": "Senior Backend Engineer, IAM at Reddit",
-    "url": "https://remote100k.com/remote-job/reddit-senior-backend-engineer-iam",
-    "source": "remote100k",
+    "title": "Principal Cloud Solutions Architect - Azure Cloud",
+    "company": "Harris",
+    "location": "Remote or North Carolina",
+    "description": "Principal Cloud Solutions Architect - Azure Cloud at Harris (Remote or North Carolina)",
+    "url": "https://www.dice.com/job-detail/79b7a4fe-70cb-42a4-8600-7db57f13e143",
+    "source": "dice",
+    "match_score": 88,
+    "matching": [
+      "Azure Cloud Principal Architect matches expertise",
+      "Remote option available",
+      "Strong alignment with enterprise solutions experience"
+    ],
+    "gaps": [],
+    "recommendation": "apply",
+    "match_reason": "High compatibility with skill set in Azure and cloud architecture, excellent fit.",
+    "user_id": 1,
+    "search_date": "2026-07-03"
+  },
+  {
+    "title": "Enterprise Architect - Remote",
+    "company": "Optum",
+    "location": "Minnetonka, MN",
+    "description": "Enterprise Architect - Remote at Optum (Minnetonka, MN)",
+    "url": "https://www.linkedin.com/jobs/view/enterprise-architect-remote-at-optum-4433890100",
+    "source": "linkedin",
     "match_score": 85,
     "matching": [
-      "Experience with microservices and Kubernetes",
-      "Strong capabilities in Azure CI/CD",
-      "Remote position accommodates US location"
+      "Enterprise Architect role matches current experience",
+      "Remote work fits preference",
+      "Experience with enterprise solution architecture"
     ],
-    "gaps": [
-      "No specific mention of IAM in skills"
-    ],
+    "gaps": [],
     "recommendation": "apply",
-    "match_reason": "The backend engineering skills match the requirements well, except for a small gap in IAM.",
+    "match_reason": "The role is well-suited to candidate\u2019s expertise in enterprise architecture on a remote basis.",
     "user_id": 1,
     "search_date": "2026-07-03"
   },
   {
-    "title": "Senior Software Engineer, Full Stack (Zero to One Labs)",
-    "company": "Affirm",
-    "location": "Remote: \ud83c\udde8\ud83c\udde6 Canada",
-    "description": "Senior Software Engineer, Full Stack (Zero to One Labs) at Affirm",
-    "url": "https://remote100k.com/remote-job/affirm-senior-software-engineer-full-stack-zero-to-one-labs",
-    "source": "remote100k",
-    "match_score": 80,
-    "matching": [
-      "Full-stack capabilities align well with requirements",
-      "Extensive experience in solution architecture",
-      "Remote role fits geographic preference"
-    ],
-    "gaps": [
-      "Python and Javascript required, not explicitly mentioned but with transferable skills"
-    ],
-    "recommendation": "apply",
-    "match_reason": "The candidate's general tech background supports full-stack engineering responsibilities.",
-    "user_id": 1,
-    "search_date": "2026-07-03"
-  },
-  {
-    "title": "Lead / Principal Agentic AI Engineer",
-    "company": "Cyma Systems Inc",
-    "location": "Dallas, Texas",
-    "description": "Lead / Principal Agentic AI Engineer at Cyma Systems Inc (Dallas, Texas)",
-    "url": "https://www.dice.com/job-detail/9f4e0966-76c2-4af4-a70d-04b7c399bb0a",
+    "title": "Principal Architect \u2013 Integration, API & AI Solutions",
+    "company": "Tixy Services LLC",
+    "location": "Hybrid in McKinney, Texas",
+    "description": "Principal Architect \u2013 Integration, API & AI Solutions at Tixy Services LLC (Hybrid in McKinney, Texas)",
+    "url": "https://www.dice.com/job-detail/e9f5d887-028c-4117-9cf5-8e3f1f2a78df",
     "source": "dice",
-    "match_score": 78,
+    "match_score": 84,
     "matching": [
-      "Agentic AI matches skill set",
-      "Principal-level role fits experience",
-      "Experience with LLM fine-tuning"
+      "Expertise in Integration, API & AI Solutions aligns with role",
+      "Principal Architect position matches level of experience"
     ],
     "gaps": [
-      "Location specific to Dallas, TX might require negotiation if non-relocation is desired"
+      "Hybrid format in Texas may require relocation or frequent travel"
     ],
-    "recommendation": "apply",
-    "match_reason": "The candidate\u2019s background aligns well with the technical and leadership aspects required.",
+    "recommendation": "consider",
+    "match_reason": "Job role and experience alignment is strong, but the hybrid location requirement may be a concern.",
     "user_id": 1,
     "search_date": "2026-07-03"
   }
