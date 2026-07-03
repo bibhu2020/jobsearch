@@ -8,97 +8,98 @@
     "source": "dice",
     "match_score": 95,
     "matching": [
-      "Principal AI Solutions Architect role aligns with current position",
+      "Principal AI Solutions Architect role aligns with experience",
       "Deep domain expertise in Healthcare",
-      "Experience in Generative AI and Azure services mentioned in post"
+      "Strong Azure experience (AKS, App Services, Functions, Cosmos DB)",
+      "Generative AI platforms expertise"
     ],
     "gaps": [],
     "recommendation": "apply",
-    "match_reason": "Perfect alignment in terms of role, domain expertise, and skillset. No geographical constraints.",
+    "match_reason": "The role is highly aligned with the candidate\u2019s extensive experience in healthcare and AI, making it an excellent fit.",
     "user_id": 1,
     "search_date": "2026-07-03"
   },
   {
-    "title": "Principal / Master Principal Cloud Architect",
-    "company": "Oracle Corporation",
-    "location": "Reston, Virginia",
-    "description": "Principal / Master Principal Cloud Architect at Oracle Corporation (Reston, Virginia)",
-    "url": "https://www.dice.com/job-detail/4cc35b3a-7c08-4669-9c83-780e30b2b68e",
+    "title": "Staff Machine Learning Research Engineer, Agent Post-training - Enterprise GenAI",
+    "company": "Scale AI",
+    "location": "San Francisco, California",
+    "description": "Staff Machine Learning Research Engineer, Agent Post-training - Enterprise GenAI at Scale AI (San Francisco, California)",
+    "url": "https://www.dice.com/job-detail/55c78c8b-e92e-4a75-9c88-83b8813aea71",
     "source": "dice",
     "match_score": 90,
     "matching": [
-      "Principal Cloud Architect matches seniority level",
-      "Extensive Azure experience relevant",
-      "No geographic constraints"
+      "Relevant experience with Agentic AI and Generative AI",
+      "Experience in leading engineering projects and teams",
+      "Expertise in Azure and ML/DL"
     ],
     "gaps": [
-      "Role may require Oracle Cloud experience not listed in profile"
+      "Hybrid location in San Francisco might be a constraint if physical presence is needed"
     ],
     "recommendation": "apply",
-    "match_reason": "Strong fit based on cloud architecture experience; Oracle experience might be needed but main skills fit well.",
+    "match_reason": "The job aligns well with the candidate\u2019s expertise in AI engineering and solution architecture.",
     "user_id": 1,
     "search_date": "2026-07-03"
   },
   {
-    "title": "AI Solutions Engineer",
+    "title": "Senior Backend Engineer, IAM",
+    "company": "Reddit",
+    "location": "Remote: \ud83c\uddfa\ud83c\uddf8 USA",
+    "description": "Senior Backend Engineer, IAM at Reddit",
+    "url": "https://remote100k.com/remote-job/reddit-senior-backend-engineer-iam",
+    "source": "remote100k",
+    "match_score": 85,
+    "matching": [
+      "Experience with microservices and Kubernetes",
+      "Strong capabilities in Azure CI/CD",
+      "Remote position accommodates US location"
+    ],
+    "gaps": [
+      "No specific mention of IAM in skills"
+    ],
+    "recommendation": "apply",
+    "match_reason": "The backend engineering skills match the requirements well, except for a small gap in IAM.",
+    "user_id": 1,
+    "search_date": "2026-07-03"
+  },
+  {
+    "title": "Senior Software Engineer, Full Stack (Zero to One Labs)",
     "company": "Affirm",
-    "location": "Remote: \ud83c\uddfa\ud83c\uddf8 USA",
-    "description": "AI Solutions Engineer at Affirm",
-    "url": "https://remote100k.com/remote-job/affirm-ai-solutions-engineer",
+    "location": "Remote: \ud83c\udde8\ud83c\udde6 Canada",
+    "description": "Senior Software Engineer, Full Stack (Zero to One Labs) at Affirm",
+    "url": "https://remote100k.com/remote-job/affirm-senior-software-engineer-full-stack-zero-to-one-labs",
     "source": "remote100k",
-    "match_score": 86,
+    "match_score": 80,
     "matching": [
-      "AI Solutions Engineer aligns with engineering and AI experience",
-      "Remote position available for US candidates",
-      "Experience with Azure and AI relevant"
+      "Full-stack capabilities align well with requirements",
+      "Extensive experience in solution architecture",
+      "Remote role fits geographic preference"
     ],
     "gaps": [
-      "Potentially less managerial responsibilities than current role"
+      "Python and Javascript required, not explicitly mentioned but with transferable skills"
     ],
     "recommendation": "apply",
-    "match_reason": "The role aligns with AI and engineering skills and is remote-friendly for US candidates.",
+    "match_reason": "The candidate's general tech background supports full-stack engineering responsibilities.",
     "user_id": 1,
     "search_date": "2026-07-03"
   },
   {
-    "title": "Senior Engineering Manager - Enablement",
-    "company": "Honeycomb.io",
-    "location": "Remote: \ud83c\uddfa\ud83c\uddf8 USA",
-    "description": "Senior Engineering Manager - Enablement at Honeycomb.io",
-    "url": "https://remote100k.com/remote-job/honeycomb-io-senior-engineering-manager-enablement",
-    "source": "remote100k",
-    "match_score": 83,
-    "matching": [
-      "Engineering manager role aligns with leadership experience",
-      "Remote position for US candidates",
-      "Relevant experience in CI/CD and team leadership"
-    ],
-    "gaps": [
-      "Specific industry experience not clearly aligned"
-    ],
-    "recommendation": "apply",
-    "match_reason": "Managerial and delivery management experience make this role a strong fit despite industry differences.",
-    "user_id": 1,
-    "search_date": "2026-07-03"
-  },
-  {
-    "title": "AI Architect / Principal Engineer",
-    "company": "PeopleNTech",
-    "location": "Hybrid in Exton, Pennsylvania",
-    "description": "AI Architect / Principal Engineer at PeopleNTech (Hybrid in Exton, Pennsylvania)",
-    "url": "https://www.dice.com/job-detail/3cfcf791-8e2f-4779-984e-0d1afa83553e",
+    "title": "Lead / Principal Agentic AI Engineer",
+    "company": "Cyma Systems Inc",
+    "location": "Dallas, Texas",
+    "description": "Lead / Principal Agentic AI Engineer at Cyma Systems Inc (Dallas, Texas)",
+    "url": "https://www.dice.com/job-detail/9f4e0966-76c2-4af4-a70d-04b7c399bb0a",
     "source": "dice",
-    "match_score": 82,
+    "match_score": 78,
     "matching": [
-      "AI Architect role fits with experience in AI and architecture",
-      "Principal level mentioned suits seniority",
-      "Hybrid role can be considered based on candidate's location preference"
+      "Agentic AI matches skill set",
+      "Principal-level role fits experience",
+      "Experience with LLM fine-tuning"
     ],
     "gaps": [
-      "Located in Pennsylvania, hybrid may require some relocation/travel"
+      "Location specific to Dallas, TX might require negotiation if non-relocation is desired"
     ],
     "recommendation": "apply",
-    "match_reason": "Skills and expertise match the role closely, hybrid nature is a small concern but manageable if flexible.",
+    "match_reason": "The candidate\u2019s background aligns well with the technical and leadership aspects required.",
     "user_id": 1,
     "search_date": "2026-07-03"
   }
