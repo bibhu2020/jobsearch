@@ -24,7 +24,6 @@ from agents.sources.linkedin import linkedin_source
 from agents.sources.indeed import indeed_source
 from agents.sources.dice import dice_source
 from agents.sources.builtin import builtin_source
-from agents.sources.wellfound import wellfound_source
 from agents.sources.remote100k import remote100k_source
 from agents.sources.remoterocketship import remoterocketship_source
 
@@ -76,7 +75,6 @@ async def run():
         remotive_source(queries),
         dice_source(queries, location),
         builtin_source(queries, location),
-        wellfound_source(queries, location),
         linkedin_source(queries),
         remote100k_source(queries, location),
         remoterocketship_source(queries, location),
@@ -87,7 +85,7 @@ async def run():
     )
 
     source_names = [
-        "remotive", "dice", "builtin", "wellfound", "linkedin",
+        "remotive", "dice", "builtin", "linkedin",
         "remote100k", "remoterocketship", "weworkremotely", "remoteok", "indeed",
     ]
     MAX_PER_SOURCE = 6

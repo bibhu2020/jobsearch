@@ -23,14 +23,14 @@ async def dice_source(queries: list[str], country: str = "") -> list[dict]:
                         f"&page=1&pageSize=20&filters.postedDate=ONE_WEEK&language=en"
                     )
                     await page.goto(url, timeout=30000)
-                    await page.wait_for_timeout(3000)
+                    await page.wait_for_timeout(5000)
 
-                    cards = await page.query_selector_all("dhi-search-card")
+                    cards = await page.query_selector_all("[data-testid='job-card']")
                     for card in cards:
                         try:
-                            t_el  = await card.query_selector('[data-cy="card-title-link"]')
-                            co_el = await card.query_selector('[data-cy="search-result-company-name"]')
-                            lo_el = await card.query_selector('.search-result-location, [data-cy="search-result-location"]')
+                            t_el  = await card.query_selector('[data-testid="job-search-job-detail-link"]')
+                            co_el = await card.query_selector('a[href*="/company-profile/"] p')
+                            lo_el = await card.query_selector('p.text-zinc-600')
 
                             title    = (await t_el.inner_text()).strip()  if t_el  else ""
                             company  = (await co_el.inner_text()).strip() if co_el else ""

@@ -11,7 +11,7 @@ short_description: AI-Powered Smart Job Search and Tracking Platform
 
 # JobQuest AI — Smart Job Application Tracker
 
-A full-stack Kanban job tracker with AI-powered document generation and automated job search across 10 sources.
+A full-stack Kanban job tracker with AI-powered document generation and automated job search across 9 sources.
 
 ## HF Space
 
