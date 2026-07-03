@@ -1,0 +1,100 @@
+[
+  {
+    "title": "Senior QA Engineer Manual Testing",
+    "company": "Princeton IT Services",
+    "location": "Berkeley Heights, New Jersey",
+    "description": "Senior QA Engineer Manual Testing at Princeton IT Services (Berkeley Heights, New Jersey)",
+    "url": "https://www.dice.com/job-detail/9bdcd18d-7479-4578-9809-c0ad5f206f5b",
+    "source": "dice",
+    "match_score": 89,
+    "matching": [
+      "QA Engineer role",
+      "Manual Testing expertise",
+      "Located in United States"
+    ],
+    "gaps": [
+      "No explicit mention of automation in this role"
+    ],
+    "recommendation": "apply",
+    "match_reason": "Strong fit for manual testing expertise. Located close to job location could be advantageous.",
+    "user_id": 2,
+    "search_date": "2026-07-03"
+  },
+  {
+    "title": "QA Manual and Automation Staff Engineer",
+    "company": "Georgia IT",
+    "location": "Columbus, Ohio",
+    "description": "QA Manual and Automation Staff Engineer at Georgia IT (Columbus, Ohio)",
+    "url": "https://www.dice.com/job-detail/7e1879d8-38a1-492d-8cae-964834dc66fc",
+    "source": "dice",
+    "match_score": 92,
+    "matching": [
+      "QA Manual and Automation experience",
+      "Based in United States",
+      "Familiarity with .Net and Java"
+    ],
+    "gaps": [],
+    "recommendation": "apply",
+    "match_reason": "Perfect match for the combination of manual and automation testing skills, as well as country location.",
+    "user_id": 2,
+    "search_date": "2026-07-03"
+  },
+  {
+    "title": "Senior Quality Assurance Automation Engineer",
+    "company": "System One",
+    "location": "Remote",
+    "description": "Senior Quality Assurance Automation Engineer at System One (Remote)",
+    "url": "https://www.dice.com/job-detail/bc1ccb06-e655-4cc7-84db-2ada72f52698",
+    "source": "dice",
+    "match_score": 90,
+    "matching": [
+      "Automation Engineer role",
+      "Remote work opportunity",
+      "QA Automation expertise"
+    ],
+    "gaps": [],
+    "recommendation": "apply",
+    "match_reason": "Strong match due to the remote nature and alignment with QA automation skills.",
+    "user_id": 2,
+    "search_date": "2026-07-03"
+  },
+  {
+    "title": "Senior Manual QA Engineer",
+    "company": "SOFTSWISS",
+    "location": "\ud83c\uddf5\ud83c\uddf1 Poland \u2013 Remote",
+    "description": "Senior Manual QA Engineer at SOFTSWISS",
+    "url": "https://www.remoterocketship.com/publicjobs/company/softswiss/jobs/senior-manual-qa-engineer-poland-remote/",
+    "source": "remoterocketship",
+    "match_score": 88,
+    "matching": [
+      "Manual QA Engineer role",
+      "Remote position available",
+      "Proven Manual Testing expertise"
+    ],
+    "gaps": [
+      "No explicit mention of automation"
+    ],
+    "recommendation": "apply",
+    "match_reason": "Highly suitable role focusing on the candidate's primary expertise in manual testing.",
+    "user_id": 2,
+    "search_date": "2026-07-03"
+  },
+  {
+    "title": "Quality Assurance Engineer \u2013 Automation",
+    "company": "ICF",
+    "location": "Remote",
+    "description": "Quality Assurance Engineer \u2013 Automation at ICF",
+    "url": "https://www.remoterocketship.com/publicjobs/company/icf/jobs/quality-assurance-engineer-automation-virginia-remote/",
+    "source": "remoterocketship",
+    "match_score": 91,
+    "matching": [
+      "QA Engineer \u2013 Automation matches expertise",
+      "Remote position fits preference"
+    ],
+    "gaps": [],
+    "recommendation": "apply",
+    "match_reason": "Excellent match for automation skills and remote work preference.",
+    "user_id": 2,
+    "search_date": "2026-07-03"
+  }
+]
