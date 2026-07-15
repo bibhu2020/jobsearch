@@ -1,0 +1,97 @@
+[
+  {
+    "title": "Director of Engineering, Cloud & Reliability",
+    "company": "Boulevard",
+    "location": "Remote: \ud83c\uddfa\ud83c\uddf8 USA",
+    "description": "Director of Engineering, Cloud & Reliability at Boulevard",
+    "url": "https://remote100k.com/remote-job/boulevard-director-of-engineering-cloud-reliability",
+    "source": "remote100k",
+    "match_score": 90,
+    "matching": [
+      "Cloud and reliability expertise",
+      "Experience leading engineering teams",
+      "Experience with cloud-native platforms"
+    ],
+    "gaps": [],
+    "recommendation": "apply",
+    "match_reason": "The candidate's experience in cloud and team leadership aligns perfectly with the Director of Engineering role.",
+    "user_id": 1,
+    "search_date": "2026-07-15"
+  },
+  {
+    "title": "Principal Cloud Engineer \u2013 Microsoft Azure",
+    "company": "Medical Review Institute of America, LLC",
+    "location": "Remote",
+    "description": "Principal Cloud Engineer \u2013 Microsoft Azure at Medical Review Institute of America, LLC",
+    "url": "https://www.remoterocketship.com/publicjobs/company/mrioa/jobs/principal-cloud-engineer-microsoft-azure-united-states-remote/",
+    "source": "remoterocketship",
+    "match_score": 88,
+    "matching": [
+      "Strong Azure expertise",
+      "Cloud platform architecture experience",
+      "Remote opportunity with a focus on healthcare"
+    ],
+    "gaps": [],
+    "recommendation": "apply",
+    "match_reason": "Candidate has extensive experience with Azure, which is crucial for this role.",
+    "user_id": 1,
+    "search_date": "2026-07-15"
+  },
+  {
+    "title": "Enterprise Solutions Architect \u2013 Healthcare Sales, EHR, RCM",
+    "company": "Raintree Systems",
+    "location": "Remote",
+    "description": "Enterprise Solutions Architect \u2013 Healthcare Sales, EHR, RCM at Raintree Systems",
+    "url": "https://www.remoterocketship.com/publicjobs/company/raintreeinc/jobs/enterprise-solutions-architect-healthcare-sales-ehr-rcm-united-states-remote/",
+    "source": "remoterocketship",
+    "match_score": 85,
+    "matching": [
+      "Experience in Healthcare solutions",
+      "Enterprise solutions architecture expertise",
+      "Remote position"
+    ],
+    "gaps": [],
+    "recommendation": "apply",
+    "match_reason": "Deep expertise in Healthcare and architecture makes this a strong fit.",
+    "user_id": 1,
+    "search_date": "2026-07-15"
+  },
+  {
+    "title": "AI Solutions Engineer",
+    "company": "Affirm",
+    "location": "Remote: \ud83c\uddfa\ud83c\uddf8 USA",
+    "description": "AI Solutions Engineer at Affirm",
+    "url": "https://remote100k.com/remote-job/affirm-ai-solutions-engineer",
+    "source": "remote100k",
+    "match_score": 84,
+    "matching": [
+      "AI Solutions engineering experience",
+      "Remote role",
+      "Generative AI platform development"
+    ],
+    "gaps": [],
+    "recommendation": "apply",
+    "match_reason": "The candidate's generative AI expertise is well-aligned with the job's requirements.",
+    "user_id": 1,
+    "search_date": "2026-07-15"
+  },
+  {
+    "title": "AI/Platform Engineer \u2014 AWS Bedrock Agentcore",
+    "company": "Toptal",
+    "location": "Remote",
+    "description": " \n\n \n   Headquarters:  Remote\n      URL:   https://www.toptal.com/ \n \n\n About the Role \n We're looking for engineers to help build and productionize AI systems that go well beyond proof-of-concept \u2014 real conversational AI, RAG pipelines, and agent architectures running on AWS Bedrock and/or Azure OpenAI, serving live traffic and real users. Whether your strength is on the AI application side (agents, RAG, orchestration) or the platform side (deployment, observability, security), this role sits at the center of turning working demos into production-grade, reliable systems. If you like being close to the frontier of agentic AI and want your work to ship rather than sit in a notebook, this is built for that. \n What You'll Do \n \n \n Design, build, and deploy conversational AI systems, chatbots, and AI agents powered by large language models \n \n \n Architect and ship production-grade RAG (Retrieval-Augmented Generation) systems \u2014 not prototypes, but systems serving live traffic \n \n \n Build and deploy LLM applications on AWS Bedrock, Azure OpenAI, AgentCore, or equivalent platforms \n \n \n Develop and orchestrate agent architectures using frameworks such as LangChain, LangGraph, or LlamaIndex \n \n \n Build and maintain MCP (Model Context Protocol) server integrations to extend agent capabilities \n \n \n Design and build the production service layer (Lambda, API Gateway, IAM, DynamoDB, OpenSearch, or equivalents) \n \n \n Establish CI/CD pipelines and manage development, beta, and production environments \n \n \n Implement observability: tracing, dashboards, per-turn cost and latency metrics, error rates, and audit trails \n \n \n Implement key security controls \u2014 data-leakage protection, session isolation, auth/authz boundaries, secure prompt/response storage \n \n \n Write clean, maintainable, production-quality Python across the AI application and platform stack \n \n \n Monitor, evaluate, and iterate on agent, RAG, and platform performance in production \n \n \n Stay current with fast-moving de",
+    "url": "https://weworkremotely.com/remote-jobs/toptal-ai-platform-engineer-aws-bedrock-agentcore",
+    "source": "weworkremotely",
+    "match_score": 82,
+    "matching": [
+      "AI and platform engineering",
+      "Azure OpenAI integration experience",
+      "Remote position"
+    ],
+    "gaps": [],
+    "recommendation": "apply",
+    "match_reason": "Proven experience in building AI systems is a perfect match for the role's requirements.",
+    "user_id": 1,
+    "search_date": "2026-07-15"
+  }
+]
