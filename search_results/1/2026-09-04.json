@@ -1,60 +1,20 @@
 [
   {
-    "title": "Principal Solutions Architect - AI/ML, Services Delivery",
-    "company": "Snowflake Inc.",
+    "title": "Sr Agentic AI/ML Engineer \u2013 GenAI & Cloud Solutions",
+    "company": "Tanisha Systems, Inc.",
     "location": "",
-    "description": "Principal Solutions Architect - AI/ML, Services Delivery at Snowflake Inc. ()",
-    "url": "https://www.dice.com/job-detail/f4828400-6677-46ee-b497-c4d02c2fe0a1",
+    "description": "Sr Agentic AI/ML Engineer \u2013 GenAI & Cloud Solutions at Tanisha Systems, Inc. ()",
+    "url": "https://www.dice.com/job-detail/c331fdb0-8153-468f-a0e7-de99578836f4",
     "source": "dice",
     "match_score": 95,
     "matching": [
-      "Principal Solutions Architect role aligns with current experience",
-      "AI/ML Services expertise",
-      "Experience in delivery leadership",
-      "Trusted advisor to enterprise customers"
+      "Experience with GenAI and Cloud Solutions",
+      "Agentic AI expertise",
+      "Hands-on engineering and leadership skills"
     ],
     "gaps": [],
     "recommendation": "apply",
-    "match_reason": "Direct alignment with candidate's current role and skills in AI/ML services delivery. The candidate's experience makes them a strong fit.",
-    "user_id": 1,
-    "search_date": "2026-09-04"
-  },
-  {
-    "title": "Principal Solutions Architect - AI/ML - Services Delivery",
-    "company": "Snowflake Inc.",
-    "location": "",
-    "description": "Principal Solutions Architect - AI/ML - Services Delivery at Snowflake Inc. ()",
-    "url": "https://www.dice.com/job-detail/0de5621a-ca98-48c4-b0bc-13db11f901b8",
-    "source": "dice",
-    "match_score": 95,
-    "matching": [
-      "Principal Solutions Architect role aligns with current experience",
-      "AI/ML Services expertise",
-      "Experience in delivery leadership",
-      "Trusted advisor to enterprise customers"
-    ],
-    "gaps": [],
-    "recommendation": "apply",
-    "match_reason": "The job directly matches the candidate's skill set and career progression, especially in AI/ML and delivery roles.",
-    "user_id": 1,
-    "search_date": "2026-09-04"
-  },
-  {
-    "title": "Principal Applied AI Solutions Architect",
-    "company": "phData",
-    "location": "",
-    "description": "Principal Applied AI Solutions Architect at phData ()",
-    "url": "https://www.dice.com/job-detail/6436f5d2-879b-48c9-a116-a3eb8e404568",
-    "source": "dice",
-    "match_score": 90,
-    "matching": [
-      "Principal Solutions Architect position matches experience",
-      "Applied AI experience aligns well",
-      "Leadership and architecture skills"
-    ],
-    "gaps": [],
-    "recommendation": "apply",
-    "match_reason": "The candidate has significant experience in applied AI and architecture leadership, making this role a strong fit.",
+    "match_reason": "Direct match with current role at Microsoft involving GenAI and Cloud Solutions. Strong alignment with skills and experience.",
     "user_id": 1,
     "search_date": "2026-09-04"
   },
@@ -65,17 +25,37 @@
     "description": "Principal Software Engineer at Jobber",
     "url": "https://remote100k.com/remote-job/jobber-principal-software-engineer",
     "source": "remote100k",
-    "match_score": 85,
+    "match_score": 88,
     "matching": [
-      "Remote position accessible",
-      "Principal Software Engineer role matches technical leadership experience",
-      "AI and platform development expertise"
+      "Principal-level engineering experience",
+      "Remote position availability",
+      "Expertise in cloud-native platforms"
     ],
     "gaps": [
-      "Specific company domain experience not mentioned"
+      "Focus on specific software engineering areas not detailed in the listing"
     ],
     "recommendation": "apply",
-    "match_reason": "Strong fit due to technical leadership experience and remote work preference. Domain knowledge can be quickly acquired.",
+    "match_reason": "Matches leadership level and cloud expertise; suitable for the candidate's background.",
+    "user_id": 1,
+    "search_date": "2026-09-04"
+  },
+  {
+    "title": "Principal AI Architect - Healthcare",
+    "company": "UiPath",
+    "location": "",
+    "description": "Principal AI Architect - Healthcare at UiPath ()",
+    "url": "https://www.dice.com/job-detail/1102f66c-d24c-4aa8-97a9-c31a0a2073ee",
+    "source": "dice",
+    "match_score": 84,
+    "matching": [
+      "Principal AI Architect role aligns with experience",
+      "Healthcare domain expertise"
+    ],
+    "gaps": [
+      "Role may involve domains not directly specified"
+    ],
+    "recommendation": "apply",
+    "match_reason": "Strong fit for AI architecture and healthcare focus, which is part of the candidate's advisory experience.",
     "user_id": 1,
     "search_date": "2026-09-04"
   },
@@ -86,17 +66,36 @@
     "description": "Sr. Platform Engineer - Kubernetes at CrowdStrike",
     "url": "https://remote100k.com/remote-job/crowdstrike-sr-platform-engineer-kubernetes",
     "source": "remote100k",
-    "match_score": 80,
+    "match_score": 78,
     "matching": [
-      "Sr. Platform Engineer role matches Kubernetes expertise",
-      "Remote position available",
-      "Experience with scalable cloud-native platforms"
+      "Kubernetes skills align with platform engineering",
+      "Remote work compatibility"
     ],
     "gaps": [
-      "Focus on a slightly different technical domain"
+      "Possible focus on specific platform engineering technologies not mentioned in profile"
     ],
     "recommendation": "apply",
-    "match_reason": "Kubernetes and cloud-native experience align well. The adjacent technical domain is not a critical gap.",
+    "match_reason": "Relevant skills in Kubernetes and remote accessibility make this a suitable opportunity.",
+    "user_id": 1,
+    "search_date": "2026-09-04"
+  },
+  {
+    "title": "Senior Manager of Data Science Production Engineering, DevOps",
+    "company": "Natera",
+    "location": "Remote: \ud83c\uddfa\ud83c\uddf8 USA",
+    "description": "Senior Manager of Data Science Production Engineering, DevOps at Natera",
+    "url": "https://remote100k.com/remote-job/natera-senior-manager-of-data-science-production-engineering-devops",
+    "source": "remote100k",
+    "match_score": 76,
+    "matching": [
+      "Data science and DevOps oversight experience",
+      "Remote position fits preference"
+    ],
+    "gaps": [
+      "Role specifics in data science production might require additional expertise"
+    ],
+    "recommendation": "consider",
+    "match_reason": "Broad match in data science and leadership, though specific technological emphasis might vary.",
     "user_id": 1,
     "search_date": "2026-09-04"
   }
