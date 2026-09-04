@@ -1,0 +1,103 @@
+[
+  {
+    "title": "Principal Solutions Architect - AI/ML, Services Delivery",
+    "company": "Snowflake Inc.",
+    "location": "",
+    "description": "Principal Solutions Architect - AI/ML, Services Delivery at Snowflake Inc. ()",
+    "url": "https://www.dice.com/job-detail/f4828400-6677-46ee-b497-c4d02c2fe0a1",
+    "source": "dice",
+    "match_score": 95,
+    "matching": [
+      "Principal Solutions Architect role aligns with current experience",
+      "AI/ML Services expertise",
+      "Experience in delivery leadership",
+      "Trusted advisor to enterprise customers"
+    ],
+    "gaps": [],
+    "recommendation": "apply",
+    "match_reason": "Direct alignment with candidate's current role and skills in AI/ML services delivery. The candidate's experience makes them a strong fit.",
+    "user_id": 1,
+    "search_date": "2026-09-04"
+  },
+  {
+    "title": "Principal Solutions Architect - AI/ML - Services Delivery",
+    "company": "Snowflake Inc.",
+    "location": "",
+    "description": "Principal Solutions Architect - AI/ML - Services Delivery at Snowflake Inc. ()",
+    "url": "https://www.dice.com/job-detail/0de5621a-ca98-48c4-b0bc-13db11f901b8",
+    "source": "dice",
+    "match_score": 95,
+    "matching": [
+      "Principal Solutions Architect role aligns with current experience",
+      "AI/ML Services expertise",
+      "Experience in delivery leadership",
+      "Trusted advisor to enterprise customers"
+    ],
+    "gaps": [],
+    "recommendation": "apply",
+    "match_reason": "The job directly matches the candidate's skill set and career progression, especially in AI/ML and delivery roles.",
+    "user_id": 1,
+    "search_date": "2026-09-04"
+  },
+  {
+    "title": "Principal Applied AI Solutions Architect",
+    "company": "phData",
+    "location": "",
+    "description": "Principal Applied AI Solutions Architect at phData ()",
+    "url": "https://www.dice.com/job-detail/6436f5d2-879b-48c9-a116-a3eb8e404568",
+    "source": "dice",
+    "match_score": 90,
+    "matching": [
+      "Principal Solutions Architect position matches experience",
+      "Applied AI experience aligns well",
+      "Leadership and architecture skills"
+    ],
+    "gaps": [],
+    "recommendation": "apply",
+    "match_reason": "The candidate has significant experience in applied AI and architecture leadership, making this role a strong fit.",
+    "user_id": 1,
+    "search_date": "2026-09-04"
+  },
+  {
+    "title": "Principal Software Engineer",
+    "company": "Jobber",
+    "location": "Remote: \ud83c\udde8\ud83c\udde6 Canada",
+    "description": "Principal Software Engineer at Jobber",
+    "url": "https://remote100k.com/remote-job/jobber-principal-software-engineer",
+    "source": "remote100k",
+    "match_score": 85,
+    "matching": [
+      "Remote position accessible",
+      "Principal Software Engineer role matches technical leadership experience",
+      "AI and platform development expertise"
+    ],
+    "gaps": [
+      "Specific company domain experience not mentioned"
+    ],
+    "recommendation": "apply",
+    "match_reason": "Strong fit due to technical leadership experience and remote work preference. Domain knowledge can be quickly acquired.",
+    "user_id": 1,
+    "search_date": "2026-09-04"
+  },
+  {
+    "title": "Sr. Platform Engineer - Kubernetes",
+    "company": "CrowdStrike",
+    "location": "Remote: \ud83c\uddfa\ud83c\uddf8 USA",
+    "description": "Sr. Platform Engineer - Kubernetes at CrowdStrike",
+    "url": "https://remote100k.com/remote-job/crowdstrike-sr-platform-engineer-kubernetes",
+    "source": "remote100k",
+    "match_score": 80,
+    "matching": [
+      "Sr. Platform Engineer role matches Kubernetes expertise",
+      "Remote position available",
+      "Experience with scalable cloud-native platforms"
+    ],
+    "gaps": [
+      "Focus on a slightly different technical domain"
+    ],
+    "recommendation": "apply",
+    "match_reason": "Kubernetes and cloud-native experience align well. The adjacent technical domain is not a critical gap.",
+    "user_id": 1,
+    "search_date": "2026-09-04"
+  }
+]
