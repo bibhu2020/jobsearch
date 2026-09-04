@@ -1,20 +1,58 @@
 [
   {
-    "title": "Sr Agentic AI/ML Engineer \u2013 GenAI & Cloud Solutions",
-    "company": "Tanisha Systems, Inc.",
+    "title": "Cloud Alliance Principal Solutions Architect",
+    "company": "PaloAlto Networks",
     "location": "",
-    "description": "Sr Agentic AI/ML Engineer \u2013 GenAI & Cloud Solutions at Tanisha Systems, Inc. ()",
-    "url": "https://www.dice.com/job-detail/c331fdb0-8153-468f-a0e7-de99578836f4",
+    "description": "Cloud Alliance Principal Solutions Architect at PaloAlto Networks ()",
+    "url": "https://www.dice.com/job-detail/7145cad2-97c8-4fd8-8d0f-f6dae62fada7",
     "source": "dice",
     "match_score": 95,
     "matching": [
-      "Experience with GenAI and Cloud Solutions",
-      "Agentic AI expertise",
-      "Hands-on engineering and leadership skills"
+      "Principal-level experience",
+      "Strong AI and cloud expertise",
+      "Proven stakeholder management skills"
     ],
     "gaps": [],
     "recommendation": "apply",
-    "match_reason": "Direct match with current role at Microsoft involving GenAI and Cloud Solutions. Strong alignment with skills and experience.",
+    "match_reason": "The candidate's expertise aligns exceptionally well with the Principal Solutions Architect role, particularly in AI and cloud solutions.",
+    "user_id": 1,
+    "search_date": "2026-09-04"
+  },
+  {
+    "title": "Principal Microsoft Solutions & Platform Architect",
+    "company": "Kalpita Technologies Inc",
+    "location": "",
+    "description": "Principal Microsoft Solutions & Platform Architect at Kalpita Technologies Inc ()",
+    "url": "https://www.dice.com/job-detail/4778c48a-48c5-4951-b411-3a23d9315707",
+    "source": "dice",
+    "match_score": 92,
+    "matching": [
+      "Principal-level experience",
+      "Expertise in Microsoft solutions and platform architecture",
+      "Experience with Azure technologies"
+    ],
+    "gaps": [],
+    "recommendation": "apply",
+    "match_reason": "The candidate's experience with Microsoft and Azure makes this role a perfect match for their skills and background.",
+    "user_id": 1,
+    "search_date": "2026-09-04"
+  },
+  {
+    "title": "Distinguished AI Engineer - Agentic AI Platform (Remote Eligible)",
+    "company": "Capital One",
+    "location": "",
+    "description": "Distinguished AI Engineer - Agentic AI Platform (Remote Eligible) at Capital One ()",
+    "url": "https://www.dice.com/direct-apply/ffbcb76e-6aa3-44d8-a891-b1d87fc73834",
+    "source": "dice",
+    "match_score": 90,
+    "matching": [
+      "Expertise in AI engineering",
+      "Experience with agentic AI platforms",
+      "Remote eligible, fitting location requirements"
+    ],
+    "gaps": [],
+    "recommendation": "apply",
+    "match_reason": "The Distinguished AI Engineer role aligns well with the candidate's current focus on production GenAI solutions.",
     "user_id": 1,
     "search_date": "2026-09-04"
   },
@@ -27,35 +65,13 @@
     "source": "remote100k",
     "match_score": 88,
     "matching": [
-      "Principal-level engineering experience",
-      "Remote position availability",
-      "Expertise in cloud-native platforms"
+      "Strong leadership experience",
+      "Software engineering expertise",
+      "Remote role matches location preferences"
     ],
-    "gaps": [
-      "Focus on specific software engineering areas not detailed in the listing"
-    ],
+    "gaps": [],
     "recommendation": "apply",
-    "match_reason": "Matches leadership level and cloud expertise; suitable for the candidate's background.",
-    "user_id": 1,
-    "search_date": "2026-09-04"
-  },
-  {
-    "title": "Principal AI Architect - Healthcare",
-    "company": "UiPath",
-    "location": "",
-    "description": "Principal AI Architect - Healthcare at UiPath ()",
-    "url": "https://www.dice.com/job-detail/1102f66c-d24c-4aa8-97a9-c31a0a2073ee",
-    "source": "dice",
-    "match_score": 84,
-    "matching": [
-      "Principal AI Architect role aligns with experience",
-      "Healthcare domain expertise"
-    ],
-    "gaps": [
-      "Role may involve domains not directly specified"
-    ],
-    "recommendation": "apply",
-    "match_reason": "Strong fit for AI architecture and healthcare focus, which is part of the candidate's advisory experience.",
+    "match_reason": "The candidate's leadership in technology projects suits the Principal Software Engineer role well.",
     "user_id": 1,
     "search_date": "2026-09-04"
   },
@@ -66,36 +82,15 @@
     "description": "Sr. Platform Engineer - Kubernetes at CrowdStrike",
     "url": "https://remote100k.com/remote-job/crowdstrike-sr-platform-engineer-kubernetes",
     "source": "remote100k",
-    "match_score": 78,
+    "match_score": 85,
     "matching": [
-      "Kubernetes skills align with platform engineering",
-      "Remote work compatibility"
+      "Kubernetes experience",
+      "Platform engineering skills",
+      "Remote work compatible with candidate's location"
     ],
-    "gaps": [
-      "Possible focus on specific platform engineering technologies not mentioned in profile"
-    ],
+    "gaps": [],
     "recommendation": "apply",
-    "match_reason": "Relevant skills in Kubernetes and remote accessibility make this a suitable opportunity.",
-    "user_id": 1,
-    "search_date": "2026-09-04"
-  },
-  {
-    "title": "Senior Manager of Data Science Production Engineering, DevOps",
-    "company": "Natera",
-    "location": "Remote: \ud83c\uddfa\ud83c\uddf8 USA",
-    "description": "Senior Manager of Data Science Production Engineering, DevOps at Natera",
-    "url": "https://remote100k.com/remote-job/natera-senior-manager-of-data-science-production-engineering-devops",
-    "source": "remote100k",
-    "match_score": 76,
-    "matching": [
-      "Data science and DevOps oversight experience",
-      "Remote position fits preference"
-    ],
-    "gaps": [
-      "Role specifics in data science production might require additional expertise"
-    ],
-    "recommendation": "consider",
-    "match_reason": "Broad match in data science and leadership, though specific technological emphasis might vary.",
+    "match_reason": "The Sr. Platform Engineer role leverages the candidate's expertise in Kubernetes and containers.",
     "user_id": 1,
     "search_date": "2026-09-04"
   }
