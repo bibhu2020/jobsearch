@@ -1,80 +1,62 @@
 [
   {
-    "title": "Principal Azure Storage Validation Architect",
-    "company": "Microsoft Corporation",
-    "location": "",
-    "description": "Principal Azure Storage Validation Architect at Microsoft Corporation ()",
-    "url": "https://www.dice.com/job-detail/d281390d-6d81-4529-8c07-9aa524f20db3",
-    "source": "dice",
-    "match_score": 95,
-    "matching": [
-      "Principal-level role",
-      "Azure expertise",
-      "Experience with Microsoft",
-      "AI and cloud-native platforms"
-    ],
-    "gaps": [],
-    "recommendation": "apply",
-    "match_reason": "The role at Microsoft aligns perfectly with the candidate's current position and expertise in Azure and AI.",
-    "user_id": 1,
-    "search_date": "2026-09-05"
-  },
-  {
-    "title": "Principal IT Solution Architect - Hyperautomation and AI",
-    "company": "Medtronic",
-    "location": "",
-    "description": "Principal IT Solution Architect - Hyperautomation and AI at Medtronic ()",
-    "url": "https://www.dice.com/job-detail/a47c7b3d-8cc8-4a2b-a244-3dfc68c4c4d2",
-    "source": "dice",
-    "match_score": 90,
-    "matching": [
-      "Principal-level role",
-      "AI and hyperautomation",
-      "Solution architecture experience"
-    ],
-    "gaps": [
-      "Healthcare domain expertise not explicitly mentioned"
-    ],
-    "recommendation": "apply",
-    "match_reason": "Strong match on architecture and AI experience; minor healthcare domain gap is manageable.",
-    "user_id": 1,
-    "search_date": "2026-09-05"
-  },
-  {
-    "title": "Azure Cloud Solution Architect (Healthcare Domain)",
-    "company": "Tech Tandem Inc",
-    "location": "",
-    "description": "Azure Cloud Solution Architect (Healthcare Domain) at Tech Tandem Inc ()",
-    "url": "https://www.dice.com/job-detail/7a5b8271-885e-45c6-9134-0515bf4ae67c",
-    "source": "dice",
-    "match_score": 88,
-    "matching": [
-      "Azure Cloud Architect role",
-      "Healthcare domain relevance",
-      "Solution architecture experience"
-    ],
-    "gaps": [],
-    "recommendation": "apply",
-    "match_reason": "Direct Azure and architecture expertise applicable; healthcare alignment present.",
-    "user_id": 1,
-    "search_date": "2026-09-05"
-  },
-  {
     "title": "Principal Azure D&A Architect",
     "company": "Connect Tech+Talent",
     "location": "",
     "description": "Principal Azure D&A Architect at Connect Tech+Talent ()",
     "url": "https://www.dice.com/job-detail/e6e8f7a3-ef8b-45f2-a512-e29658dbfb60",
     "source": "dice",
-    "match_score": 85,
+    "match_score": 95,
     "matching": [
-      "Principal Azure role",
-      "D&A focus aligns with cloud-native skills",
-      "Solution architecture experience"
+      "Principal-level experience",
+      "Azure expertise",
+      "Enterprise & solution architecture",
+      "Stakeholder management",
+      "Remote or open to India candidate"
     ],
     "gaps": [],
     "recommendation": "apply",
-    "match_reason": "Azure and data & analytics experience is highly relevant; principal role matches current level.",
+    "match_reason": "This position perfectly aligns with the candidate's Azure-focused skillset and seniority level. The role is remote or open to candidates from India.",
+    "user_id": 1,
+    "search_date": "2026-09-05"
+  },
+  {
+    "title": "Principal Azure Storage Validation Architect",
+    "company": "Microsoft Corporation",
+    "location": "",
+    "description": "Principal Azure Storage Validation Architect at Microsoft Corporation ()",
+    "url": "https://www.dice.com/job-detail/d281390d-6d81-4529-8c07-9aa524f20db3",
+    "source": "dice",
+    "match_score": 98,
+    "matching": [
+      "Current role at Microsoft aligns directly",
+      "Principal Azure skills",
+      "GenAI and cloud-native solution experience",
+      "Enterprise leadership experience"
+    ],
+    "gaps": [],
+    "recommendation": "apply",
+    "match_reason": "The candidate is already positioned within Microsoft, making transition smoother, with Azure expertise and leadership skills matching job requirements precisely.",
+    "user_id": 1,
+    "search_date": "2026-09-05"
+  },
+  {
+    "title": "Principal Solution Architect, AI Transformation",
+    "company": "Microsoft Corporation",
+    "location": "",
+    "description": "Principal Solution Architect, AI Transformation at Microsoft Corporation ()",
+    "url": "https://www.dice.com/job-detail/5e8b88ec-d693-4d6d-a548-ef455771b4e7",
+    "source": "dice",
+    "match_score": 97,
+    "matching": [
+      "Principal Solution Architect specialty",
+      "AI Transformation focus",
+      "Microsoft experience",
+      "Cloud-native and AI platform design expertise"
+    ],
+    "gaps": [],
+    "recommendation": "apply",
+    "match_reason": "Strong alignment given candidate's current role handles AI solutions, and experience at Microsoft bolsters candidacy.",
     "user_id": 1,
     "search_date": "2026-09-05"
   },
@@ -85,15 +67,36 @@
     "description": "Principal Azure Solution Architect at  ()",
     "url": "https://www.dice.com/job-detail/662bd4b0-a2f5-4eae-9d3a-316c7c39a361",
     "source": "dice",
-    "match_score": 84,
+    "match_score": 92,
     "matching": [
-      "Principal Azure Solution Architect",
-      "Enterprise & solution architecture experience",
-      "Azure platform expertise"
+      "Azure Solution Architect expertise",
+      "Enterprise experience",
+      "Program & delivery management"
     ],
     "gaps": [],
     "recommendation": "apply",
-    "match_reason": "High alignment with principal role and Azure expertise; solution architecture skills are a strong fit.",
+    "match_reason": "Candidate\u2019s strong experience in Azure and solution architecture makes them an excellent fit, along with their leadership capabilities.",
+    "user_id": 1,
+    "search_date": "2026-09-05"
+  },
+  {
+    "title": "Principal Cloud Solution Architect, US Remote",
+    "company": "Connection",
+    "location": "",
+    "description": "Principal Cloud Solution Architect, US Remote at Connection ()",
+    "url": "https://www.dice.com/job-detail/0c4aeef5-f30c-4640-b002-278a6f49c99d",
+    "source": "dice",
+    "match_score": 85,
+    "matching": [
+      "Principal Cloud Solution Architect role matches experience",
+      "Strong Azure expertise",
+      "Remote position"
+    ],
+    "gaps": [
+      "US Remote-specific factor implies many US clients"
+    ],
+    "recommendation": "apply",
+    "match_reason": "The position matches the candidate\u2019s expertise, and the remote nature offsets some typical location constraints.",
     "user_id": 1,
     "search_date": "2026-09-05"
   }
