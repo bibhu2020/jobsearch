@@ -1,77 +1,64 @@
 [
   {
-    "title": "Azure Cloud Solution Architect (Healthcare Domain)",
-    "company": "Tech Tandem Inc",
+    "title": "Senior Principal Cloud Architect",
+    "company": "SAIC",
     "location": "",
-    "description": "Azure Cloud Solution Architect (Healthcare Domain) at Tech Tandem Inc ()",
-    "url": "https://www.dice.com/job-detail/7a5b8271-885e-45c6-9134-0515bf4ae67c",
+    "description": "Senior Principal Cloud Architect at SAIC ()",
+    "url": "https://www.dice.com/job-detail/49e05476-2cfa-4d9a-a7b4-e52a6a0a0b7f",
     "source": "dice",
     "match_score": 90,
     "matching": [
-      "Azure Cloud Architecture experience",
-      "Healthcare domain experience",
-      "Remote availability"
+      "Principal-level architecture experience",
+      "Cloud-native platforms expertise",
+      "Leadership in AI solutions"
     ],
-    "gaps": [],
+    "gaps": [
+      "No specific mention of SAIC experience or familiarity"
+    ],
     "recommendation": "apply",
-    "match_reason": "Strong match with candidate's Azure expertise and healthcare domain experience.",
+    "match_reason": "The candidate's principal-level experience in cloud architectures aligns well with this role. Solid match with their leadership in AI solutions and cloud-native platforms expertise.",
     "user_id": 1,
     "search_date": "2026-09-05"
   },
   {
-    "title": "Principal IT Solution Architect - Hyperautomation and AI",
-    "company": "Medtronic",
+    "title": "Cloud Alliance Principal Solutions Architect",
+    "company": "PaloAlto Networks",
     "location": "",
-    "description": "Principal IT Solution Architect - Hyperautomation and AI at Medtronic ()",
-    "url": "https://www.dice.com/job-detail/a47c7b3d-8cc8-4a2b-a244-3dfc68c4c4d2",
+    "description": "Cloud Alliance Principal Solutions Architect at PaloAlto Networks ()",
+    "url": "https://www.dice.com/job-detail/7145cad2-97c8-4fd8-8d0f-f6dae62fada7",
     "source": "dice",
     "match_score": 88,
     "matching": [
-      "Proven record in Hyperautomation and AI",
-      "Remote position fits preference",
-      "Principal-level solution architecture experience"
+      "Cloud Solution Architecture expertise",
+      "Experience with large enterprise customers",
+      "Roadmaps and stakeholder management"
     ],
-    "gaps": [],
+    "gaps": [
+      "Specific experience with PaloAlto Networks not mentioned"
+    ],
     "recommendation": "apply",
-    "match_reason": "Candidate's experience in AI projects and leadership fits perfectly with role requirements.",
+    "match_reason": "Extensive experience in cloud architecture and enterprise-level customer engagements makes this a strong fit. Any specific missing technology learnings can be quickly acquired given the candidate's robust background.",
     "user_id": 1,
     "search_date": "2026-09-05"
   },
   {
-    "title": "Principal Azure Solution Architect",
-    "company": "",
+    "title": "Principal AI Architect",
+    "company": "Winning Edge Solutions, LLC",
     "location": "",
-    "description": "Principal Azure Solution Architect at  ()",
-    "url": "https://www.dice.com/job-detail/662bd4b0-a2f5-4eae-9d3a-316c7c39a361",
-    "source": "dice",
-    "match_score": 87,
-    "matching": [
-      "Azure Solution Architecture experience",
-      "Remote position fits preference",
-      "Delivery leadership skills"
-    ],
-    "gaps": [],
-    "recommendation": "apply",
-    "match_reason": "The role closely aligns with candidate's extensive Azure and leadership experience.",
-    "user_id": 1,
-    "search_date": "2026-09-05"
-  },
-  {
-    "title": "Principal Azure D&A Architect",
-    "company": "Connect Tech+Talent",
-    "location": "",
-    "description": "Principal Azure D&A Architect at Connect Tech+Talent ()",
-    "url": "https://www.dice.com/job-detail/e6e8f7a3-ef8b-45f2-a512-e29658dbfb60",
+    "description": "Principal AI Architect at Winning Edge Solutions, LLC ()",
+    "url": "https://www.dice.com/job-detail/c75e126e-1d51-4a19-939f-b0a9dce6eb16",
     "source": "dice",
     "match_score": 85,
     "matching": [
-      "Principal-level Azure experience",
-      "Remote availability",
-      "Data & Analytics domain expertise"
+      "Principal AI Architect role matches experience",
+      "Delivery of production AI solutions like LLMs",
+      "Stakeholder management experience"
     ],
-    "gaps": [],
+    "gaps": [
+      "Familiarity with Winning Edge Solutions' specific frameworks not specified"
+    ],
     "recommendation": "apply",
-    "match_reason": "The candidate's background in Azure and analytics is an excellent match for this position.",
+    "match_reason": "Experience in AI architectures and stakeholder management aligns closely with role requirements. Great opportunity to leverage their AI solutions experience.",
     "user_id": 1,
     "search_date": "2026-09-05"
   },
@@ -84,15 +71,36 @@
     "source": "remote100k",
     "match_score": 82,
     "matching": [
-      "Principal Software Engineering experience",
-      "Cloud-native platform development",
-      "Remote work fits preference"
+      "Principal Software Engineering matches senior leadership",
+      "Experience in cloud-native applications",
+      "Remote position is feasible"
     ],
     "gaps": [
-      "No specific mention of direct React or similar frontend experience"
+      "Direct software engineering emphasis without listed Java/Python language expertise"
     ],
     "recommendation": "apply",
-    "match_reason": "Strong alignment with technical leadership and cloud-native development experience.",
+    "match_reason": "Leadership skills in software engineering sectors combined with cloud experience render this role a very good match; language specifics can be rapidly addressed or may not be primary.",
+    "user_id": 1,
+    "search_date": "2026-09-05"
+  },
+  {
+    "title": "Cloud Architect/Principal Engineer",
+    "company": "Solugenix Corporation",
+    "location": "",
+    "description": "Cloud Architect/Principal Engineer at Solugenix Corporation ()",
+    "url": "https://www.dice.com/job-detail/43a07072-65a7-4728-8cba-14611f767e17",
+    "source": "dice",
+    "match_score": 80,
+    "matching": [
+      "Cloud Architect experience",
+      "Solution architecture",
+      "Program & delivery management"
+    ],
+    "gaps": [
+      "Company specifics like Solugenix methodologies unfamiliar"
+    ],
+    "recommendation": "apply",
+    "match_reason": "With key experience in solution architecture and program management, adapting to Solugenix's environment is feasible. Strong baseline alignment with the candidate's skill set.",
     "user_id": 1,
     "search_date": "2026-09-05"
   }
