@@ -1,0 +1,103 @@
+[
+  {
+    "title": "Principal Azure Solution Architect",
+    "company": "",
+    "location": "",
+    "description": "Principal Azure Solution Architect at  ()",
+    "url": "https://www.dice.com/job-detail/662bd4b0-a2f5-4eae-9d3a-316c7c39a361",
+    "source": "dice",
+    "match_score": 95,
+    "matching": [
+      "Principal Azure Solution Architect role",
+      "Experience with Azure services",
+      "Cloud-native platforms expertise",
+      "Available to remote candidates"
+    ],
+    "gaps": [],
+    "recommendation": "apply",
+    "match_reason": "The candidate's experience closely aligns with the role requirements, particularly in Azure and cloud-native solutions. Strong leadership and architecture skills further enhance the match.",
+    "user_id": 1,
+    "search_date": "2026-09-05"
+  },
+  {
+    "title": "Principal Azure D&A Architect",
+    "company": "Connect Tech+Talent",
+    "location": "",
+    "description": "Principal Azure D&A Architect at Connect Tech+Talent ()",
+    "url": "https://www.dice.com/job-detail/e6e8f7a3-ef8b-45f2-a512-e29658dbfb60",
+    "source": "dice",
+    "match_score": 90,
+    "matching": [
+      "Principal Azure D&A Architect role",
+      "Expertise in Azure architecture",
+      "Remote opportunity available"
+    ],
+    "gaps": [],
+    "recommendation": "apply",
+    "match_reason": "The candidate has extensive experience in Azure architecture and a proven track record in delivery and leadership, making this role a strong fit.",
+    "user_id": 1,
+    "search_date": "2026-09-05"
+  },
+  {
+    "title": "Principal Azure Storage Validation Architect",
+    "company": "Microsoft Corporation",
+    "location": "",
+    "description": "Principal Azure Storage Validation Architect at Microsoft Corporation ()",
+    "url": "https://www.dice.com/job-detail/d281390d-6d81-4529-8c07-9aa524f20db3",
+    "source": "dice",
+    "match_score": 92,
+    "matching": [
+      "Principal Azure Storage Validation Architect role at Microsoft",
+      "Deep Azure experience",
+      "Current role at Microsoft",
+      "Remote opportunity available"
+    ],
+    "gaps": [],
+    "recommendation": "apply",
+    "match_reason": "Candidate's current position at Microsoft and expertise with Azure establish a strong alignment with this role. Transition within the same company enhances fit.",
+    "user_id": 1,
+    "search_date": "2026-09-05"
+  },
+  {
+    "title": "Principal Software Engineer",
+    "company": "Jobber",
+    "location": "Remote: \ud83c\udde8\ud83c\udde6 Canada",
+    "description": "Principal Software Engineer at Jobber",
+    "url": "https://remote100k.com/remote-job/jobber-principal-software-engineer",
+    "source": "remote100k",
+    "match_score": 87,
+    "matching": [
+      "Remote role with no country restrictions",
+      "Leadership experience in software engineering",
+      "Fit with cloud-native platforms"
+    ],
+    "gaps": [
+      "Kubernetes expertise is useful but not explicitly required"
+    ],
+    "recommendation": "apply",
+    "match_reason": "Candidate's leadership skills and experience with cloud-native solutions match the requirements for a principal software engineering position. The remote nature fits the candidate's location.",
+    "user_id": 1,
+    "search_date": "2026-09-05"
+  },
+  {
+    "title": "Sr. Platform Engineer - Kubernetes",
+    "company": "CrowdStrike",
+    "location": "Remote: \ud83c\uddfa\ud83c\uddf8 USA",
+    "description": "Sr. Platform Engineer - Kubernetes at CrowdStrike",
+    "url": "https://remote100k.com/remote-job/crowdstrike-sr-platform-engineer-kubernetes",
+    "source": "remote100k",
+    "match_score": 85,
+    "matching": [
+      "Remote position with no country restrictions",
+      "Kubernetes expertise",
+      "Platform engineering experience"
+    ],
+    "gaps": [
+      "Focus on security engineering required"
+    ],
+    "recommendation": "apply",
+    "match_reason": "Candidate's expertise in Kubernetes and cloud platforms is pertinent to the role, and the security focus can be addressed with their broad engineering background.",
+    "user_id": 1,
+    "search_date": "2026-09-05"
+  }
+]
