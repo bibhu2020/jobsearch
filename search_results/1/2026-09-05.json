@@ -1,5 +1,25 @@
 [
   {
+    "title": "Principal Azure Storage Validation Architect",
+    "company": "Microsoft Corporation",
+    "location": "",
+    "description": "Principal Azure Storage Validation Architect at Microsoft Corporation ()",
+    "url": "https://www.dice.com/job-detail/d281390d-6d81-4529-8c07-9aa524f20db3",
+    "source": "dice",
+    "match_score": 95,
+    "matching": [
+      "Principal-level role",
+      "Azure expertise",
+      "Experience with Microsoft",
+      "AI and cloud-native platforms"
+    ],
+    "gaps": [],
+    "recommendation": "apply",
+    "match_reason": "The role at Microsoft aligns perfectly with the candidate's current position and expertise in Azure and AI.",
+    "user_id": 1,
+    "search_date": "2026-09-05"
+  },
+  {
     "title": "Principal IT Solution Architect - Hyperautomation and AI",
     "company": "Medtronic",
     "location": "",
@@ -8,32 +28,34 @@
     "source": "dice",
     "match_score": 90,
     "matching": [
-      "Experience with Hyperautomation and AI",
-      "Strong Enterprise and Solution Architecture skills",
-      "Extensive leadership experience"
+      "Principal-level role",
+      "AI and hyperautomation",
+      "Solution architecture experience"
     ],
-    "gaps": [],
+    "gaps": [
+      "Healthcare domain expertise not explicitly mentioned"
+    ],
     "recommendation": "apply",
-    "match_reason": "The candidate's background matches well with the job's hyperautomation and AI focus. Leadership and architecture skills further strengthen the fit.",
+    "match_reason": "Strong match on architecture and AI experience; minor healthcare domain gap is manageable.",
     "user_id": 1,
     "search_date": "2026-09-05"
   },
   {
-    "title": "Principal Azure Storage Validation Architect",
-    "company": "Microsoft Corporation",
+    "title": "Azure Cloud Solution Architect (Healthcare Domain)",
+    "company": "Tech Tandem Inc",
     "location": "",
-    "description": "Principal Azure Storage Validation Architect at Microsoft Corporation ()",
-    "url": "https://www.dice.com/job-detail/d281390d-6d81-4529-8c07-9aa524f20db3",
+    "description": "Azure Cloud Solution Architect (Healthcare Domain) at Tech Tandem Inc ()",
+    "url": "https://www.dice.com/job-detail/7a5b8271-885e-45c6-9134-0515bf4ae67c",
     "source": "dice",
     "match_score": 88,
     "matching": [
-      "Experience with Microsoft and Azure ecosystems",
-      "Principal level aligning with candidate's current role",
-      "Expertise in cloud-native solutions"
+      "Azure Cloud Architect role",
+      "Healthcare domain relevance",
+      "Solution architecture experience"
     ],
     "gaps": [],
     "recommendation": "apply",
-    "match_reason": "Direct match with the candidate's current expertise at Microsoft and Azure, making it an ideal fit for their skills and experience.",
+    "match_reason": "Direct Azure and architecture expertise applicable; healthcare alignment present.",
     "user_id": 1,
     "search_date": "2026-09-05"
   },
@@ -46,55 +68,32 @@
     "source": "dice",
     "match_score": 85,
     "matching": [
-      "Data & Analytics focus matches skills",
-      "Azure expertise",
-      "Enterprise architecture experience"
+      "Principal Azure role",
+      "D&A focus aligns with cloud-native skills",
+      "Solution architecture experience"
     ],
     "gaps": [],
     "recommendation": "apply",
-    "match_reason": "The candidate's Azure and D&A experience aligns well with the role's requirements. Strong enterprise architecture background adds value.",
+    "match_reason": "Azure and data & analytics experience is highly relevant; principal role matches current level.",
     "user_id": 1,
     "search_date": "2026-09-05"
   },
   {
-    "title": "Principal Software Engineer",
-    "company": "Jobber",
-    "location": "Remote: \ud83c\udde8\ud83c\udde6 Canada",
-    "description": "Principal Software Engineer at Jobber",
-    "url": "https://remote100k.com/remote-job/jobber-principal-software-engineer",
-    "source": "remote100k",
-    "match_score": 80,
+    "title": "Principal Azure Solution Architect",
+    "company": "",
+    "location": "",
+    "description": "Principal Azure Solution Architect at  ()",
+    "url": "https://www.dice.com/job-detail/662bd4b0-a2f5-4eae-9d3a-316c7c39a361",
+    "source": "dice",
+    "match_score": 84,
     "matching": [
-      "Software engineering experience",
-      "Remote opportunity suitable for location",
-      "Leadership and architecture expertise"
+      "Principal Azure Solution Architect",
+      "Enterprise & solution architecture experience",
+      "Azure platform expertise"
     ],
-    "gaps": [
-      "No specific Azure mention in the role which may limit technical alignment"
-    ],
+    "gaps": [],
     "recommendation": "apply",
-    "match_reason": "Strong fit in software engineering and leadership roles, with remote work fitting location. Azure gap considered manageable.",
-    "user_id": 1,
-    "search_date": "2026-09-05"
-  },
-  {
-    "title": "ENTERPRISE ARCHITECT L0",
-    "company": "Wipro",
-    "location": "Chennai, ",
-    "description": "Job description:<br><br>Job Description \u00cd\u008f \u00cd\u008f \u00cd\u008f \u00cd\u008f <p>Mandatory Skills: Enterprise Architecting .</p><p>\u00c2\u00a0</p><p>Experience: 8-10 Years<br>.</p><p>\u00c2\u00a0</p><p>Reinvent your world. We are building a modern Wipro. We are an end-to-end digital transformation partner with the boldest ambitions. To realize them, we need people inspired by reinvention. Of yourself, your career, and your skills. We want to see the constant evolution of our business and our industry. It has always been in our DNA - as the world around us changes, so do we. Join a business powered by purpose and a place that empowers you to design your own reinvention.</p><br/><br/>Please mention the word **LUCK** and tag RMjAuMTA5Ljg2LjIyOA== when applying to show you read the job post completely (#RMjAuMTA5Ljg2LjIyOA==). This is a beta feature to avoid spam applicants. Companies can search these words to find applicants that read this and see they're human.",
-    "url": "https://remoteOK.com/remote-jobs/remote-enterprise-architect-l0-wipro-1137226",
-    "source": "remoteok",
-    "match_score": 78,
-    "matching": [
-      "Enterprise Architect experience",
-      "Relevant years of experience",
-      "Enterprise transformations"
-    ],
-    "gaps": [
-      "Specific mandatory skills not completely detailed against current experience"
-    ],
-    "recommendation": "apply",
-    "match_reason": "The candidate has strong experience in enterprise architecture and digital transformations, making them a good fit for Wipro's requirements.",
+    "match_reason": "High alignment with principal role and Azure expertise; solution architecture skills are a strong fit.",
     "user_id": 1,
     "search_date": "2026-09-05"
   }
