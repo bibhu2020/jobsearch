@@ -9,9 +9,9 @@ router = APIRouter()
 
 _openai: AsyncOpenAI | None = None
 
-# Provider selection — set AI_PRIMARY_PROVIDER / AI_FALLBACK_PROVIDER to "google", "openai", or "openrouter"
-PRIMARY_PROVIDER = os.getenv("AI_PRIMARY_PROVIDER", "google")
-FALLBACK_PROVIDER = os.getenv("AI_FALLBACK_PROVIDER", "openrouter")
+# Provider selection — explicitly pinned to the repo's intended routing
+PRIMARY_PROVIDER = "google"
+FALLBACK_PROVIDER = "openrouter"
 
 # Model overrides — defaults match the provider defaults above
 GOOGLE_MODEL = os.getenv("GOOGLE_AI_MODEL", "gemma-4")

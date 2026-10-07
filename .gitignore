@@ -31,7 +31,7 @@ Thumbs.db
 /playwright-report/
 /test-results/
 build/
-.claude/
+#.claude/
 
 shared/job_tracker.db-shm
 shared/job_tracker.db-wal
