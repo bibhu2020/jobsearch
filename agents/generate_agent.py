@@ -9,13 +9,14 @@ router = APIRouter()
 
 _openai: AsyncOpenAI | None = None
 
-# Provider selection — set AI_PRIMARY_PROVIDER / AI_FALLBACK_PROVIDER to "google" or "openai"
+# Provider selection — set AI_PRIMARY_PROVIDER / AI_FALLBACK_PROVIDER to "google", "openai", or "openrouter"
 PRIMARY_PROVIDER = os.getenv("AI_PRIMARY_PROVIDER", "google")
-FALLBACK_PROVIDER = os.getenv("AI_FALLBACK_PROVIDER", "openai")
+FALLBACK_PROVIDER = os.getenv("AI_FALLBACK_PROVIDER", "openrouter")
 
 # Model overrides — defaults match the provider defaults above
 GOOGLE_MODEL = os.getenv("GOOGLE_AI_MODEL", "gemma-4")
 OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o")
+OPENROUTER_MODEL = os.getenv("OPENROUTER_MODEL", "openai/gpt-4o-mini")
 
 
 def get_openai() -> AsyncOpenAI:
@@ -23,6 +24,13 @@ def get_openai() -> AsyncOpenAI:
     if _openai is None:
         _openai = AsyncOpenAI(api_key=os.environ["OPENAI_API_KEY"])
     return _openai
+
+
+def get_openrouter() -> AsyncOpenAI:
+    return AsyncOpenAI(
+        api_key=os.environ["OPENROUTER_API_KEY"],
+        base_url="https://openrouter.ai/api/v1",
+    )
 
 
 async def _call_google(prompt: str, json_mode: bool, max_tokens: int) -> str:
@@ -45,12 +53,25 @@ async def _call_openai(system: str, user: str, json_mode: bool, max_tokens: int)
     return resp.choices[0].message.content
 
 
+async def _call_openrouter(system: str, user: str, json_mode: bool, max_tokens: int) -> str:
+    kwargs = {"model": OPENROUTER_MODEL, "max_tokens": max_tokens, "messages": [
+        {"role": "system", "content": system},
+        {"role": "user", "content": user},
+    ]}
+    if json_mode:
+        kwargs["response_format"] = {"type": "json_object"}
+    resp = await get_openrouter().chat.completions.create(**kwargs)
+    return resp.choices[0].message.content
+
+
 async def _call_provider(provider: str, prompt: str, system: str, user: str, json_mode: bool, max_tokens: int) -> str:
     if provider == "google":
         return await _call_google(prompt, json_mode, max_tokens)
     if provider == "openai":
         return await _call_openai(system, user, json_mode, max_tokens)
-    raise ValueError(f"Unknown AI provider: {provider!r}. Use 'google' or 'openai'.")
+    if provider == "openrouter":
+        return await _call_openrouter(system, user, json_mode, max_tokens)
+    raise ValueError(f"Unknown AI provider: {provider!r}. Use 'google', 'openai', or 'openrouter'.")
 
 
 async def call_ai(system: str, user: str, json_mode: bool = False, max_tokens: int = 2048) -> str:

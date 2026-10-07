@@ -10,6 +10,7 @@ router = APIRouter()
 PRIMARY_PROVIDER = os.getenv("AI_PRIMARY_PROVIDER", "google")
 GOOGLE_MODEL = os.getenv("GOOGLE_AI_MODEL", "gemma-4")
 OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o")
+OPENROUTER_MODEL = os.getenv("OPENROUTER_MODEL", "openai/gpt-4o-mini")
 
 _openai: AsyncOpenAI | None = None
 
@@ -21,9 +22,30 @@ def get_openai() -> AsyncOpenAI:
     return _openai
 
 
+def get_openrouter() -> AsyncOpenAI:
+    return AsyncOpenAI(
+        api_key=os.environ["OPENROUTER_API_KEY"],
+        base_url="https://openrouter.ai/api/v1",
+    )
+
+
+async def _call_openrouter(prompt: str) -> str:
+    client = get_openrouter()
+    resp = await client.chat.completions.create(
+        model=OPENROUTER_MODEL,
+        max_tokens=1500,
+        response_format={"type": "json_object"},
+        messages=[
+            {"role": "system", "content": "You are a hiring assistant. Respond with valid JSON only."},
+            {"role": "user", "content": prompt},
+        ],
+    )
+    return resp.choices[0].message.content
+
+
 async def _call_ai(prompt: str) -> str:
-    try:
-        if PRIMARY_PROVIDER == "google" and os.getenv("GEMINI_API_KEY"):
+    if PRIMARY_PROVIDER == "google" and os.getenv("GEMINI_API_KEY"):
+        try:
             client = google_genai.Client(api_key=os.environ["GEMINI_API_KEY"])
             resp = client.models.generate_content(
                 model=GOOGLE_MODEL,
@@ -31,8 +53,12 @@ async def _call_ai(prompt: str) -> str:
                 config={"max_output_tokens": 1500, "response_mime_type": "application/json"},
             )
             return resp.text
-    except Exception:
-        pass
+        except Exception:
+            if os.getenv("AI_FALLBACK_PROVIDER") != "openrouter":
+                pass
+
+    if PRIMARY_PROVIDER == "openrouter" or os.getenv("AI_FALLBACK_PROVIDER") == "openrouter":
+        return await _call_openrouter(prompt)
 
     client = get_openai()
     resp = await client.chat.completions.create(
