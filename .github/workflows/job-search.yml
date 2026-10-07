@@ -54,6 +54,10 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          AI_PRIMARY_PROVIDER: google
+          AI_FALLBACK_PROVIDER: openrouter
+          OPENROUTER_MODEL: ${{ secrets.OPENROUTER_MODEL }}
           SEARCH_RESULTS_PATH: search_results
           USER_ID: ${{ github.event.inputs.user_id }}
           PROFILE_SUMMARY: ${{ github.event.inputs.profile_summary }}

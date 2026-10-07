@@ -143,3 +143,26 @@ Requires GitHub Secrets: `OPENAI_API_KEY`, `GEMINI_API_KEY`.
 ## Git Workflow
 
 **Always develop on the `local` branch. Never commit directly to `main`. Open a PR to merge `local` → `main`.**
+
+## Future feature workflow
+
+Use the project skills in this order when adding or changing functionality:
+
+1. [01-start](.github/skills/01-start/SKILL.md) — learn the repo and current state.
+2. [02-scope](.github/skills/02-scope/SKILL.md) — define feature scope.
+3. [03-prd](.github/skills/03-prd/SKILL.md) — capture product requirements.
+4. [04-spec](.github/skills/04-spec/SKILL.md) — define technical specifications.
+5. [05-build](.github/skills/05-build/SKILL.md) — implement and validate.
+6. [06-ship](.github/skills/06-ship/SKILL.md) — prepare for release and deployment.
+
+## Current project state snapshot
+
+The current project understanding has been stored in the state folder:
+
+- [scope.md](_state/scope.md)
+- [prd.md](_state/prd.md)
+- [spec.md](_state/spec.md)
+- [build.md](_state/build.md)
+- [ship.md](_state/ship.md)
+
+These files capture the current architecture, requirements, build flow, and release checklist so future changes can start from a common baseline.
