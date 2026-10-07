@@ -1,0 +1,97 @@
+[
+  {
+    "title": "Cloud Alliance Principal Solutions Architect",
+    "company": "PaloAlto Networks",
+    "location": "",
+    "description": "Cloud Alliance Principal Solutions Architect at PaloAlto Networks ()",
+    "url": "https://www.dice.com/job-detail/7145cad2-97c8-4fd8-8d0f-f6dae62fada7",
+    "source": "dice",
+    "match_score": 95,
+    "matching": [
+      "Principal-level experience",
+      "Strong AI and cloud expertise",
+      "Proven stakeholder management skills"
+    ],
+    "gaps": [],
+    "recommendation": "apply",
+    "match_reason": "The candidate's expertise aligns exceptionally well with the Principal Solutions Architect role, particularly in AI and cloud solutions.",
+    "user_id": 1,
+    "search_date": "2026-09-04"
+  },
+  {
+    "title": "Principal Microsoft Solutions & Platform Architect",
+    "company": "Kalpita Technologies Inc",
+    "location": "",
+    "description": "Principal Microsoft Solutions & Platform Architect at Kalpita Technologies Inc ()",
+    "url": "https://www.dice.com/job-detail/4778c48a-48c5-4951-b411-3a23d9315707",
+    "source": "dice",
+    "match_score": 92,
+    "matching": [
+      "Principal-level experience",
+      "Expertise in Microsoft solutions and platform architecture",
+      "Experience with Azure technologies"
+    ],
+    "gaps": [],
+    "recommendation": "apply",
+    "match_reason": "The candidate's experience with Microsoft and Azure makes this role a perfect match for their skills and background.",
+    "user_id": 1,
+    "search_date": "2026-09-04"
+  },
+  {
+    "title": "Distinguished AI Engineer - Agentic AI Platform (Remote Eligible)",
+    "company": "Capital One",
+    "location": "",
+    "description": "Distinguished AI Engineer - Agentic AI Platform (Remote Eligible) at Capital One ()",
+    "url": "https://www.dice.com/direct-apply/ffbcb76e-6aa3-44d8-a891-b1d87fc73834",
+    "source": "dice",
+    "match_score": 90,
+    "matching": [
+      "Expertise in AI engineering",
+      "Experience with agentic AI platforms",
+      "Remote eligible, fitting location requirements"
+    ],
+    "gaps": [],
+    "recommendation": "apply",
+    "match_reason": "The Distinguished AI Engineer role aligns well with the candidate's current focus on production GenAI solutions.",
+    "user_id": 1,
+    "search_date": "2026-09-04"
+  },
+  {
+    "title": "Principal Software Engineer",
+    "company": "Jobber",
+    "location": "Remote: \ud83c\udde8\ud83c\udde6 Canada",
+    "description": "Principal Software Engineer at Jobber",
+    "url": "https://remote100k.com/remote-job/jobber-principal-software-engineer",
+    "source": "remote100k",
+    "match_score": 88,
+    "matching": [
+      "Strong leadership experience",
+      "Software engineering expertise",
+      "Remote role matches location preferences"
+    ],
+    "gaps": [],
+    "recommendation": "apply",
+    "match_reason": "The candidate's leadership in technology projects suits the Principal Software Engineer role well.",
+    "user_id": 1,
+    "search_date": "2026-09-04"
+  },
+  {
+    "title": "Sr. Platform Engineer - Kubernetes",
+    "company": "CrowdStrike",
+    "location": "Remote: \ud83c\uddfa\ud83c\uddf8 USA",
+    "description": "Sr. Platform Engineer - Kubernetes at CrowdStrike",
+    "url": "https://remote100k.com/remote-job/crowdstrike-sr-platform-engineer-kubernetes",
+    "source": "remote100k",
+    "match_score": 85,
+    "matching": [
+      "Kubernetes experience",
+      "Platform engineering skills",
+      "Remote work compatible with candidate's location"
+    ],
+    "gaps": [],
+    "recommendation": "apply",
+    "match_reason": "The Sr. Platform Engineer role leverages the candidate's expertise in Kubernetes and containers.",
+    "user_id": 1,
+    "search_date": "2026-09-04"
+  }
+]

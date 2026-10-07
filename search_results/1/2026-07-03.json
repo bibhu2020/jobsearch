@@ -1,0 +1,99 @@
+[
+  {
+    "title": "Principal AI Solutions Architect, Healthcare & Life Sciences - US",
+    "company": "DataArt Solutions",
+    "location": "Dallas, Texas",
+    "description": "Principal AI Solutions Architect, Healthcare & Life Sciences - US at DataArt Solutions (Dallas, Texas)",
+    "url": "https://www.dice.com/job-detail/83a51089-9403-4270-a319-34b5e8a92978",
+    "source": "dice",
+    "match_score": 95,
+    "matching": [
+      "Principal AI Solutions Architect aligns with current role",
+      "Healthcare & Life Sciences domain expertise",
+      "Located in the US matches location requirements",
+      "Experience with Azure and AI solutions"
+    ],
+    "gaps": [],
+    "recommendation": "apply",
+    "match_reason": "Highly aligns with candidate's expertise and domain knowledge, with no significant gaps noted.",
+    "user_id": 1,
+    "search_date": "2026-07-03"
+  },
+  {
+    "title": "Director, Enterprise AI Platform Architect",
+    "company": "Vista Equity Partners",
+    "location": "United States",
+    "description": "Director, Enterprise AI Platform Architect at Vista Equity Partners (United States)",
+    "url": "https://www.linkedin.com/jobs/view/director-enterprise-ai-platform-architect-at-vista-equity-partners-4373021114",
+    "source": "linkedin",
+    "match_score": 90,
+    "matching": [
+      "Director, Enterprise AI Platform Architect role matches leadership experience",
+      "Based in the United States fits location",
+      "Strong relevance to AI and enterprise architecture"
+    ],
+    "gaps": [],
+    "recommendation": "apply",
+    "match_reason": "Direct fit for leadership and technology skills, US-based role is fully suitable.",
+    "user_id": 1,
+    "search_date": "2026-07-03"
+  },
+  {
+    "title": "Principal Cloud Solutions Architect - Azure Cloud",
+    "company": "Harris",
+    "location": "Remote or North Carolina",
+    "description": "Principal Cloud Solutions Architect - Azure Cloud at Harris (Remote or North Carolina)",
+    "url": "https://www.dice.com/job-detail/79b7a4fe-70cb-42a4-8600-7db57f13e143",
+    "source": "dice",
+    "match_score": 88,
+    "matching": [
+      "Azure Cloud Principal Architect matches expertise",
+      "Remote option available",
+      "Strong alignment with enterprise solutions experience"
+    ],
+    "gaps": [],
+    "recommendation": "apply",
+    "match_reason": "High compatibility with skill set in Azure and cloud architecture, excellent fit.",
+    "user_id": 1,
+    "search_date": "2026-07-03"
+  },
+  {
+    "title": "Enterprise Architect - Remote",
+    "company": "Optum",
+    "location": "Minnetonka, MN",
+    "description": "Enterprise Architect - Remote at Optum (Minnetonka, MN)",
+    "url": "https://www.linkedin.com/jobs/view/enterprise-architect-remote-at-optum-4433890100",
+    "source": "linkedin",
+    "match_score": 85,
+    "matching": [
+      "Enterprise Architect role matches current experience",
+      "Remote work fits preference",
+      "Experience with enterprise solution architecture"
+    ],
+    "gaps": [],
+    "recommendation": "apply",
+    "match_reason": "The role is well-suited to candidate\u2019s expertise in enterprise architecture on a remote basis.",
+    "user_id": 1,
+    "search_date": "2026-07-03"
+  },
+  {
+    "title": "Principal Architect \u2013 Integration, API & AI Solutions",
+    "company": "Tixy Services LLC",
+    "location": "Hybrid in McKinney, Texas",
+    "description": "Principal Architect \u2013 Integration, API & AI Solutions at Tixy Services LLC (Hybrid in McKinney, Texas)",
+    "url": "https://www.dice.com/job-detail/e9f5d887-028c-4117-9cf5-8e3f1f2a78df",
+    "source": "dice",
+    "match_score": 84,
+    "matching": [
+      "Expertise in Integration, API & AI Solutions aligns with role",
+      "Principal Architect position matches level of experience"
+    ],
+    "gaps": [
+      "Hybrid format in Texas may require relocation or frequent travel"
+    ],
+    "recommendation": "consider",
+    "match_reason": "Job role and experience alignment is strong, but the hybrid location requirement may be a concern.",
+    "user_id": 1,
+    "search_date": "2026-07-03"
+  }
+]
