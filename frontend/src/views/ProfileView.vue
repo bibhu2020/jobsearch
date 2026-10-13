@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import Navbar from '@/components/Navbar.vue'
 import { useProfileStore } from '@/stores/profile'
+import AutoApplySettings from '@/components/AutoApplySettings.vue'
 
 const store = useProfileStore()
 const fileInput = ref<HTMLInputElement>()
@@ -239,6 +240,8 @@ const skillList = () => skillsText.value.split(',').map(s => s.trim()).filter(Bo
             </span>
           </transition>
         </div>
+
+        <AutoApplySettings />
 
       </div>
     </div>

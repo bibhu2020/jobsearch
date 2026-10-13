@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import GenerateKitPanel from './GenerateKitPanel.vue'
+import ApplicationRecord from './ApplicationRecord.vue'
 import { usePipelineStore, type PipelineCard } from '@/stores/pipeline'
 
 const props = defineProps<{ card: PipelineCard }>()
@@ -90,6 +91,8 @@ async function deleteCard() {
             Remove
           </button>
         </div>
+
+        <ApplicationRecord :card-id="card.id" />
 
         <!-- Description -->
         <div v-if="card.description" class="rounded-xl bg-slate-800 border border-slate-700/60 p-4">

@@ -9,6 +9,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: 'card-click', card: PipelineCard): void
+  (e: 'card-apply', card: PipelineCard): void
   (e: 'drop', cardId: number, stage: Stage, index: number): void
 }>()
 
@@ -72,7 +73,7 @@ function onUpdate(evt: any) {
         @update="onUpdate"
       >
         <div v-for="card in cards" :key="card.id" :data-card-id="card.id">
-          <JobCard :card="card" :stage-key="stage.key" @click="emit('card-click', card)" />
+          <JobCard :card="card" :stage-key="stage.key" @click="emit('card-click', card)" @apply="emit('card-apply', card)" />
         </div>
       </VueDraggable>
 

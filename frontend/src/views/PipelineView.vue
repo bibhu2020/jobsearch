@@ -4,11 +4,13 @@ import Navbar from '@/components/Navbar.vue'
 import KanbanBoard from '@/components/KanbanBoard.vue'
 import AddJobModal from '@/components/AddJobModal.vue'
 import JobDetailModal from '@/components/JobDetailModal.vue'
+import ApplyLiveModal from '@/components/ApplyLiveModal.vue'
 import { usePipelineStore, type PipelineCard } from '@/stores/pipeline'
 
 const store = usePipelineStore()
 const showAddModal = ref(false)
 const selectedCard = ref<PipelineCard | null>(null)
+const applyCard = ref<PipelineCard | null>(null)
 const total = computed(() => store.cards.length)
 
 onMounted(() => store.fetchCards())
@@ -38,10 +40,11 @@ onMounted(() => store.fetchCards())
 
     <!-- Board -->
     <div class="flex-1 overflow-hidden">
-      <KanbanBoard @card-click="selectedCard = $event" />
+      <KanbanBoard @card-click="selectedCard = $event" @card-apply="applyCard = $event" />
     </div>
 
     <AddJobModal v-if="showAddModal" @close="showAddModal = false" />
     <JobDetailModal v-if="selectedCard" :card="selectedCard" @close="selectedCard = null" />
+    <ApplyLiveModal v-if="applyCard" :card="applyCard" @close="applyCard = null" />
   </div>
 </template>

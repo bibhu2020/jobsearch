@@ -61,11 +61,13 @@ export class SuggestionsService {
       return { imported: 0 };
     }
 
-    // Dismiss pending suggestions from older runs — they are now superseded by the
-    // latest run. Explicit user decisions (dismissed / added) are left untouched.
+    // Dismiss pending suggestions that are not in the latest run — they are superseded.
+    // Compared by URL, not date: several runs on the same day share one search_date.
+    // Explicit user decisions (dismissed / added) are left untouched.
+    const latestUrls = jobs.map(j => j.url).filter(Boolean);
     await this.db.run(
-      "UPDATE job_suggestions SET status = 'dismissed' WHERE user_id = ? AND status = 'pending' AND search_date < ?",
-      [userId, latestDate],
+      "UPDATE job_suggestions SET status = 'dismissed' WHERE user_id = ? AND status = 'pending' AND (url IS NULL OR NOT (url = ANY(?::text[])))",
+      [userId, latestUrls],
     );
 
     let imported = 0;

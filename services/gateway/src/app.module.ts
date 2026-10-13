@@ -9,6 +9,9 @@ import { PipelineModule } from './pipeline/pipeline.module';
 import { KitsModule } from './kits/kits.module';
 import { SuggestionsModule } from './suggestions/suggestions.module';
 import { InterviewerModule } from './interviewer/interviewer.module';
+import { CryptoModule } from './crypto/crypto.module';
+import { ApplyModule } from './apply/apply.module';
+import { IntegrationsModule } from './integrations/integrations.module';
 
 @Module({
   imports: [
@@ -18,6 +21,7 @@ import { InterviewerModule } from './interviewer/interviewer.module';
       ignoreEnvFile: false,
     }),
     DatabaseModule,
+    CryptoModule,
     GitHubStorageModule,
     AuthModule,
     ProfileModule,
@@ -26,6 +30,8 @@ import { InterviewerModule } from './interviewer/interviewer.module';
     KitsModule,
     SuggestionsModule,
     InterviewerModule,
+    ApplyModule,
+    IntegrationsModule,
   ],
 })
 export class AppModule {}

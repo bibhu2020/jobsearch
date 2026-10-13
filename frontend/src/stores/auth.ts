@@ -12,21 +12,17 @@ export const useAuthStore = defineStore('auth', () => {
   const isAuthenticated = computed(() => !!token.value)
   const isInterviewer = computed(() => mode.value === 'interviewer')
 
-  async function login(email: string, password: string) {
-    const { data } = await api.post('/auth/login', { email, password })
-    token.value = data.token
-    user.value = data.user
-    localStorage.setItem('token', data.token)
-    await fetchMode()
-    router.push(mode.value === 'interviewer' ? '/interviewer' : '/pipeline')
+  /** Sign-in is Google-only: the browser leaves the app and returns to /auth/callback. */
+  function loginWithGoogle() {
+    window.location.href = '/api/auth/google'
   }
 
-  async function register(name: string, email: string, password: string) {
-    const { data } = await api.post('/auth/register', { name, email, password })
-    token.value = data.token
-    user.value = data.user
-    localStorage.setItem('token', data.token)
-    router.push('/pipeline')
+  /** Called by AuthCallbackView with the session token from the Google redirect. */
+  async function completeLogin(newToken: string) {
+    token.value = newToken
+    localStorage.setItem('token', newToken)
+    await fetchMode()
+    router.replace(mode.value === 'interviewer' ? '/interviewer' : '/pipeline')
   }
 
   async function fetchMode() {
@@ -53,5 +49,5 @@ export const useAuthStore = defineStore('auth', () => {
     router.push('/login')
   }
 
-  return { token, user, mode, isAuthenticated, isInterviewer, login, register, logout, fetchMode, switchMode }
+  return { token, user, mode, isAuthenticated, isInterviewer, loginWithGoogle, completeLogin, logout, fetchMode, switchMode }
 })

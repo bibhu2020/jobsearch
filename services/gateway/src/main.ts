@@ -1,9 +1,14 @@
 import 'reflect-metadata';
+import { setDefaultAutoSelectFamilyAttemptTimeout } from 'net';
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import { AppModule } from './app.module';
+
+// Node races IPv6/IPv4 with only 250 ms per attempt; on hosts without working IPv6 (e.g. WSL) the
+// IPv4 attempt can also be cut off, so calls to dual-stack hosts like oauth2.googleapis.com time out.
+setDefaultAutoSelectFamilyAttemptTimeout(2000);
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
