@@ -1,67 +1,45 @@
 [
   {
-    "title": "Principal AI Solutions Architect (Digital CCaaS)",
-    "company": "Kutir Inc",
+    "title": "Principal Solution Architect - Microsoft Fabric & AI",
+    "company": "Aroha Technologies",
     "location": "",
-    "description": "Principal AI Solutions Architect (Digital CCaaS) at Kutir Inc ()",
-    "url": "https://www.dice.com/job-detail/4f15e1fc-47ae-495b-b21c-7537d10f9096",
+    "description": "Principal Solution Architect - Microsoft Fabric & AI at Aroha Technologies ()",
+    "url": "https://www.dice.com/job-detail/db321f3a-5059-4197-a860-523842b860b3",
     "source": "dice",
     "match_score": 90,
     "matching": [
-      "Principal-level role aligns with candidate's experience",
-      "Strong background in AI solutions matches job focus",
-      "Leadership experience with large teams fits management expectations"
+      "Principal-level role matches candidate's experience",
+      "Focus on Microsoft Fabric & AI aligns with current work",
+      "Remote position fits preference"
     ],
     "gaps": [
-      "Specific knowledge of CCaaS may be limited",
-      "Digital solutions may require rapid adaptation"
+      "Specific experience in Microsoft Fabric is not mentioned",
+      "Potential competition with internal candidates"
     ],
     "recommendation": "apply",
-    "match_reason": "Candidate's background in AI aligns with the role, and leadership experience is a strong fit.",
+    "match_reason": "Strong alignment with current expertise and leadership level in AI solutions.",
     "user_id": 1,
     "search_date": "2026-10-13"
   },
   {
-    "title": "Principal Technical Consultant - AI/ Azure Cloud Platform Engineering",
-    "company": "AHEAD",
-    "location": "United States",
-    "description": "Principal Technical Consultant - AI/ Azure Cloud Platform Engineering at AHEAD (United States)",
-    "url": "https://www.linkedin.com/jobs/view/principal-technical-consultant-ai-azure-cloud-platform-engineering-at-ahead-4457961789",
-    "source": "linkedin",
+    "title": "Principal AI Solution Architect - Finance - Remote",
+    "company": "UnitedHealth Group",
+    "location": "",
+    "description": "Principal AI Solution Architect - Finance - Remote at UnitedHealth Group ()",
+    "url": "https://www.dice.com/job-detail/455aa1ed-f98c-4f53-8aea-64352b245dfb",
+    "source": "dice",
     "match_score": 88,
     "matching": [
-      "AI and Azure Cloud expertise matches job requirements",
-      "Principal-level position matches candidate's current role",
-      "Experience with platform engineering is relevant"
+      "Principal role aligns with candidate's level",
+      "Experience in AI solutions matches requirements",
+      "Remote position fits preference"
     ],
     "gaps": [
-      "Specific tools and technologies at AHEAD may differ",
-      "Company culture and optimization focus might be a shift"
+      "Experience in finance applications is not specified",
+      "Need to understand specific compliance requirements in healthcare/finance"
     ],
     "recommendation": "apply",
-    "match_reason": "Strong match with AI and Azure experience; principal-level role fits perfectly.",
-    "user_id": 1,
-    "search_date": "2026-10-13"
-  },
-  {
-    "title": "Principal Azure DevOps Engineer",
-    "company": "Tekniforce",
-    "location": "",
-    "description": "Principal Azure DevOps Engineer at Tekniforce ()",
-    "url": "https://www.dice.com/job-detail/7dcbf2f3-f5c2-486d-be25-cf75faa4054a",
-    "source": "dice",
-    "match_score": 85,
-    "matching": [
-      "Azure DevOps experience aligns with job requirements",
-      "Principal role aligns with candidate's current leadership position",
-      "Focus on cloud engineering fits expertise"
-    ],
-    "gaps": [
-      "DevOps specifics might require additional adaptation",
-      "Continuous delivery vs traditional project management styles could differ"
-    ],
-    "recommendation": "apply",
-    "match_reason": "Strong match on Azure and cloud engineering focus; principal role aligns excellently.",
+    "match_reason": "Directly correlates with candidate's AI and solution architecture expertise.",
     "user_id": 1,
     "search_date": "2026-10-13"
   },
@@ -72,40 +50,62 @@
     "description": "Principal Architect (.Net/ C#/ Azure) at Nuvento ()",
     "url": "https://www.dice.com/job-detail/a27da785-3317-46d9-afdd-2e96c5ee90e5",
     "source": "dice",
-    "match_score": 80,
+    "match_score": 85,
     "matching": [
-      "Principal Architect role matches leadership and architecture expertise",
-      "Azure proficiency is crucial for the position",
-      "Cloud focus is in line with current experience"
+      "Principal architecture role aligns with experience",
+      "Focus on Azure aligns with candidate's skills",
+      "Leadership experience fits expectations"
     ],
     "gaps": [
-      "Specific .NET/C#/Azure stack proficiency may be a concern",
-      "May require additional development context adaptation"
+      "No mention of .Net/C# specific projects",
+      "Must familiarize with company culture and structure"
     ],
     "recommendation": "apply",
-    "match_reason": "Matches candidate's leadership and technical skills well, though slight stack gaps exist.",
+    "match_reason": "Solid fit due to relevant experience in Azure and architecture.",
     "user_id": 1,
     "search_date": "2026-10-13"
   },
   {
-    "title": "Principal Solutions Architect (Cloud, Infrastructure & Data)",
-    "company": "Solvd, Inc.",
-    "location": "United States",
-    "description": "Principal Solutions Architect (Cloud, Infrastructure & Data) at Solvd, Inc. (United States)",
-    "url": "https://www.linkedin.com/jobs/view/principal-solutions-architect-cloud-infrastructure-data-at-solvd-inc-4477619773",
-    "source": "linkedin",
-    "match_score": 79,
+    "title": "Solutions Engineer - Splunk",
+    "company": "Cisco",
+    "location": "Remote: \ud83c\uddfa\ud83c\uddf8 USA",
+    "description": "Solutions Engineer - Splunk at Cisco",
+    "url": "https://remote100k.com/remote-job/cisco-solutions-engineer-splunk",
+    "source": "remote100k",
+    "match_score": 80,
     "matching": [
-      "Cloud and infrastructure experience aligns with job requirements",
-      "Principal Solutions Architect role matches candidate's seniority",
-      "Delivery excellence focus fits track record"
+      "Role as Solutions Engineer fits technical expertise",
+      "Experience in AI aligns with job expectations",
+      "Remote position fits preference"
     ],
     "gaps": [
-      "Specific data solutions experience may need to be elaborated",
-      "Architecture governance context may be a shift"
+      "Position may focus more on engineering over architecture",
+      "Not explicitly a principal role which may set expectations lower"
+    ],
+    "recommendation": "apply",
+    "match_reason": "Strong technical skills in AI and cloud solutions fit well with role.",
+    "user_id": 1,
+    "search_date": "2026-10-13"
+  },
+  {
+    "title": "Technical Account Manager",
+    "company": "DEUNA",
+    "location": "Ciudad de M\u00c3\u00a9xico, Mexico",
+    "description": "<p><strong>About DEUNA</strong>&nbsp;\u00f0\u009f\u00a7\u00a1</p>\n<p>&nbsp;</p>\n<p>DEUNA is a rapidly growing startup revolutionizing global commerce with ATHIA, our AI-powered orchestration and payments platform that helps large enterprises boost approval rates, reduce costs, and unlock new revenue. Built by the team behind DEUNA\u00e2\u0080\u0094the fastest-growing Commerce OS in Latin America\u00e2\u0080\u0094ATHIA combines payment intelligence, checkout optimization, and data orchestration in one powerful solution.</p>\n<p>&nbsp;</p>\n<p>With deep integrations across 300+ PSPs and alternative payment methods, and over 20% of Mexico\u00e2\u0080\u0099s digital economy running through our platform, we simplify global payments through a single integration and centralized reconciliation.</p>\n<p>We are a rapidly growing startup expanding into the U.S. to meet the urgent needs of large retailers, marketplaces, airlines, and QSRs. Join us to shape the future of payments! \u00f0\u009f\u009a\u0080</p>\n<p>&nbsp;</p>\n<p>Visit&nbsp;<a href=\"https://www.deuna.com/\">https://www.deuna.com/</a>&nbsp;to learn more about us!</p><p><br></p><p>\n</p><h2><strong>About the Role</strong></h2>\n<p>As a <strong>Technical Account Manager</strong> (TAM), you will be the primary technical point of contact for our merchants after their initial go-live.</p>\n<p>You will help monitor merchant technical health, support incident management, answer ongoing technical questions, and guide merchants through future technical evolutions.</p>\n<p>For DEUNA\u00e2\u0080\u0099s premium and key accounts, the TAM plays a critical role in making sure merchants feel technically protected, proactively monitored, and confident operating on our platform.</p>\n<p>Your mission is to help ensure every merchant is operationally stable, technically satisfied, and continuously improving on DEUNA.</p>\n<p>&nbsp;</p>\n<hr>\n<p>&nbsp;</p>\n<h2><strong>Responsibilities</strong></h2>\n<h3><strong>Proactively monitor merchant technical health</strong></h3>\n<ul>\n<li>\n<p>Monitor merchant performance, transaction behavior, errors, decli",
+    "url": "https://remoteOK.com/remote-jobs/remote-technical-account-manager-deuna-1137482",
+    "source": "remoteok",
+    "match_score": 75,
+    "matching": [
+      "Role in AI-powered platform aligns with current trends",
+      "Remote position fits preference",
+      "Start-up environment experience may resonate"
+    ],
+    "gaps": [
+      "Less clear direct relation to finance",
+      "Startup environment may be less structured than candidate's preference"
     ],
     "recommendation": "consider",
-    "match_reason": "Strong alignment on roles and expertise; however, slight concern on the specific data focus.",
+    "match_reason": "Moderate alignment but startup aspects may fit candidate seeking dynamic roles.",
     "user_id": 1,
     "search_date": "2026-10-13"
   }
