@@ -132,3 +132,53 @@ CREATE TABLE IF NOT EXISTS interviewer_project_members (
   FOREIGN KEY (project_id) REFERENCES interviewer_projects(id) ON DELETE CASCADE,
   FOREIGN KEY (user_id)    REFERENCES users(id) ON DELETE CASCADE
 );
+
+-- Auto-apply tables
+CREATE TABLE IF NOT EXISTS user_apply_settings (
+  user_id                 INTEGER PRIMARY KEY,
+  portal_password_enc     TEXT,
+  auto_submit             INTEGER NOT NULL DEFAULT 1,
+  easy_apply_daily_cap    INTEGER NOT NULL DEFAULT 5,
+  defaults                TEXT    NOT NULL DEFAULT '{}',
+  gmail_refresh_token_enc TEXT,
+  gmail_email             TEXT,
+  updated_at              DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS user_site_sessions (
+  user_id    INTEGER NOT NULL,
+  site       TEXT    NOT NULL,
+  state_enc  TEXT    NOT NULL,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (user_id, site),
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS ats_accounts (
+  user_id    INTEGER NOT NULL,
+  tenant     TEXT    NOT NULL,
+  email      TEXT    NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (user_id, tenant),
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS application_runs (
+  id               TEXT    PRIMARY KEY,
+  user_id          INTEGER NOT NULL,
+  pipeline_card_id INTEGER NOT NULL,
+  kind             TEXT    NOT NULL DEFAULT 'apply',
+  status           TEXT    NOT NULL DEFAULT 'queued',
+  site             TEXT,
+  channel          TEXT,
+  apply_url        TEXT,
+  auto_submitted   INTEGER NOT NULL DEFAULT 0,
+  message          TEXT,
+  fields           TEXT    NOT NULL DEFAULT '[]',
+  screenshot       BLOB,
+  started_at       DATETIME DEFAULT CURRENT_TIMESTAMP,
+  finished_at      DATETIME,
+  FOREIGN KEY (user_id)          REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (pipeline_card_id) REFERENCES pipeline_cards(id) ON DELETE CASCADE
+);

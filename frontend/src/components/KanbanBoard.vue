@@ -3,7 +3,10 @@ import { reactive, watch, ref, onMounted, onUnmounted } from 'vue'
 import KanbanColumn from './KanbanColumn.vue'
 import { usePipelineStore, STAGES, type PipelineCard, type Stage } from '@/stores/pipeline'
 
-const emit = defineEmits<{ (e: 'card-click', card: PipelineCard): void }>()
+const emit = defineEmits<{
+  (e: 'card-click', card: PipelineCard): void
+  (e: 'card-apply', card: PipelineCard): void
+}>()
 const store = usePipelineStore()
 
 const stageLists = reactive<Record<Stage, PipelineCard[]>>({
@@ -91,6 +94,7 @@ const STAGE_DOT: Record<string, string> = {
         :stage="stage"
         v-model:cards="stageLists[stage.key]"
         @card-click="emit('card-click', $event)"
+        @card-apply="emit('card-apply', $event)"
         @drop="onDrop"
       />
     </div>

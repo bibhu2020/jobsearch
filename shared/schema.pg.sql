@@ -125,3 +125,49 @@ CREATE TABLE IF NOT EXISTS interviewer_project_members (
   invited_at TIMESTAMPTZ DEFAULT NOW(),
   PRIMARY KEY (project_id, user_id)
 );
+
+-- Auto-apply tables
+CREATE TABLE IF NOT EXISTS user_apply_settings (
+  user_id                 INTEGER PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+  portal_password_enc     TEXT,                          -- AES-256-GCM
+  auto_submit             BOOLEAN NOT NULL DEFAULT TRUE,
+  easy_apply_daily_cap    INTEGER NOT NULL DEFAULT 5,
+  defaults                TEXT    NOT NULL DEFAULT '{}', -- JSON application defaults
+  gmail_refresh_token_enc TEXT,
+  gmail_email             TEXT,
+  updated_at              TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS user_site_sessions (
+  user_id    INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  site       TEXT    NOT NULL,                           -- linkedin | indeed
+  state_enc  TEXT    NOT NULL,                           -- Playwright storage_state, encrypted
+  updated_at TIMESTAMPTZ DEFAULT NOW(),
+  PRIMARY KEY (user_id, site)
+);
+
+CREATE TABLE IF NOT EXISTS ats_accounts (
+  user_id    INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  tenant     TEXT    NOT NULL,                           -- e.g. acme.wd5.myworkdayjobs.com
+  email      TEXT    NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  PRIMARY KEY (user_id, tenant)
+);
+
+CREATE TABLE IF NOT EXISTS application_runs (
+  id               TEXT    PRIMARY KEY,                  -- uuid
+  user_id          INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  pipeline_card_id INTEGER NOT NULL REFERENCES pipeline_cards(id) ON DELETE CASCADE,
+  kind             TEXT    NOT NULL DEFAULT 'apply',     -- apply | login
+  status           TEXT    NOT NULL DEFAULT 'queued',    -- queued|running|needs_input|awaiting_review|submitting|submitted|failed|cancelled
+  site             TEXT,
+  channel          TEXT,                                 -- ats | easy_apply
+  apply_url        TEXT,
+  auto_submitted   BOOLEAN NOT NULL DEFAULT FALSE,
+  message          TEXT,
+  fields           TEXT    NOT NULL DEFAULT '[]',        -- JSON FieldRecord[]
+  screenshot       BYTEA,                                -- confirmation JPEG (kept in the DB: personal data)
+  started_at       TIMESTAMPTZ DEFAULT NOW(),
+  finished_at      TIMESTAMPTZ
+);
+CREATE INDEX IF NOT EXISTS idx_application_runs_user ON application_runs(user_id, started_at DESC);
