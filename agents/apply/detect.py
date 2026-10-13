@@ -5,7 +5,8 @@ from urllib.parse import urlparse, parse_qs
 CONFIRMATION_RE = re.compile(
     r"thank(s| you)[^.]{0,40}\b(for )?(applying|your application|submitting|your interest)"
     r"|application (has been |was )?(submitted|received)"
-    r"|we('ve| have) received your application",
+    r"|we('ve| have) received your application"
+    r"|your application was sent|application sent",
     re.I,
 )
 ALREADY_APPLIED_RE = re.compile(r"(you('ve| have)|already) (already )?applied", re.I)
@@ -31,6 +32,10 @@ def site_for_url(url: str) -> str | None:
         return "linkedin"
     if host.endswith("indeed.com"):
         return "indeed"
+    if host.endswith("dice.com"):
+        return "dice"
+    if host.endswith("remote100k.com"):
+        return "remote100k"
     if "myworkdayjobs.com" in host or "myworkdaysite.com" in host:
         return "workday"
     if "icims.com" in host:

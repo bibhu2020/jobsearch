@@ -25,6 +25,15 @@ ALLOWED_ACTIONS = {
 }
 
 
+def merged_sessions(sessions: dict | None) -> dict | None:
+    """Combine the saved per-site storage states (LinkedIn, Dice…) into one for the browser context."""
+    cookies, origins = [], []
+    for state in (sessions or {}).values():
+        cookies += state.get("cookies", [])
+        origins += state.get("origins", [])
+    return {"cookies": cookies, "origins": origins} if cookies or origins else None
+
+
 class RunFailed(Exception):
     """Ends the run as `failed` with a user-facing message."""
 
@@ -42,6 +51,7 @@ class Run:
         self.req = req
         self.id: str = req["run_id"]
         self.kind: str = req.get("kind", "apply")
+        self.login_site: str | None = req.get("site")  # for kind == "login"
         self.status = "queued"
         self.site: str | None = None
         self.channel: str | None = None
@@ -54,7 +64,8 @@ class Run:
         self.new_accounts: list[str] = []
         self.session_updates: dict = {}
         self.screenshot: bytes | None = None
-        self.page = None
+        self.page = None          # the page handlers drive
+        self.context = None       # browser context (holds every tab / popup)
         self.task: asyncio.Task | None = None
         self.actions: asyncio.Queue[str] = asyncio.Queue()
         self.started_epoch = time.time()
@@ -65,6 +76,14 @@ class Run:
         self.needs: dict | None = None          # e.g. {"kind": "verification", "email": ...}
         self.provided: str | None = None        # value typed by the user for `needs`
         self.gmail_invalid = False              # tell the gateway to clear the stored Gmail token
+
+    def view_page(self):
+        """The tab the user sees and controls: the newest open one (popups such as "Sign in with Google")."""
+        if self.context:
+            open_pages = [p for p in self.context.pages if not p.is_closed()]
+            if open_pages:
+                return open_pages[-1]
+        return self.page
 
     def note(self, msg: str) -> None:
         self.step = msg
@@ -144,8 +163,9 @@ class RunManager:
     async def _screenshot_loop(self, run: Run) -> None:
         while not run.stop_shots:
             try:
-                if run.page and not run.page.is_closed():
-                    run.screenshot = await run.page.screenshot(type="jpeg", quality=55, timeout=5000)
+                page = run.view_page()
+                if page and not page.is_closed():
+                    run.screenshot = await page.screenshot(type="jpeg", quality=55, timeout=5000)
             except Exception:
                 pass
             await asyncio.sleep(1)
@@ -162,8 +182,10 @@ class RunManager:
                 async with async_playwright() as p:
                     browser = await p.chromium.launch(headless=HEADLESS)
                     try:
-                        context = await browser.new_context(viewport=VIEWPORT, locale="en-US")
-                        run.page = await context.new_page()
+                        run.context = await browser.new_context(
+                            viewport=VIEWPORT, locale="en-US", storage_state=merged_sessions(run.req.get("sessions")),
+                        )
+                        run.page = await run.context.new_page()
                         shots = asyncio.create_task(self._screenshot_loop(run))
                         await run_apply(run)
                     finally:
@@ -175,8 +197,9 @@ class RunManager:
                             except (asyncio.TimeoutError, asyncio.CancelledError):
                                 pass
                         try:
-                            if run.page and not run.page.is_closed():
-                                run.screenshot = await run.page.screenshot(type="jpeg", quality=70, timeout=5000)
+                            page = run.view_page()
+                            if page and not page.is_closed():
+                                run.screenshot = await page.screenshot(type="jpeg", quality=70, timeout=5000)
                         except Exception:
                             pass
                         await browser.close()
@@ -198,7 +221,7 @@ class RunManager:
                 run.status, run.message = "failed", run.message or "Run ended unexpectedly"
             run.note(f"Finished: {run.status}{' — ' + run.message if run.message else ''}")
             run.finished_at = time.time()
-            run.page = None
+            run.page = run.context = None
             run.req = {}  # drop secrets as soon as the run ends
             shutil.rmtree(run.workdir, ignore_errors=True)
 

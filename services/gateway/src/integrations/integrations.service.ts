@@ -2,6 +2,7 @@ import { Injectable, ServiceUnavailableException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import axios from 'axios';
 import { ApplySettingsService } from '../apply/apply-settings.service';
+import { exchangeCode, frontendBase, googleAuthUrl, googleConfigured, readIdToken } from '../auth/google-oauth';
 
 const GMAIL_SCOPES = ['https://www.googleapis.com/auth/gmail.readonly', 'openid', 'email'];
 
@@ -9,34 +10,28 @@ const GMAIL_SCOPES = ['https://www.googleapis.com/auth/gmail.readonly', 'openid'
 export class IntegrationsService {
   constructor(private jwt: JwtService, private settings: ApplySettingsService) {}
 
-  private get clientId() { return process.env.GOOGLE_OAUTH_CLIENT_ID; }
-  private get clientSecret() { return process.env.GOOGLE_OAUTH_CLIENT_SECRET; }
   private get redirectUri() {
     return process.env.GOOGLE_OAUTH_REDIRECT_URI || 'http://localhost:3000/api/integrations/gmail/callback';
   }
 
-  /** Where to send the browser after the OAuth round-trip. */
   frontendBase(): string {
-    if (process.env.NODE_ENV === 'production') return '';
-    return process.env.FRONTEND_URL || 'http://localhost:5173';
+    return frontendBase();
   }
 
-  gmailAuthUrl(userId: number): string {
-    if (!this.clientId || !this.clientSecret) {
+  gmailAuthUrl(userId: number, email?: string): string {
+    if (!googleConfigured()) {
       throw new ServiceUnavailableException('Gmail connection is not configured on this server');
     }
     const state = this.jwt.sign({ sub: userId, purpose: 'gmail' }, { expiresIn: '10m' });
-    const params = new URLSearchParams({
-      client_id: this.clientId,
+    return googleAuthUrl({
       redirect_uri: this.redirectUri,
-      response_type: 'code',
       scope: GMAIL_SCOPES.join(' '),
       access_type: 'offline',
       prompt: 'consent',
       include_granted_scopes: 'true',
+      ...(email ? { login_hint: email } : {}),
       state,
     });
-    return `https://accounts.google.com/o/oauth2/v2/auth?${params}`;
   }
 
   async gmailCallback(code: string, state: string): Promise<boolean> {
@@ -49,18 +44,9 @@ export class IntegrationsService {
       return false;
     }
     try {
-      const { data } = await axios.post(
-        'https://oauth2.googleapis.com/token',
-        new URLSearchParams({
-          code,
-          client_id: this.clientId!,
-          client_secret: this.clientSecret!,
-          redirect_uri: this.redirectUri,
-          grant_type: 'authorization_code',
-        }),
-      );
+      const data = await exchangeCode(code, this.redirectUri);
       if (!data.refresh_token) return false;
-      const email = data.id_token ? this.emailFromIdToken(data.id_token) : null;
+      const email = data.id_token ? readIdToken(data.id_token).email : null;
       await this.settings.setGmail(userId, data.refresh_token, email);
       return true;
     } catch (err: any) {
@@ -75,15 +61,5 @@ export class IntegrationsService {
       axios.post('https://oauth2.googleapis.com/revoke', new URLSearchParams({ token })).catch(() => {});
     }
     return { disconnected: true };
-  }
-
-  /** id_token comes straight from Google's token endpoint over TLS, so decoding without verifying is fine. */
-  private emailFromIdToken(idToken: string): string | null {
-    try {
-      const payload = JSON.parse(Buffer.from(idToken.split('.')[1], 'base64url').toString('utf8'));
-      return payload.email ?? null;
-    } catch {
-      return null;
-    }
   }
 }

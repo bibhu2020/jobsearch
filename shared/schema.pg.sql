@@ -78,6 +78,10 @@ CREATE TABLE IF NOT EXISTS job_suggestions (
 -- Interviewer mode tables
 ALTER TABLE users ADD COLUMN IF NOT EXISTS mode TEXT NOT NULL DEFAULT 'candidate';
 
+-- Google sign-in (the only login method); existing users are linked by email on first sign-in
+ALTER TABLE users ADD COLUMN IF NOT EXISTS google_sub TEXT;
+CREATE UNIQUE INDEX IF NOT EXISTS idx_users_google_sub ON users(google_sub);
+
 CREATE TABLE IF NOT EXISTS interviewer_projects (
   id          SERIAL PRIMARY KEY,
   user_id     INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -171,3 +175,5 @@ CREATE TABLE IF NOT EXISTS application_runs (
   finished_at      TIMESTAMPTZ
 );
 CREATE INDEX IF NOT EXISTS idx_application_runs_user ON application_runs(user_id, started_at DESC);
+-- "Connect LinkedIn/Dice" runs (kind = 'login') aren't tied to a job card
+ALTER TABLE application_runs ALTER COLUMN pipeline_card_id DROP NOT NULL;

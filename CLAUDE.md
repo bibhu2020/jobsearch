@@ -54,7 +54,7 @@ SQLite (shared/job_tracker.db) ← local Python agent dev only
 | `agents/` | Python FastAPI | 8000 | All AI work: profile analysis, generation, PDF, search |
 
 ### Gateway modules (`services/gateway/src/`)
-- `auth/` — JWT register/login (bcryptjs + passport-jwt)
+- `auth/` — Google-only sign-in (OAuth, `openid email profile`): `GET /api/auth/google` → Google → `/api/auth/google/callback` → app JWT (passport-jwt). Users are found by `users.google_sub`, or linked by verified email on first sign-in. No password login.
 - `profile/` — Profile CRUD + resume upload + proxy to `/profile/analyze`
 - `jobs/` — Add job by URL (cheerio scrape) or text (agents extract)
 - `pipeline/` — Kanban card CRUD + stage/position moves
@@ -65,7 +65,7 @@ SQLite (shared/job_tracker.db) ← local Python agent dev only
 - `integrations/` — Gmail OAuth (read-only) for email verification
 - `crypto/` — AES-256-GCM for stored secrets (`CREDENTIALS_ENC_KEY`)
 
-All routes prefixed with `/api`. Protected by `JwtAuthGuard` except `/api/auth/*`.
+All routes prefixed with `/api`. Protected by `JwtAuthGuard` except `/api/auth/*` and the Gmail OAuth callback.
 
 ### Python agents (`agents/`)
 - `main.py` — FastAPI app; registers all routers
@@ -75,7 +75,7 @@ All routes prefixed with `/api`. Protected by `JwtAuthGuard` except `/api/auth/*
 - `search_agent.py` — Orchestrates 9 parallel sources + OpenAI scoring (only returns `match_score >= 70`)
 - `jobs_agent.py` — Extracts structured job info from raw content
 - `sources/` — 9 active sources: remotive, remoteok, weworkremotely, linkedin, indeed, dice, builtin, remote100k, remoterocketship (wellfound dropped — hard-blocked by anti-bot protection)
-- `apply/` — Auto-apply browser agent (Playwright): run manager with live screenshots + take-over input, form extraction/filling, defaults-then-LLM answering, auto-submit gate, ATS handlers (Greenhouse/Lever/Ashby). Offline tests: `PYTHONPATH=. python3 -m agents.apply.selftest`
+- `apply/` — Auto-apply browser agent (Playwright): run manager with live screenshots + take-over input, form extraction/filling, defaults-then-LLM answering, auto-submit gate, ATS handlers (Greenhouse/Lever/Ashby), multi-step wizards (LinkedIn Easy Apply, Dice) using connect-once site sessions (`sessions.py`), and job-board link-following (remote100k etc. → employer form). Offline tests: `PYTHONPATH=. python3 -m agents.apply.selftest`
 - `run_search.py` — Standalone script for GitHub Actions; reads all config from env vars, writes `search_results/{user_id}/YYYY-MM-DD.json`
 
 ### Frontend (`frontend/src/`)

@@ -8,7 +8,7 @@ from google import genai as google_genai
 router = APIRouter()
 
 PRIMARY_PROVIDER = "google"
-GOOGLE_MODEL = os.getenv("GOOGLE_AI_MODEL", "gemma-4")
+GOOGLE_MODEL = os.getenv("GOOGLE_AI_MODEL") or "gemini-2.5-flash"
 OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o")
 OPENROUTER_MODEL = os.getenv("OPENROUTER_MODEL", "openai/gpt-4o-mini")
 

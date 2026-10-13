@@ -14,6 +14,7 @@ export const TERMINAL_STATUSES = ['submitted', 'failed', 'cancelled'];
 const CONTROL_ACTIONS = ['resume', 'submit', 'cancel', 'mark-applied', 'finish-login'];
 const POLL_INTERVAL_MS = 3000;
 const EASY_APPLY_SPACING_MIN = 3;
+export const SESSION_SITES = ['linkedin', 'dice'];
 const MAX_POLL_FAILURES = 40; // ~2 min of the agents service being unreachable
 
 // Abuse / capacity limits. Every user's browser runs share one container and one outbound IP.
@@ -163,6 +164,56 @@ export class ApplyService implements OnApplicationBootstrap, OnModuleDestroy {
         HttpStatus.TOO_MANY_REQUESTS,
       );
     }
+  }
+
+  /** Connect a job site once: the user signs in through the live view and the session is saved encrypted. */
+  async startSiteLogin(userId: number, site: string) {
+    if (!SESSION_SITES.includes(site)) throw new BadRequestException('Unsupported site');
+    const active = await this.getActiveRun(userId);
+    if (active?.kind === 'apply') return { runId: active.id, resumed: true };
+    if (active) {
+      // An unfinished sign-in (any site) is replaced, so "Connect Dice" never reopens a stuck LinkedIn one.
+      axios.post(`${this.agentsUrl}/apply/runs/${active.id}/cancel`, {}, { timeout: 5000 }).catch(() => {});
+      this.stopTracking(active.id);
+      await this.finish(active.id, 'cancelled', 'Replaced by a new sign-in');
+    }
+    if (this.starting.has(userId)) throw new BadRequestException('Already starting');
+    this.starting.add(userId);
+    try {
+      const pending = await this.db.get<{ n: number }>(
+        `SELECT COUNT(*)::int AS n FROM application_runs WHERE status NOT IN ('submitted', 'failed', 'cancelled')`,
+      );
+      if ((pending?.n ?? 0) >= MAX_PENDING_RUNS) {
+        throw new HttpException('The apply service is busy — please try again in a few minutes.', HttpStatus.TOO_MANY_REQUESTS);
+      }
+      const runId = randomUUID();
+      await this.db.run(
+        'INSERT INTO application_runs (id, user_id, pipeline_card_id, kind, status, site) VALUES (?, ?, NULL, ?, ?, ?)',
+        [runId, userId, 'login', 'queued', site],
+      );
+      const existing = await this.db.get<{ state_enc: string }>(
+        'SELECT state_enc FROM user_site_sessions WHERE user_id = ? AND site = ?', [userId, site],
+      );
+      const state = this.tryDecrypt(existing?.state_enc ?? null);
+      try {
+        await axios.post(`${this.agentsUrl}/apply/runs`, {
+          run_id: runId, kind: 'login', site,
+          sessions: state ? { [site]: JSON.parse(state) } : {},
+        }, { timeout: 15000 });
+      } catch (err: any) {
+        await this.finish(runId, 'failed', `Could not reach the apply agent: ${err.message}`);
+        throw new BadGatewayException('Apply agent is unavailable');
+      }
+      this.track(userId, null, runId);
+      return { runId, resumed: false };
+    } finally {
+      this.starting.delete(userId);
+    }
+  }
+
+  async disconnectSite(userId: number, site: string) {
+    await this.db.run('DELETE FROM user_site_sessions WHERE user_id = ? AND site = ?', [userId, site]);
+    return { disconnected: true };
   }
 
   private async startLocked(userId: number, cardId: number) {
@@ -363,7 +414,7 @@ export class ApplyService implements OnApplicationBootstrap, OnModuleDestroy {
 
   // ── Tracking ─────────────────────────────────────────────────────────────────
 
-  private track(userId: number, cardId: number, runId: string) {
+  private track(userId: number, cardId: number | null, runId: string) {
     let busy = false;
     const timer = setInterval(async () => {
       if (busy) return;
@@ -385,8 +436,8 @@ export class ApplyService implements OnApplicationBootstrap, OnModuleDestroy {
     this.trackers.delete(runId);
   }
 
-  private async poll(userId: number, cardId: number, runId: string) {
-    const exists = await this.db.get<any>('SELECT id FROM application_runs WHERE id = ?', [runId]);
+  private async poll(userId: number, cardId: number | null, runId: string) {
+    const exists = await this.db.get<{ id: string; kind: string }>('SELECT id, kind FROM application_runs WHERE id = ?', [runId]);
     if (!exists) {
       // Card (and its runs) deleted mid-run.
       this.stopTracking(runId);
@@ -445,7 +496,7 @@ export class ApplyService implements OnApplicationBootstrap, OnModuleDestroy {
     this.stopTracking(runId);
     await this.db.run('UPDATE application_runs SET finished_at = NOW() WHERE id = ?', [runId]);
 
-    if (data.status === 'submitted') {
+    if (data.status === 'submitted' && exists.kind === 'apply' && cardId !== null) {
       await this.moveToApplied(userId, cardId);
       await this.saveConfirmationScreenshot(runId);
     }

@@ -8,6 +8,6 @@ import { AuthModule } from '../auth/auth.module';
   imports: [AuthModule],
   controllers: [ApplyController],
   providers: [ApplyService, ApplySettingsService],
-  exports: [ApplySettingsService],
+  exports: [ApplySettingsService, ApplyService],
 })
 export class ApplyModule {}

@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useApplyStore, type ApplicationDefaults } from '@/stores/apply'
+import { useApplyStore, SESSION_SITE_LABELS, type ApplicationDefaults, type SessionSite } from '@/stores/apply'
+import ApplyLiveModal from '@/components/ApplyLiveModal.vue'
 
 const store = useApplyStore()
 const route = useRoute()
@@ -13,6 +14,22 @@ const defaultsMsg = ref('')
 const errorMsg = ref('')
 const gmailMsg = ref('')
 const saving = ref(false)
+const connecting = ref<SessionSite | null>(null)
+const SITES = Object.keys(SESSION_SITE_LABELS) as SessionSite[]
+
+async function saveCap(value: number) {
+  errorMsg.value = ''
+  try {
+    await store.saveSettings({ easyApplyDailyCap: value })
+  } catch (err) {
+    errorMsg.value = errorText(err)
+  }
+}
+
+async function onConnectClosed() {
+  connecting.value = null
+  await store.fetchSettings()
+}
 
 const DECLINE = 'Decline to answer'
 const form = reactive<Required<Omit<ApplicationDefaults, 'workAuthorizedCountries' | 'requiresSponsorship' | 'willingToRelocate' | 'customAnswers'>> & {
@@ -206,6 +223,39 @@ async function connectGmail() {
         <p v-if="gmailMsg" class="text-xs mt-1.5" :class="gmailMsg.includes('failed') ? 'text-red-400' : 'text-emerald-400'">{{ gmailMsg }}</p>
       </div>
 
+      <!-- Job site accounts (LinkedIn, Dice) -->
+      <div>
+        <label :class="labelCls">Job site accounts</label>
+        <p class="text-xs text-slate-500 mb-3">
+          Needed for LinkedIn Easy Apply and Dice. You sign in once in a live browser view; only the signed-in session is kept (encrypted) — never your password.
+          <span class="text-amber-400/90">LinkedIn and Dice don't allow automated applying, so your account could be restricted. Applications on them are capped per day.</span>
+        </p>
+        <div class="space-y-2">
+          <div v-for="site in SITES" :key="site" class="flex flex-wrap items-center gap-3 rounded-xl border border-slate-700/60 px-3 py-2">
+            <span class="text-sm font-medium text-slate-100 w-20">{{ SESSION_SITE_LABELS[site] }}</span>
+            <span v-if="store.settings.sites[site]?.connected" class="text-xs text-emerald-400">
+              ✓ Connected<span class="text-slate-500"> · {{ new Date(store.settings.sites[site].updatedAt!).toLocaleDateString() }}</span>
+            </span>
+            <span v-else class="text-xs text-slate-500">Not connected</span>
+            <div class="ml-auto flex gap-2">
+              <button @click="connecting = site" :disabled="!store.settings.encryptionConfigured"
+                class="px-3 py-1.5 text-xs border border-slate-600 rounded-lg text-slate-200 hover:bg-slate-700 transition disabled:opacity-40">
+                {{ store.settings.sites[site]?.connected ? 'Reconnect' : 'Connect' }}
+              </button>
+              <button v-if="store.settings.sites[site]?.connected" @click="store.disconnectSite(site)"
+                class="px-2 py-1.5 text-xs text-red-400 hover:text-red-300">Disconnect</button>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 mt-3">
+          <span class="text-xs text-slate-400">LinkedIn Easy Apply + Dice applications per day:</span>
+          <select :value="store.settings.easyApplyDailyCap" @change="saveCap(Number(($event.target as HTMLSelectElement).value))"
+            class="rounded-lg border-slate-600 bg-slate-700/50 text-slate-100 text-xs py-1 focus:border-indigo-500 focus:ring-indigo-500">
+            <option v-for="n in [0, 1, 2, 3, 4, 5]" :key="n" :value="n">{{ n === 0 ? 'Off' : n }}</option>
+          </select>
+        </div>
+      </div>
+
       <!-- Application defaults -->
       <form class="space-y-4" @submit.prevent="saveDefaults">
         <div>
@@ -277,4 +327,6 @@ async function connectGmail() {
       </form>
     </div>
   </section>
+
+  <ApplyLiveModal v-if="connecting" :site="connecting" @close="onConnectClosed" @done="store.fetchSettings()" />
 </template>

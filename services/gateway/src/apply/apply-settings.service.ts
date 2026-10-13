@@ -51,7 +51,7 @@ export class ApplySettingsService {
       easyApplyDailyCap: row?.easy_apply_daily_cap ?? EASY_APPLY_MAX_CAP,
       defaults: row?.defaults ? JSON.parse(row.defaults) : {},
       gmail: { connected: !!row?.gmail_refresh_token_enc, email: row?.gmail_email ?? null },
-      sites: { linkedin: siteStatus('linkedin'), indeed: siteStatus('indeed') },
+      sites: { linkedin: siteStatus('linkedin'), dice: siteStatus('dice') },
     };
   }
 

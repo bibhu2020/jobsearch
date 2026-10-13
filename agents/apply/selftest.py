@@ -3,7 +3,10 @@ import asyncio
 import shutil
 
 from agents.apply import detect, gate, gmail, verification
-from agents.apply.manager import Run
+from agents.apply.handlers.dice import job_id as dice_job_id
+from agents.apply.handlers.jobboard import pick_apply_link
+from agents.apply.handlers.linkedin import canonical_job_url
+from agents.apply.manager import Run, merged_sessions
 from agents.apply.answers import apply_options, match_option, rule_answer
 
 DEFAULTS = {
@@ -147,8 +150,36 @@ def check_verification():
     asyncio.run(scenarios())
 
 
+def check_job_sites():
+    assert detect.site_for_url("https://www.dice.com/job-detail/1102f66c-d24c-4aa8-97a9-c31a0a2073ee") == "dice"
+    assert detect.site_for_url("https://remote100k.com/remote-job/engine-vp-finance") == "remote100k"
+    # remote100k: follow "Apply for This Job", never their paid "Auto Apply" upsell
+    page = "https://remote100k.com/remote-job/engine-vp-finance"
+    links = [
+        {"text": "Auto Apply", "href": "https://remote100k.com/jobcopilot?ref=nav"},
+        {"text": "Auto Apply with AI 💫", "href": "https://remote100k.com/jobcopilot?ref=jobpage"},
+        {"text": "Apply for This Job", "href": "https://job-boards.greenhouse.io/engine/jobs/8017188003?ref=remote100k"},
+        {"text": "Back to apply", "href": page + "#apply-top"},
+    ]
+    assert pick_apply_link(links, page) == "https://job-boards.greenhouse.io/engine/jobs/8017188003?ref=remote100k"
+    assert pick_apply_link([{"text": "Apply for This Job", "href": "https://acme.wd5.myworkdayjobs.com/x"},
+                            {"text": "Apply now", "href": "https://jobs.lever.co/acme/1"}], page) == "https://jobs.lever.co/acme/1"
+    assert pick_apply_link([{"text": "Sign up to apply", "href": "https://other.com/signup"}], page) is None
+    # LinkedIn job URLs in their many shapes → one canonical job page
+    assert canonical_job_url("https://www.linkedin.com/jobs/view/azure-solution-architect-at-tqa-4465734611?trk=x") == \
+        "https://www.linkedin.com/jobs/view/4465734611/"
+    assert canonical_job_url("https://www.linkedin.com/jobs/search/?currentJobId=4465734611&keywords=a") == \
+        "https://www.linkedin.com/jobs/view/4465734611/"
+    assert dice_job_id("https://www.dice.com/job-detail/1102f66c-d24c-4aa8-97a9-c31a0a2073ee?x=1") == "1102f66c-d24c-4aa8-97a9-c31a0a2073ee"
+    # Saved sessions from several sites load into one browser
+    merged = merged_sessions({"linkedin": {"cookies": [{"name": "li_at"}], "origins": []},
+                              "dice": {"cookies": [{"name": "d"}], "origins": [{"origin": "https://www.dice.com"}]}})
+    assert [c["name"] for c in merged["cookies"]] == ["li_at", "d"] and len(merged["origins"]) == 1
+    assert merged_sessions({}) is None
+
+
 if __name__ == "__main__":
-    for check in (check_rules, check_options, check_gate, check_detect, check_gmail, check_verification):
+    for check in (check_rules, check_options, check_gate, check_detect, check_gmail, check_verification, check_job_sites):
         check()
         print(f"✓ {check.__name__}")
     print("All auto-apply self-tests passed")

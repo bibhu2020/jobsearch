@@ -8,6 +8,9 @@ export type RunStatus =
 
 export const TERMINAL: RunStatus[] = ['submitted', 'failed', 'cancelled']
 
+export type SessionSite = 'linkedin' | 'dice'
+export const SESSION_SITE_LABELS: Record<SessionSite, string> = { linkedin: 'LinkedIn', dice: 'Dice' }
+
 export interface FieldRecord {
   id: string
   label: string
@@ -21,7 +24,8 @@ export interface FieldRecord {
 
 export interface ApplicationRun {
   id: string
-  pipeline_card_id: number
+  kind: 'apply' | 'login'
+  pipeline_card_id: number | null
   status: RunStatus
   site: string | null
   channel: string | null
@@ -34,7 +38,7 @@ export interface ApplicationRun {
   finished_at: string | null
   live?: {
     screenshot: string | null; log: string[]; step: string
-    needs?: { kind: 'verification'; email: string; sender: string } | null
+    needs?: { kind: 'verification'; email: string; sender: string } | { kind: 'signin'; site: string; label: string } | null
   } | null
 }
 
@@ -59,7 +63,7 @@ export interface ApplySettings {
   easyApplyDailyCap: number
   defaults: ApplicationDefaults
   gmail: { connected: boolean; email: string | null }
-  sites: Record<'linkedin' | 'indeed', { connected: boolean; updatedAt: string | null }>
+  sites: Record<SessionSite, { connected: boolean; updatedAt: string | null }>
 }
 
 export const useApplyStore = defineStore('apply', () => {
@@ -104,7 +108,17 @@ export const useApplyStore = defineStore('apply', () => {
     await api.post(`/apply/runs/${runId}/verification`, { value })
   }
 
-  async function control(runId: string, action: 'resume' | 'submit' | 'cancel' | 'mark-applied') {
+  async function connectSite(site: SessionSite): Promise<string> {
+    const { data } = await api.post(`/integrations/sites/${site}/connect`)
+    return data.runId
+  }
+
+  async function disconnectSite(site: SessionSite) {
+    await api.delete(`/integrations/sites/${site}`)
+    await fetchSettings()
+  }
+
+  async function control(runId: string, action: 'resume' | 'submit' | 'cancel' | 'mark-applied' | 'finish-login') {
     await api.post(`/apply/runs/${runId}/${action}`)
   }
 
@@ -122,5 +136,5 @@ export const useApplyStore = defineStore('apply', () => {
     await fetchSettings()
   }
 
-  return { settings, fetchSettings, saveSettings, start, getRun, cardRuns, screenshotUrl, provideVerification, control, input, connectGmail, disconnectGmail }
+  return { settings, fetchSettings, saveSettings, start, getRun, cardRuns, screenshotUrl, provideVerification, connectSite, disconnectSite, control, input, connectGmail, disconnectGmail }
 })

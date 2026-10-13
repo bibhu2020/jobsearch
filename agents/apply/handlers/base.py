@@ -41,6 +41,7 @@ class SinglePageFormHandler:
     confirmation_url_markers: tuple[str, ...] = ()
     submit_selectors = ['button[type="submit"]', 'input[type="submit"]']
     submit_text = re.compile(r"submit( application)?|send application|apply", re.I)
+    root_selector: str | None = None   # limit form reading to this container (e.g. a modal dialog)
 
     def __init__(self, run: Run):
         self.run = run
@@ -119,7 +120,7 @@ class SinglePageFormHandler:
         """Extract → answer → fill, repeated so conditional questions that appear get answered too."""
         known = {f["id"] for f in self.run.fields}
         for _ in range(MAX_FILL_PASSES):
-            new = [f for f in await forms.extract(frame) if f["id"] not in known]
+            new = [f for f in await forms.extract(frame, self.root_selector) if f["id"] not in known]
             if not new:
                 break
             self.run.note(f"Answering {len(new)} question(s)")
@@ -177,7 +178,7 @@ class SinglePageFormHandler:
     async def review_gate(self, frame) -> None:
         while True:
             captcha = await detect.visible_captcha(self.page)
-            ok, reasons = gate.decide(self.run.fields, self.auto_submit, captcha, await forms.form_errors(frame))
+            ok, reasons = gate.decide(self.run.fields, self.auto_submit, captcha, await forms.form_errors(frame, self.root_selector))
             if ok:
                 self.run.auto_submitted = True
                 return
@@ -223,7 +224,7 @@ class SinglePageFormHandler:
                     await self.check_done(frame)
                     break  # re-click submit
             else:
-                errors = await forms.form_errors(frame)
+                errors = await forms.form_errors(frame, self.root_selector)
                 if not errors:
                     raise RunFailed("Submitted, but no confirmation was detected — please check the job site")
                 await run.wait_for_user("awaiting_review", "The site reported problems: " + "; ".join(errors[:3]))

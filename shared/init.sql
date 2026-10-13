@@ -167,7 +167,7 @@ CREATE TABLE IF NOT EXISTS ats_accounts (
 CREATE TABLE IF NOT EXISTS application_runs (
   id               TEXT    PRIMARY KEY,
   user_id          INTEGER NOT NULL,
-  pipeline_card_id INTEGER NOT NULL,
+  pipeline_card_id INTEGER,
   kind             TEXT    NOT NULL DEFAULT 'apply',
   status           TEXT    NOT NULL DEFAULT 'queued',
   site             TEXT,

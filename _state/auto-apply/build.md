@@ -29,9 +29,21 @@
 - Self-tests cover the verification fallback: Gmail hit, no Gmail → typed code, expired Gmail → flagged + pasted link, manual completion.
 - Not yet validated: live Greenhouse / Lever / Ashby postings (do with auto-submit OFF and cancel), real Gmail OAuth round-trip, CAPTCHA hand-off.
 
+## LinkedIn, Dice, remote100k (2026-10-13)
+- Connect once: Profile → Auto-Apply → Job site accounts → Connect opens the live view on the site's login page; the
+  user signs in (any 2FA/codes), clicks "I'm signed in"; the agent verifies on a members-only page and saves only that
+  site's cookies (encrypted, `user_site_sessions`). Expired session mid-run → pause to sign in again in place.
+- LinkedIn: Easy Apply via the multi-step engine (`handlers/multistep.py`, dialog-scoped); "Apply" (external) →
+  follows the new tab to the employer site and continues with that site's handler.
+- Dice: `/job-applications/{id}/start-apply` wizard, or the employer URL when Dice redirects there.
+- remote100k (and any job board): follows "Apply for This Job"-style links, skipping upsells, preferring fillable ATS.
+- LinkedIn Easy Apply + Dice count as `easy_apply`: per-user cap (0–5/day, Profile), 3 min spacing, global cap.
+- Validated with local fake pages (board → Greenhouse form; 3-step modal with an unanswerable question → pause →
+  user answer → submit; login: false "I'm signed in" rejected, real sign-in captured, session reused).
+  Not yet validated on the real LinkedIn/Dice logged-in forms — first runs should use auto-submit OFF.
+
 ## Next phases
-**Prerequisite for P3 (deferred by product owner, 2026-10-13):** signup does not verify that the user owns their email.
-P3 creates job-site accounts with the login email, so add email verification at signup (or require the connected
-Gmail address to match the login email) before enabling account creation.
+**Resolved (2026-10-13):** app sign-in is now Google-only, so the login email is verified by Google before
+P3 creates job-site accounts with it.
 
 P2 LinkedIn/Indeed (sessions, Easy Apply, cap UI), P3 account sites (Workday, iCIMS/Taleo + Gmail verification), P4 generic LLM handler.

@@ -9,6 +9,7 @@ router = APIRouter()
 class StartRequest(BaseModel):
     run_id: str
     kind: str = "apply"
+    site: str | None = None       # kind == "login": which site to connect
     job: dict = {}
     applicant: dict = {}
     files: dict = {}
@@ -56,7 +57,7 @@ async def get_run(run_id: str, screenshot: int = 1):
 @router.post("/runs/{run_id}/input")
 async def send_input(run_id: str, req: InputRequest):
     run = _get(run_id)
-    page = run.page
+    page = run.view_page()
     if run.status in TERMINAL or page is None or page.is_closed():
         raise HTTPException(409, "The browser is not available")
     if req.kind == "click" and req.x is not None and req.y is not None:

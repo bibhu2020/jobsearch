@@ -1,17 +1,16 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { RouterLink } from 'vue-router'
-import { useApplyStore, TERMINAL, type ApplicationRun } from '@/stores/apply'
+import { useApplyStore, TERMINAL, SESSION_SITE_LABELS, type ApplicationRun, type SessionSite } from '@/stores/apply'
 import { usePipelineStore, type PipelineCard } from '@/stores/pipeline'
 
-const props = defineProps<{ card: PipelineCard }>()
-const emit = defineEmits<{ (e: 'close'): void }>()
+// Either apply to `card`, or connect a job-site account (`site`) once.
+const props = defineProps<{ card?: PipelineCard; site?: SessionSite }>()
+const emit = defineEmits<{ (e: 'close'): void; (e: 'done'): void }>()
 
 const apply = useApplyStore()
 const pipeline = usePipelineStore()
 
-const VIEWPORT_W = 1280
-const VIEWPORT_H = 900
 const POLL_MS = 1500
 
 const run = ref<ApplicationRun | null>(null)
@@ -24,6 +23,7 @@ const takeOver = ref(false)
 const typeText = ref('')
 const showLog = ref(false)
 const verificationValue = ref('')
+const shotWidth = ref(0)
 const lastShot = ref<string | null>(null)
 let timer: ReturnType<typeof setTimeout> | null = null
 let stopped = false
@@ -32,7 +32,12 @@ const status = computed(() => run.value?.status)
 const isTerminal = computed(() => !!status.value && TERMINAL.includes(status.value))
 const waitingForUser = computed(() => status.value === 'needs_input' || status.value === 'awaiting_review')
 const verification = computed(() => run.value?.live?.needs?.kind === 'verification' ? run.value.live.needs : null)
-const otherCard = computed(() => run.value && run.value.pipeline_card_id !== props.card.id)
+const otherCard = computed(() => !!run.value && !!props.card && run.value.pipeline_card_id !== props.card.id)
+const isLogin = computed(() => run.value?.kind === 'login' || (!run.value && !!props.site))
+const signIn = computed(() => run.value?.live?.needs?.kind === 'signin' ? run.value.live.needs : null)
+const heading = computed(() => props.card
+  ? { kicker: 'Auto-apply', title: props.card.title || 'Untitled Position', sub: props.card.company }
+  : { kicker: 'Connect account', title: `Sign in to ${SESSION_SITE_LABELS[props.site!]}`, sub: 'Your password is never stored — only the signed-in session, encrypted' })
 
 const STATUS_UI: Record<string, { label: string; cls: string }> = {
   queued:          { label: 'Waiting for a browser',  cls: 'bg-slate-700/60 text-slate-300 border-slate-600' },
@@ -40,7 +45,7 @@ const STATUS_UI: Record<string, { label: string; cls: string }> = {
   needs_input:     { label: 'Needs you',               cls: 'bg-amber-900/40 text-amber-300 border-amber-700/60' },
   awaiting_review: { label: 'Review before submitting', cls: 'bg-amber-900/40 text-amber-300 border-amber-700/60' },
   submitting:      { label: 'Submitting',              cls: 'bg-indigo-900/40 text-indigo-300 border-indigo-700/60' },
-  submitted:       { label: 'Applied',                 cls: 'bg-emerald-900/40 text-emerald-300 border-emerald-700/60' },
+  submitted:       { label: 'Done',                    cls: 'bg-emerald-900/40 text-emerald-300 border-emerald-700/60' },
   failed:          { label: 'Failed',                  cls: 'bg-red-900/40 text-red-300 border-red-700/60' },
   cancelled:       { label: 'Cancelled',               cls: 'bg-slate-700/60 text-slate-300 border-slate-600' },
 }
@@ -69,7 +74,10 @@ async function poll() {
     if (data.live?.screenshot) lastShot.value = data.live.screenshot
     if (TERMINAL.includes(data.status)) {
       takeOver.value = false
-      if (data.status === 'submitted') pipeline.fetchCards()
+      if (data.status === 'submitted') {
+        if (data.kind === 'login') emit('done')
+        else pipeline.fetchCards()
+      }
       return
     }
   } catch { /* transient — keep polling */ }
@@ -78,7 +86,7 @@ async function poll() {
 
 onMounted(async () => {
   try {
-    runId.value = await apply.start(props.card.id)
+    runId.value = props.card ? await apply.start(props.card.id) : await apply.connectSite(props.site!)
     poll()
   } catch (err: any) {
     const data = err?.response?.data
@@ -92,7 +100,7 @@ onUnmounted(() => {
   if (timer) clearTimeout(timer)
 })
 
-async function act(action: 'resume' | 'submit' | 'cancel' | 'mark-applied') {
+async function act(action: 'resume' | 'submit' | 'cancel' | 'mark-applied' | 'finish-login') {
   if (!runId.value) return
   busy.value = true
   actionError.value = ''
@@ -122,10 +130,11 @@ async function sendVerification() {
 
 async function onShotClick(e: MouseEvent) {
   if (!takeOver.value || !runId.value || isTerminal.value) return
+  // Scale to the screenshot's own pixel size: popups (e.g. "Sign in with Google") are smaller than the main tab.
   const img = e.currentTarget as HTMLImageElement
   const rect = img.getBoundingClientRect()
-  const x = Math.round(((e.clientX - rect.left) / rect.width) * VIEWPORT_W)
-  const y = Math.round(((e.clientY - rect.top) / rect.height) * VIEWPORT_H)
+  const x = Math.round(((e.clientX - rect.left) / rect.width) * img.naturalWidth)
+  const y = Math.round(((e.clientY - rect.top) / rect.height) * img.naturalHeight)
   await apply.input(runId.value, { kind: 'click', x, y }).catch(() => {})
 }
 
@@ -151,13 +160,13 @@ async function scroll(dy: number) {
       <!-- Header -->
       <div class="flex items-start justify-between gap-3 px-5 py-4 border-b border-slate-700/60">
         <div class="min-w-0">
-          <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Auto-apply</p>
-          <h2 class="text-base font-bold text-slate-100 truncate">{{ card.title || 'Untitled Position' }}</h2>
-          <p class="text-sm text-slate-400 truncate">{{ card.company }}<span v-if="run?.site" class="text-slate-500"> · {{ run.site }}</span></p>
+          <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ heading.kicker }}</p>
+          <h2 class="text-base font-bold text-slate-100 truncate">{{ heading.title }}</h2>
+          <p class="text-sm text-slate-400 truncate">{{ heading.sub }}<span v-if="card && run?.site" class="text-slate-500"> · {{ run.site }}</span></p>
         </div>
         <div class="flex items-center gap-2 flex-shrink-0">
           <span v-if="status" :class="['text-xs font-semibold px-2.5 py-1 rounded-full border', STATUS_UI[status]?.cls]">
-            {{ STATUS_UI[status]?.label || status }}
+            {{ status === 'submitted' ? (isLogin ? 'Connected' : 'Applied') : (STATUS_UI[status]?.label || status) }}
           </span>
           <button @click="emit('close')" title="Close (the application keeps running)"
             class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-500 hover:text-slate-200 hover:bg-slate-800 transition">
@@ -215,7 +224,9 @@ async function scroll(dy: number) {
           <div v-if="lastShot" class="space-y-2">
             <div :class="['relative rounded-xl overflow-hidden border', takeOver ? 'border-amber-500 ring-2 ring-amber-500/40' : 'border-slate-700/60']">
               <img :src="`data:image/jpeg;base64,${lastShot}`"
-                :class="['w-full block select-none', takeOver ? 'cursor-crosshair' : '']"
+                :class="['w-full max-w-full block select-none mx-auto', takeOver ? 'cursor-crosshair' : '']"
+                :style="{ maxWidth: shotWidth ? `${shotWidth}px` : undefined }"
+                @load="shotWidth = ($event.target as HTMLImageElement).naturalWidth"
                 alt="Live view of the application browser" draggable="false" @click="onShotClick" />
               <span v-if="takeOver" class="absolute top-2 left-2 text-[11px] font-semibold bg-amber-500 text-slate-900 px-2 py-0.5 rounded">
                 You're in control — click to interact
@@ -278,11 +289,15 @@ async function scroll(dy: number) {
               takeOver ? 'border-amber-500 text-amber-300 bg-amber-900/20' : 'border-slate-700 text-slate-300 hover:bg-slate-800']">
             {{ takeOver ? 'Stop controlling' : 'Take over' }}
           </button>
-          <button v-if="waitingForUser" :disabled="busy" @click="act('resume')"
+          <button v-if="signIn" :disabled="busy" @click="act('finish-login')"
+            class="px-4 py-2 text-sm rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold disabled:opacity-50">
+            I'm signed in
+          </button>
+          <button v-if="waitingForUser && !signIn" :disabled="busy" @click="act('resume')"
             class="px-3 py-2 text-sm rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800 font-medium disabled:opacity-50">
             Resume agent
           </button>
-          <button v-if="waitingForUser" :disabled="busy" @click="act('mark-applied')"
+          <button v-if="waitingForUser && !isLogin && !signIn" :disabled="busy" @click="act('mark-applied')"
             class="px-3 py-2 text-sm rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800 font-medium disabled:opacity-50">
             Mark applied
           </button>

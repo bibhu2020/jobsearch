@@ -7,7 +7,9 @@ Types: text | email | tel | url | number | textarea | select | radio | checkbox 
 import re
 
 EXTRACT_JS = r"""
-() => {
+(root) => {
+  const scope = root ? document.querySelector(root) : document;
+  if (!scope) return [];
   const clean = (t) => (t || '').replace(/\s+/g, ' ').trim();
   const visible = (el) => {
     const r = el.getBoundingClientRect();
@@ -63,7 +65,7 @@ EXTRACT_JS = r"""
 
   const fields = [];
   const groups = {};
-  const controls = document.querySelectorAll('input, select, textarea');
+  const controls = scope.querySelectorAll('input, select, textarea');
   for (const el of controls) {
     const type = (el.getAttribute('type') || el.tagName).toLowerCase();
     if (['hidden', 'submit', 'button', 'reset', 'image', 'search'].includes(type)) continue;
@@ -107,7 +109,7 @@ EXTRACT_JS = r"""
 """
 
 ERRORS_JS = r"""
-() => [...document.querySelectorAll('[role="alert"], .error, .field-error, [class*="error"]:not(input), [aria-invalid="true"]')]
+(root) => [...(root ? (document.querySelector(root) || document) : document).querySelectorAll('[role="alert"], .error, .field-error, [class*="error"]:not(input), [aria-invalid="true"]')]
   .filter(e => { const r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0; })
   .map(e => (e.innerText || e.getAttribute('aria-label') || '').replace(/\s+/g, ' ').trim())
   .filter(t => t && t.length < 200)
@@ -119,8 +121,9 @@ def _clean_label(label: str) -> str:
     return (label or "").strip().rstrip("*").strip() or "(unlabelled field)"
 
 
-async def extract(frame) -> list[dict]:
-    fields = await frame.evaluate(EXTRACT_JS)
+async def extract(frame, root: str | None = None) -> list[dict]:
+    """`root`: CSS selector limiting extraction to one container (e.g. a modal dialog)."""
+    fields = await frame.evaluate(EXTRACT_JS, root)
     for f in fields:
         f["label"] = _clean_label(f["label"])
         f["id"] = re.search(r'"(\d+)"', f["selector"]).group(1)
@@ -143,9 +146,9 @@ async def combobox_options(frame, selector: str) -> list[str]:
         return []
 
 
-async def form_errors(frame) -> list[str]:
+async def form_errors(frame, root: str | None = None) -> list[str]:
     try:
-        return await frame.evaluate(ERRORS_JS)
+        return await frame.evaluate(ERRORS_JS, root)
     except Exception:
         return []
 
@@ -168,16 +171,27 @@ READ_JS = r"""
 """
 
 
+async def _read(frame, selector: str):
+    loc = frame.locator(selector).first
+    if not await loc.count():
+        return None  # element gone (e.g. an earlier step of a multi-step form)
+    return await loc.evaluate(READ_JS, timeout=3000)
+
+
 async def read_value(frame, field: dict):
-    """Current value of a field as the page sees it (option label for choice fields)."""
+    """Current value of a field as the page sees it (option label for choice fields); None if it's gone."""
     try:
         if field["type"] in ("radio", "checkbox_group"):
-            chosen = []
+            chosen, present = [], False
             for opt, sel in (field.get("option_selectors") or {}).items():
-                if await frame.locator(sel).first.evaluate(READ_JS):
+                state = await _read(frame, sel)
+                present = present or state is not None
+                if state:
                     chosen.append(opt)
+            if not present:
+                return None
             return chosen[0] if field["type"] == "radio" and chosen else (chosen or "")
-        return await frame.locator(field["selector"]).first.evaluate(READ_JS)
+        return await _read(frame, field["selector"])
     except Exception:
         return None
 

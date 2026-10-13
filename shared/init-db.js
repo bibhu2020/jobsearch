@@ -22,6 +22,8 @@ const migrations = [
   "ALTER TABLE user_profiles ADD COLUMN location TEXT",
   "ALTER TABLE user_profiles ADD COLUMN resume_text TEXT",
   "ALTER TABLE users ADD COLUMN mode TEXT NOT NULL DEFAULT 'candidate'",
+  "ALTER TABLE users ADD COLUMN google_sub TEXT",
+  "CREATE UNIQUE INDEX IF NOT EXISTS idx_users_google_sub ON users(google_sub)",
 ];
 for (const m of migrations) {
   try { db.exec(m); } catch (_) { /* column already exists */ }
